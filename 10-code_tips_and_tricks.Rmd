@@ -16,9 +16,24 @@ Following the update of road segments using the `ALSroads`package users may wish
 
 ## Reconnecing Roads
 
+## Casting Roads to Linestring 
+
+```{r ID_col, rgl = TRUE, warning  = FALSE, fig.height=15, eval = FALSE}
+roads <- st_cast(roads, "LINESTRING")
+```
+
 ## Adding an ID Column
 
+```{r ID_col, rgl = TRUE, warning  = FALSE, fig.height=15, eval = FALSE}
+roads <- tibble::rowid_to_column(roads, "NUM")
+```
+
 ## Selecting Specific Roads
+
+```{r subset_roads, rgl = TRUE, warning  = FALSE, fig.height=15, eval = FALSE}
+road_subset <- roads %>%
+  dplyr::filter(NUM %in% c(0:10))
+```
 
 ## Plotting Data 
 
