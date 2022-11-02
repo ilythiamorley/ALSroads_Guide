@@ -1,0 +1,16 @@
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+r3dDefaults = rgl::r3dDefaults
+r3dDefaults$FOV = 50
+r3dDefaults$zoom = 1
+
+knitr::opts_chunk$set(
+  comment =  "#>", 
+  collapse = TRUE,
+  fig.align = "center")
+
+rgl::setupKnitr(autoprint = TRUE)
+```
+
+## Standard Parameters {#sec-explanation-of-parameters-measure_roads}
+
+The `meaure_roads()` function is built with a series of standard parameters. Users can change these parameter to suit the study areas for which road extraction is being completed.

@@ -1,0 +1,16 @@
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+r3dDefaults = rgl::r3dDefaults
+r3dDefaults$FOV = 50
+r3dDefaults$zoom = 0.5
+
+knitr::opts_chunk$set(
+  comment =  "#>", 
+  collapse = TRUE,
+  fig.align = "center")
+
+library(lidR)
+library(stars)
+rgl::setupKnitr(autoprint = TRUE)
+```
+
+# Waterbodie Case studies {#sec-waterbodie-case-studies}

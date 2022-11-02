@@ -1,0 +1,59 @@
+```{r setup,echo=FALSE,message=FALSE,warning=FALSE}
+knitr::opts_chunk$set(
+  comment =  "#>", 
+  collapse = TRUE,
+  fig.align = "center")
+
+options(crayon.enabled = TRUE)
+old_hooks <- fansi::set_knit_hooks(knitr::knit_hooks, which = c("output", "message", "error"))
+
+rgl::setupKnitr(autoprint = TRUE)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Road Extraction Data Requirements {#sec-road-extraction-data-requirements}
+
+The road extraction method, implemented using the `ALSroads` package requires three inputs:
+
+1.  A LAS catalog of LiDAR data
+2.  A Digital Terrain Model (DTM) that corresponds to the LAS catalog coverage
+3.  A pre-existing road network
+
+## LiDAR Data {#sec-lidar-data}
+
+Road extraction using `ALSroads` requires LiDAR data that covers the roads being updated.
+
+Airborne laser sensors (ALS) record positional data in three dimensions (X,Y,Z) as well as the intensity of points, the position of each point in the return sequence, or the beam incidence angle of each point. ALS data is commonly distributed in the LAS format which is specifically designed to store ALS data. Documentation on the LAS format is available from the [American Society for Photogrammetry & Remote Sensing (ASPRS)](http://www.asprs.org/wp-content/uploads/2019/07/LAS_1_4_r15.pdf).
+
+`ALSroads` users may encounter LAS files, which can be read into RStudio as a LAS catalog (i.e., more than one LAS file). Alternatively users may encounter LAZ format files. The LAZ format has become the standard compression scheme for LAS tiles, which require a large amount of memory. The `ALSroads` package uses the `lidR` package for loading ALS data. `lidR` was designed to process LAS and LAZ files both as input and output. Information on using the `lidR` packages and functions is available in a [detailed online book](https://r-lidar.github.io/lidRbook/io.html#read).
+
+For use in the `ALSroads` package LAS data must be:
+
+1.  A non-normalized LAScatalog object from `lidR` package
+
+2.  
+
+3.  
+
+## DTM Data {#sec-dtm-data}
+
+Road extraction using `ALSroads` requires a Digital Terrain Model (DTM) as an input, unless a conductivity later is provided.
+
+DTMs, which can broadly be described a an 'image' of the ground, are used for several purposes that induce, stream flow, basin hydrology, and watershed analysis. The `ALSroads` method cannot update an existing road if either the DTM coverage or the LAZ coverage is missing. For use with the `ALSroads` method the DTM must:
+
+1.  Have a resolution of at least 1m
+2.  Cover the extent of the LAZ catalog/road network.
+
+## Existing road network {#sec-existing-road-network}
+
+Road extraction using `ALSroads` updates an existing road network. Therefore, an existing network is a critical input. The method will not locate roads that are not on the existing network.
+
+The existing road network must:
+
+1.  Be a simple feature (sf) format (linestring)
+
+2.  Match the CRS of the LAZ catalog.
+
+## Water bodies (optional) {#sec-water-bodies-(optional}
+
+An optional input for road extraction using `ALSroads` is a set of spatial polygons (sf format) of water bodies. If included this input masks water bodies so they cannot be mistaken as a drivable surfaces, and allows the detection of bridges above water.

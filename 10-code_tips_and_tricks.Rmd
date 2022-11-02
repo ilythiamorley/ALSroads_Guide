@@ -1,0 +1,26 @@
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+r3dDefaults = rgl::r3dDefaults
+r3dDefaults$FOV = 50
+r3dDefaults$zoom = 0.5
+
+knitr::opts_chunk$set(
+  comment =  "#>", 
+  collapse = TRUE,
+  fig.align = "center")
+rgl::setupKnitr(autoprint = TRUE)
+```
+
+# Tips and Tricks {#sec-tips-and-tricks}
+
+Following the update of road segments using the `ALSroads`package users may wish to edit data, filter results, or plot outcomes. Here, we provide code snippets intended to provide users with some data interpretation tools. 
+
+## Reconnecing Roads
+
+## Adding an ID Column
+
+## Selecting Specific Roads
+
+## Plotting Data 
+
+## Saving Data
+
