@@ -13,4 +13,4 @@ library(stars)
 rgl::setupKnitr(autoprint = TRUE)
 ```
 
-# Waterbodie Case studies {#sec-waterbodie-case-studies}
+# Waterbodie {#waterbodie}
