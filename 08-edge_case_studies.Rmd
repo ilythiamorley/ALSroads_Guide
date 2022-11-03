@@ -118,7 +118,7 @@ updated_roads_custom_param <- measure_roads(ctg = ctg, roads = roads, dtm = dtm,
 
 Plotting the updated road network alongside the existing road network allows the visualization of the updated roads.
 
-```{r plot_dc_roads, echo = FALSE, rgl = TRUE, fig.width = 4, fig.height = 3}
+```{r, echo = FALSE, rgl = TRUE, fig.width = 4, fig.height = 3}
 m = mapview::mapview(list(dc_roads, dc_updated_roads),
   layer.name = c("Inaccurate", "Corrected"),
   color = c("red", "blue"), map.type = "Esri.WorldImagery")
@@ -180,7 +180,7 @@ updated_roads_custom_param <- measure_roads(ctg = ctg, roads = roads, dtm = dtm,
 
 Plotting the updated road network alongside the existing road network allows the visualization of the updated roads.
 
-```{r plot_dc_roads, echo = FALSE, rgl = TRUE, fig.width = 4, fig.height = 3}
+```{r, echo = FALSE, rgl = TRUE, fig.width = 4, fig.height = 3}
 m = mapview::mapview(list(roads, updated_roads),
   layer.name = c("Inaccurate", "Corrected"),
   color = c("red", "blue"), map.type = "Esri.WorldImagery")

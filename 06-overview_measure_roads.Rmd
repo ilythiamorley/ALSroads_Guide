@@ -29,7 +29,7 @@ upd_roads_ctg <- st_read("data/05_data_load/upd_roads_ctg.shp")
 roads_las <- st_read("data/05_data_load/roads_las.shp")
 upd_roads_las <- st_read("data/05_data_load/upd_roads_las.shp")
 road1_las <- roads_las %>%
-dplyr::lter(FNODE_ %in% c(1592))
+dplyr::filter(FNODE_ %in% c(1592))
 road1_upd_las <- upd_roads_las %>%
 dplyr::filter(FNODE_ %in% c(1592))
 road1_upd_las_poly <- sf::st_buffer(road1_upd_las, road1_upd_las$ROADWID/2)
@@ -129,7 +129,7 @@ updated_roads <- measure_roads(ctg = las_ctg,  roads = roads, dtm= dtm)
 
 The updated road network is a spatial feature that can be plotted to visualize the location of updated roads.
 
-```{r print-las}
+```{r}
 m = mapview::mapview(list(roads_ctg, upd_roads_ctg),
   layer.name = c("Inaccurate", "Corrected"),
   color = c("red", "blue"), map.type = "Esri.WorldImagery")
@@ -156,7 +156,7 @@ Information about the quality of roads is beneficial for understanding the chara
 
 ##### Plotting updated road class {#sec-plotting-updated-road-class}
 
-```{r print-las}
+```{r}
 ggplot(upd_roads_ctg_filt, aes(y = CLASS)) +
  geom_bar(aes(fill = CLASS)) +
     labs(x="Count", y="Road Class") +
@@ -165,7 +165,7 @@ ggplot(upd_roads_ctg_filt, aes(y = CLASS)) +
 
 ##### Plotting updated road width {#sec-plotting-updated-road-width}
 
-```{r print-las}
+```{r}
 ggplot(data=upd_roads_ctg_filt, aes(x=CLASS, y= ROADWID, fill=CLASS)) +
     geom_boxplot(size = 0.25, color="black", coef = 1, outlier.size = 0.5)+
     labs(y = "Total Road Width (m)", x = "Road class")
