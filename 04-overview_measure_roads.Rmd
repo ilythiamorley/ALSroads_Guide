@@ -22,17 +22,18 @@ rgl::setupKnitr(autoprint = TRUE)
 
 
 #Data
-ctg <- readLAScatalog("data/05_data_load/ctg_example", filter = "-drop_withheld -keep_random_fraction 0.25")
-dtm <- raster("data/05_data_load/DTM.tif")
-roads_ctg <- st_read("data/05_data_load/roads_ctg.shp")
-upd_roads_ctg <- st_read("data/05_data_load/upd_roads_ctg.shp")
-roads_las <- st_read("data/05_data_load/roads_las.shp")
-upd_roads_las <- st_read("data/05_data_load/upd_roads_las.shp")
-road1_las <- roads_las %>%
-dplyr::filter(FNODE_ %in% c(1592))
-road1_upd_las <- upd_roads_las %>%
-dplyr::filter(FNODE_ %in% c(1592))
-road1_upd_las_poly <- sf::st_buffer(road1_upd_las, road1_upd_las$ROADWID/2)
+#ctg <- readLAScatalog("E:/data/05_data_load/ctg2", filter = "-drop_withheld -keep_random_fraction 0.25")
+#dtm <- raster("E:/data/05_data_load/DTM_new.tif")
+roads <- st_read("E:/data/05_data_load/roads.shp")
+roads_upd <-st_read("E:/data/05_data_load/updated_roads.shp")
+
+roads1 <- roads %>%
+dplyr::filter(FNODE_ %in% c(8041))
+
+roads_upd1 <- roads_upd %>%
+dplyr::filter(FNODE_ %in% c(8041))
+
+road_poly <- sf::st_buffer(roads_upd1, roads_upd1$ROADWID/2)
 
 ```
 
@@ -130,10 +131,12 @@ updated_roads <- measure_roads(ctg = las_ctg,  roads = roads, dtm= dtm)
 The updated road network is a spatial feature that can be plotted to visualize the location of updated roads.
 
 ```{r}
-m = mapview::mapview(list(roads_ctg, upd_roads_ctg),
+url = "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
+
+m = mapview::mapview(list(roads, roads_upd),
   layer.name = c("Inaccurate", "Corrected"),
   color = c("red", "blue"), map.type = "Esri.WorldImagery")
-leaflet::addTiles(m@map)
+leaflet::addTiles(m@map, url)
 ```
 
 In addition, following road extraction, the new road width attribute can be used to buffer the road and show road footprint. Buffering is performed using the `sf` package function `st_buffer ()`.
@@ -143,11 +146,13 @@ road_poly <- sf::st_buffer(updated_roads, updated_roads$ROADWIDTH/2)
 ```
 
 ```{r plot-buff-rd}
-m2 = mapview::mapview(list(road1_upd_las, road1_upd_las_poly),
+url = "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
+
+m = mapview::mapview(list(roads_upd1, road_poly),
                       layer.name = c("Corrected Road", "Road Width Buffer"),
                       col.regions=list("blue","orange"),col=list("blue","orange"),
                       map.type = "Esri.WorldImagery")
-m2@map
+leaflet::addTiles(m@map, url)
 ```
 
 #### Attribute plotting Updated Roads {#sec-attribute-plotting-updated-roads}
@@ -157,7 +162,7 @@ Information about the quality of roads is beneficial for understanding the chara
 ##### Plotting updated road class {#sec-plotting-updated-road-class}
 
 ```{r}
-ggplot(upd_roads_ctg_filt, aes(y = CLASS)) +
+ggplot(roads_upd, aes(y = CLASS)) +
  geom_bar(aes(fill = CLASS)) +
     labs(x="Count", y="Road Class") +
   scale_fill_discrete(name = "Road Class")
@@ -166,7 +171,7 @@ ggplot(upd_roads_ctg_filt, aes(y = CLASS)) +
 ##### Plotting updated road width {#sec-plotting-updated-road-width}
 
 ```{r}
-ggplot(data=upd_roads_ctg_filt, aes(x=CLASS, y= ROADWID, fill=CLASS)) +
+ggplot(data=roads_upd, aes(x=CLASS, y= ROADWID, fill=CLASS)) +
     geom_boxplot(size = 0.25, color="black", coef = 1, outlier.size = 0.5)+
     labs(y = "Total Road Width (m)", x = "Road class")
 ```

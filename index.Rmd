@@ -20,6 +20,6 @@ Development of the `ALSroads` package was made possible by the financial support
 
 Testing of the `ALSroads` package in Ontario was made possible by the [Forestry Futures Trust Ontario](http://www.forestryfutures.ca/) (Project number: KTTD 2B-2021) and an NSERC Discovery grant (RGPIN-2018-03851), grantee [Prof. Nicholas C. Coops](https://forestry.ubc.ca/faculty-profile/nicholas-coops/).
 
------------------------------
+------------------------------------------------------------------------
 
 ![](images/logos.png)

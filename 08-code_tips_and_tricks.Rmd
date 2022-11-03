@@ -8,6 +8,11 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   fig.align = "center")
 rgl::setupKnitr(autoprint = TRUE)
+
+
+library(sf)
+rds_cs1 <- st_read("E:/data/08_edge_cs1/cs_1_roads.shp")
+
 ```
 
 # Tips and Tricks {#sec-tips-and-tricks}
@@ -18,7 +23,10 @@ Following the update of road segments using the `ALSroads`package users may wish
 
 ## Casting Roads to Linestring 
 
-```{r ID_col, rgl = TRUE, warning  = FALSE, fig.height=15, eval = FALSE}
+
+
+
+``` r
 roads <- st_cast(roads, "LINESTRING")
 ```
 
