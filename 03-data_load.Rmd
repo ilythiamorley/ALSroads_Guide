@@ -2,8 +2,6 @@
 library(lidR)
 library(ggplot2)
 library(raster)
-library(stars)
-library(forcats)
 library(sf)
 
 r3dDefaults = rgl::r3dDefaults
@@ -20,14 +18,9 @@ knitr::opts_chunk$set(
 
 rgl::setupKnitr(autoprint = TRUE)
 
-ctg <- readLAScatalog("E:/data/05_data_load/ctg2", filter = "-drop_withheld -keep_random_fraction 0.25")
-dtm <- raster("E:/data/05_data_load/DTM_new.tif")
-roads <- st_read("E:/data/05_data_load/roads.shp")
-
-
-
-
-
+#Data
+ctg <- readLAScatalog("E:/data/03/ctg", filter = "-drop_withheld -keep_random_fraction 0.25")
+roads <- st_read("E:/data/03/roads.shp")
 ```
 
 # Reading, Generating, and Plotting Input Data {#sec-reading-generating-and-plotting-input-data}

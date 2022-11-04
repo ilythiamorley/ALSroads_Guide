@@ -1,32 +1,33 @@
 ```{r,echo=FALSE,message=FALSE,warning=FALSE}
+library(lidR)
+library(ggplot2)
+library(raster)
+library(sf)
+library(forcats)
+
 r3dDefaults = rgl::r3dDefaults
 m = structure(c(0.921, -0.146, 0.362, 0, 0.386, 0.482, -0.787, 0, 
 -0.06, 0.864, 0.5, 0, 0, 0, 0, 1), .Dim = c(4L, 4L))
-rgl::setupKnitr()
 r3dDefaults$FOV = 50
 r3dDefaults$userMatrix = m
 r3dDefaults$zoom = 0.75
-rgl::setupKnitr()
 
 knitr::opts_chunk$set(
   comment =  "#>", 
   collapse = TRUE,
   fig.align = "center")
 
-rgdal::set_thin_PROJ6_warnings(TRUE)
-
-library(lidR)
-library(ggplot2)
-library(raster)
-library(forcats)
-library(sf)
+rgl::setupKnitr(autoprint = TRUE)
 
 #Case study: DTM compx
-las_infolder <- ("data/08_edge_cs1/las/")
+
+las_infolder <- ("E:/data/06/01/ctg/")
 ctg_cs1 <- readLAScatalog(las_infolder, filter = "-drop_withheld -keep_random_fraction 0.25")
-dtm_cs1 <- raster("data/08_edge_cs1/cs_1_DTM.bil")
-rds_cs1 <- st_read("data/08_edge_cs1/cs_1_roads.shp")
-upd_rds_cs1 <- st_read("data/08_edge_cs1/cs_1_upd_roads.shp") # Standard Parameters
+dtm_cs1 <- raster("E:/data/06/01/DTM.tif")
+dtm20 <- raster("E:/data/06/01/DTM20.tif")
+rds_cs1 <- st_read("E:/data/06/01/roads.shp")
+upd_rds_cs1 <- st_read("E:/data/06/01/upd_roads.shp") # Standard Parameters
+
 ```
 
 # Edge Case Studies {#sec-edge-case-studies}
@@ -65,22 +66,7 @@ Among other factors, such as vegetation and slope, the road extraction method de
 
 In this case study, we update a section of roads located in the eastern portion of the Nipissing Forest, located in the province of Ontario.
 
-```{r plot-dtm-rayshaded, rgl = TRUE, warning  = FALSE, fig.height=15, eval = FALSE, include= FALSE}
-library(rayshader)
-elmat <- raster_to_matrix(dtm)
-map <- elmat %>%
-  sphere_shade(texture = "imhof1", progbar = FALSE) %>%
-  add_water(detect_water(elmat), color = "imhof1") %>%
-  add_shadow(ray_shade(elmat, progbar = FALSE), 0.5) %>%
-  add_shadow(ambient_shade(elmat, progbar = FALSE), 0)
-plot_3d(map, elmat, zscale = 1, windowsize = c(800, 800))
-
-```
-
-![](docs/images/DTM/dtm_ctg_rayshader.PNG)
-
-![]()
-
+![](images/06_01_dtm.png)
 ### Method and Application: {#sec-method-and-application}
 
 #### Loading Data: {#sec-loading-data}
@@ -135,14 +121,6 @@ Within the `measure_roads()` function, terrain slope is computed according to [H
 
 The standard parameter for S, refer to section \@ref(), in the road extract algorithm is 20 °. This parameter can be adjusted to account for areas where local legislation provides a specific S value.
 
-```{r plot-dtm-shaded, fig.height=5.85, fig.width=6, warning=FALSE}
-library(terra)
-
-slope <- terrain(dtm, opt=c('slope'), unit='radians')
-aspect <- terrain(dtm, opt=c('aspect'), unit='radians')
-hill = hillShade(slope, aspect, 40, 270)
-plot(hill, col =gray(0:30/30), legend = FALSE)
-```
 
 ### Method and Application
 
@@ -161,12 +139,6 @@ roads = sf::st_crop(roads, ctg)
 
 #### Parameter Tuning
 
-We adjust the the standard `measure_roads()` parameters, explained in section \@ref().
-
-``` r
-custom_param = alsroads_default_parameters
-...
-```
 
 #### Updating roads using `measure_roads()`
 

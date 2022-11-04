@@ -1,14 +1,12 @@
 ```{r,echo=FALSE,message=FALSE,warning=FALSE}
 library(lidR)
-library(stars)
-library(ALSroads)
-library(raster)
 library(ggplot2)
+library(raster)
+library(sf)
 
 r3dDefaults = rgl::r3dDefaults
 m = structure(c(0.921, -0.146, 0.362, 0, 0.386, 0.482, -0.787, 0, 
 -0.06, 0.864, 0.5, 0, 0, 0, 0, 1), .Dim = c(4L, 4L))
-
 r3dDefaults$FOV = 50
 r3dDefaults$userMatrix = m
 r3dDefaults$zoom = 0.75
@@ -20,21 +18,13 @@ knitr::opts_chunk$set(
 
 rgl::setupKnitr(autoprint = TRUE)
 
-
 #Data
-#ctg <- readLAScatalog("E:/data/05_data_load/ctg2", filter = "-drop_withheld -keep_random_fraction 0.25")
-#dtm <- raster("E:/data/05_data_load/DTM_new.tif")
-roads <- st_read("E:/data/05_data_load/roads.shp")
-roads_upd <-st_read("E:/data/05_data_load/updated_roads.shp")
-
-roads1 <- roads %>%
-dplyr::filter(FNODE_ %in% c(8041))
-
-roads_upd1 <- roads_upd %>%
-dplyr::filter(FNODE_ %in% c(8041))
-
-road_poly <- sf::st_buffer(roads_upd1, roads_upd1$ROADWID/2)
-
+roads <- st_read("E:/data/04/roads.shp")
+roads_upd <-st_read("E:/data/04/updated_roads.shp")
+road_upd <- st_read("E:/data/04/road_upd.shp")
+road_poly <- st_read("E:/data/04/road_poly.shp")
+roads_upd <-  transform(roads_upd, CLASS = as.factor(CLASS))
+roads_upd_filt <- subset(roads_upd, CLASS == 1| CLASS == 2)
 ```
 
 # Road Extraction using `ALSroads` {#sec-road-extraction-using-alsroads}
@@ -123,7 +113,7 @@ The `measure_roads()` function updates the existing road network by adding eight
 In this example, we do not include water bodies, refer to (\@ref(water-case-studies)) for an example application with water bodies. Similarly, here we do not adjust the `ALSroads` default parameters, refer to (\@ref(topo) for example applications of the method with custom parameters.
 
 ``` r
-updated_roads <- measure_roads(ctg = las_ctg,  roads = roads, dtm= dtm)
+updated_roads <- measure_roads(ctg = ctg, roads = roads, dtm= dtm)
 ```
 
 #### Spatial plotting Updated Roads {#sec-spatial-plotting-updated-roads}
@@ -139,39 +129,45 @@ m = mapview::mapview(list(roads, roads_upd),
 leaflet::addTiles(m@map, url)
 ```
 
-In addition, following road extraction, the new road width attribute can be used to buffer the road and show road footprint. Buffering is performed using the `sf` package function `st_buffer ()`.
+In addition, following road extraction, the new road width attribute can be used to buffer the road and show the road footprint. Buffering is performed using the `sf` package function `st_buffer ()`.
 
 ``` r
 road_poly <- sf::st_buffer(updated_roads, updated_roads$ROADWIDTH/2)
 ```
 
-```{r plot-buff-rd}
+```{r plot-buff-rd, waning = FALSE}
 url = "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
 
-m = mapview::mapview(list(roads_upd1, road_poly),
+m = mapview::mapview(list(road_upd, road_poly),
                       layer.name = c("Corrected Road", "Road Width Buffer"),
                       col.regions=list("blue","orange"),col=list("blue","orange"),
                       map.type = "Esri.WorldImagery")
 leaflet::addTiles(m@map, url)
 ```
 
-#### Attribute plotting Updated Roads {#sec-attribute-plotting-updated-roads}
+#### Attribute Plotting Updated Roads {#sec-attribute-plotting-updated-roads}
 
 Information about the quality of roads is beneficial for understanding the characteristics of road networks. Simple plots using the package `ggplot2` allow users to complete a preliminary assessment of the updated road network.
 
-##### Plotting updated road class {#sec-plotting-updated-road-class}
+The number of roads per new road class can be plotted for visualization.
 
-```{r}
-ggplot(roads_upd, aes(y = CLASS)) +
- geom_bar(aes(fill = CLASS)) +
+``` r
+ggplot(roads_upd, aes(y = CLASS, fill = CLASS)) +
+ geom_bar() +
     labs(x="Count", y="Road Class") +
-  scale_fill_discrete(name = "Road Class")
+  scale_fill_discrete(name = "Road Class") 
 ```
 
-##### Plotting updated road width {#sec-plotting-updated-road-width}
+![](images/road_class_plot.png)
 
-```{r}
-ggplot(data=roads_upd, aes(x=CLASS, y= ROADWID, fill=CLASS)) +
+The derivable widths of roads, grouped by road class, can be plotted for comparison. Only Class 1 and 2 roads are included as Class 3 and 4 roads do not have updated road widths.
+
+``` r
+ggplot(data=roads_upd_filt, aes(x=CLASS, y= DRIVABL, fill=CLASS)) +
     geom_boxplot(size = 0.25, color="black", coef = 1, outlier.size = 0.5)+
-    labs(y = "Total Road Width (m)", x = "Road class")
+    labs(y = "Drivable Road Width (m)", x = "Road class")+
+      theme(text = element_text(size = 16)) +
+      scale_fill_manual(values = c("#F8766D", "#7CAE00"), (name = "Road Class"))
 ```
+
+![](images/road_width_plot.png)
