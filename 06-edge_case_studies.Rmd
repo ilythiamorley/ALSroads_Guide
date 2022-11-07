@@ -21,12 +21,12 @@ rgl::setupKnitr(autoprint = TRUE)
 
 #Case study: DTM compx
 
-las_infolder <- ("E:/data/06/01/ctg/")
+las_infolder <- ("data/06/01/ctg/")
 ctg_cs1 <- readLAScatalog(las_infolder, filter = "-drop_withheld -keep_random_fraction 0.25")
-dtm_cs1 <- raster("E:/data/06/01/DTM.tif")
-dtm20 <- raster("E:/data/06/01/DTM20.tif")
-rds_cs1 <- st_read("E:/data/06/01/roads.shp")
-upd_rds_cs1 <- st_read("E:/data/06/01/upd_roads.shp") # Standard Parameters
+dtm_cs1 <- raster("data/06/01/DTM.tif")
+dtm20 <- raster("data/06/01/DTM20.tif")
+rds_cs1 <- st_read("data/06/01/roads.shp")
+upd_rds_cs1 <- st_read("data/06/01/upd_roads.shp") # Standard Parameters
 
 ```
 
@@ -66,8 +66,7 @@ Among other factors, such as vegetation and slope, the road extraction method de
 
 In this case study, we update a section of roads located in the eastern portion of the Nipissing Forest, located in the province of Ontario.
 
-![](images/06_01_dtm.png)
-### Method and Application: {#sec-method-and-application}
+![](images/06_01_dtm.png) \### Method and Application: {#sec-method-and-application}
 
 #### Loading Data: {#sec-loading-data}
 
@@ -105,10 +104,11 @@ updated_roads_custom_param <- measure_roads(ctg = ctg, roads = roads, dtm = dtm,
 Plotting the updated road network alongside the existing road network allows the visualization of the updated roads.
 
 ```{r, echo = FALSE, rgl = TRUE, fig.width = 4, fig.height = 3}
-m = mapview::mapview(list(dc_roads, dc_updated_roads),
+url = "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
+m = mapview::mapview(list(rds_cs1, upd_rds_cs1),
   layer.name = c("Inaccurate", "Corrected"),
   color = c("red", "blue"), map.type = "Esri.WorldImagery")
-leaflet::addTiles(m@map)
+leaflet::addTiles(m@map, url)
 ```
 
 ## Case Study: Steep Slopes {#sec-case-study-steep-slopes}
@@ -120,7 +120,6 @@ The road extraction method functions by combining information, such as terrain s
 Within the `measure_roads()` function, terrain slope is computed according to [Horn (1981)](https://www.researchgate.net/publication/2996084_Hill_shading_and_the_reflectance_map) method, and implemented using the `raster` package. The slope of the terrain indicates where a road cannot be with certainty. If the slope of the terrain is greater than a pre-set degree value S, then a road cannot be present. S is often defined by local legislation and is considered a known parameter. A slope of \< 5° has a conductivity of 1, between 5 and S ° the conductivity decreases linearly to 0, making it impossible to move through pixels with steeper slopes.
 
 The standard parameter for S, refer to section \@ref(), in the road extract algorithm is 20 °. This parameter can be adjusted to account for areas where local legislation provides a specific S value.
-
 
 ### Method and Application
 
@@ -139,7 +138,6 @@ roads = sf::st_crop(roads, ctg)
 
 #### Parameter Tuning
 
-
 #### Updating roads using `measure_roads()`
 
 `measure_roads()` is run using the custom parameters.
@@ -152,7 +150,7 @@ updated_roads_custom_param <- measure_roads(ctg = ctg, roads = roads, dtm = dtm,
 
 Plotting the updated road network alongside the existing road network allows the visualization of the updated roads.
 
-```{r, echo = FALSE, rgl = TRUE, fig.width = 4, fig.height = 3}
+```r
 m = mapview::mapview(list(roads, updated_roads),
   layer.name = c("Inaccurate", "Corrected"),
   color = c("red", "blue"), map.type = "Esri.WorldImagery")
