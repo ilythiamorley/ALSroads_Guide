@@ -84,14 +84,14 @@ roads = sf::st_crop(roads, ctg)
 
 The `measure_roads()` function updates the existing road network by adding eight new attributes to the existing road network:
 
-- ROADWIDTH - The total width (meters) of the road.
-- DRIVABLEWIDTH - The drivable width (meters) of the road.
-- PERCABOVEROAD - The percentage of point above the road in a range [0.5, 5] m
-- SHOULDERS - The average number of shoulders found along the roads.
-- SINUOSITY - The sinuosity (i.e., curvature) of the road.
-- CONDUCTIVITY - The average conductivity of the road i.e., how much the road facilitates or impedes movement (unitless)
-- SCORE - The score of the road relates to the quality of the road. Road score ranges from 0 - 100, where a road score of 100 indicated high-quality roads.
-- CLASS - A 'Class' (1 - 4) is assigned to each road segment. The class is simply computed from the SCORE. Class 4 corresponds to a score [0, 25[, Class 3 to a score [25, 50[ and so on.
+-   ROADWIDTH - The total width (meters) of the road.
+-   DRIVABLEWIDTH - The drivable width (meters) of the road.
+-   PERCABOVEROAD - The percentage of point above the road in a range [0.5, 5] m
+-   SHOULDERS - The average number of shoulders found along the roads.
+-   SINUOSITY - The sinuosity (i.e., curvature) of the road.
+-   CONDUCTIVITY - The average conductivity of the road i.e., how much the road facilitates or impedes movement (unitless)
+-   SCORE - The score of the road relates to the quality of the road. Road score ranges from 0 - 100, where a road score of 100 indicated high-quality roads.
+-   CLASS - A 'Class' (1 - 4) is assigned to each road segment. The class is simply computed from the SCORE. Class 4 corresponds to a score [0, 25[, Class 3 to a score [25, 50[ and so on.
 
 #### Applying the `measure_roads()`function
 
