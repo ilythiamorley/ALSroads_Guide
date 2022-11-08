@@ -66,7 +66,9 @@ Among other factors, such as vegetation and slope, the road extraction method de
 
 In this case study, we update a section of roads located in the eastern portion of the Nipissing Forest, located in the province of Ontario.
 
-![](images/06_01_dtm.png) \### Method and Application: {#sec-method-and-application}
+![](images/06_01_dtm.PNG) 
+
+### Method and Application: {#sec-method-and-application}
 
 #### Loading Data: {#sec-loading-data}
 
