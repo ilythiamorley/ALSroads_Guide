@@ -3,7 +3,6 @@ library(lidR)
 library(ggplot2)
 library(raster)
 library(sf)
-library(forcats)
 
 r3dDefaults = rgl::r3dDefaults
 m = structure(c(0.921, -0.146, 0.362, 0, 0.386, 0.482, -0.787, 0, 
@@ -17,6 +16,12 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   fig.align = "center")
 
+
+options(crayon.enabled = TRUE)
+old_hooks <- fansi::set_knit_hooks(knitr::knit_hooks, which = c("output", "message", "error"))
+
+rgl::setupKnitr(autoprint = TRUE)
+knitr::opts_chunk$set(echo = TRUE)
 rgl::setupKnitr(autoprint = TRUE)
 
 #Case study: DTM compx
@@ -31,23 +36,23 @@ upd_rds_cs1 <- st_read("data/06/01/upd_roads.shp") # Standard Parameters
 
 # Edge Case Studies {#sec-edge-case-studies}
 
-In this section, we present three known edge case studies where the `measure_road()` standard parameters may require tuning:
+In this section, we present three known edge case studies where the `measure_road()` standard parameters (see section \@ref(sec-explanation-of-parameters-measure_roads) may require tuning:
 
--   **Low DTM complexity** (i.e., an area of uniform elevation)
--   **Steep slopes** (i.e., an area characterized by steep slopes)
--   **No vegetation** (i.e., an area where the road is not clearly defined by vegetation), there are three known no vegetation scenarios:
-    1.  The roads are nicely shaped, and it is not an edge case it should works
-    2.  The DTM is very flat and we are in 2.1
-    3.  It so hard to find the road that even the least cost path fails because the roads are not highlighted enough compared to the surrounding vegetation. In that case we are facing a hard limit.
+-   **Low DTM complexity** - an area of uniform elevation
+-   **Steep slopes** - an area characterized by steep slopes
+-   **No vegetation** - an area where the road is not clearly defined by vegetation, there are three known no vegetation scenarios:
+    1.  The roads are nicely shaped, is not an edge case, and the algorithm should be able to accurate update the road.
+    2.  The DTM is very flat and locating the road is a challenge.
+    3.  It so hard to find the road that even the least cost path fails because the roads are not highlighted enough compared to the surrounding vegetation, refer to [Roussel et al. (2022)](https://www.sciencedirect.com/science/article/pii/S1569843222002084#d1e1483) on how the least cost algorithm works to identify roads. In this case we are facing a hard limit.
 
-## Structure:
+## Case Study Structure:
 
 For each case study, we include code snippets outlining how to:
 
-1.  Read the required input data, detailed information is available in Section \@ref().
+1.  Read the required input data, detailed information is available in Section \@ref(sec-reading-generating-and-plotting-input-data).
 2.  Check the Coordinate Reference System of input data and clip the existing road network to the spatial extent of the LAZ catalog.
 3.  Update the existing road network using the `measure_roads()` function.
-4.  Adjust road extraction parameters to improve method accuracy, where applicable, detailed information on `measure_roads()` standard parameters is available in Section \@ref().
+4.  Adjust standard road extraction parameters to improve method accuracy. Information on `measure_roads()` standard parameters is available in Section \@ref(sec-explanation-of-parameters-measure_roads).
 5.  Visualize road extraction results.
 
 Each case study is 'stand-alone' and users do not need to refer to other sections of the user guide. As such, some code snippets, such as loading data, are repeated for each case study.
@@ -77,7 +82,7 @@ roads = sf::st_crop(roads, ctg)
 
 #### Parameter Tuning {#sec-parameter-tuning}
 
-We adjust the the standard `measure_roads()` parameters, explained in section \@ref(). **The maximum elevation ground points is set to to 0.07 and the maximum standard deviation of ground points to 0.04.**
+We adjust the the standard `measure_roads()` parameters, explained in section \@ref(sec-explanation-of-parameters-measure_roads). **The maximum elevation ground points is set to to 0.07 and the maximum standard deviation of ground points to 0.04.**
 
 ``` r
 custom_param = alsroads_default_parameters

@@ -48,7 +48,7 @@ print(ctg)
 
 ### Reading raster DTM data using `raster` {#sec-reading-raster-dtm-data-using-raster}
 
-`ALSroads` users may be provided a 1 m resolution DTM that covers the `LAScatalog` coverage. If DTM data is provided, then users can load this information using the `raster` package.
+`ALSroads` users may be provided a 1 m resolution DTM that covers the `LAScatalog` coverage (refer to section \@ref(sec-dtm-data) for DTM requirements). If DTM data is provided, then users can load this information using the `raster` package.
 
 ``` r
 library(raster)
@@ -67,7 +67,7 @@ plot_dtm3d(dtm, bg = "white")
 
 `ALSroads` users that do not have an existing 1 m resolution DTM can produce a DTM using LAS data and the function `grid_terrain()` from the `lidR` packages.
 
-The `rasterize_terrain()` function interpolates ground points and creates a DTM. Here we demonstrate the Triangular irregular network (tin) interpolation method. The TIN method is fast, efficient, and generates good DTMs. To generate a DTM model with the TIN algorithm we the `rasterize_terrain()` function and specify the algorithm using `algorithm = tin()`.
+The `rasterize_terrain()` function interpolates ground points and creates a DTM. Here we demonstrate the Triangular irregular network (tin) interpolation method. The TIN method is fast, efficient, and generates good DTMs. To generate a 1 m resolution DTM model with the TIN algorithm we use the `rasterize_terrain()` function and (1) specify the algorithm using `algorithm = tin()`, and (2) specify the DTM resolution using `res = 1`.
 
 ```r
 dtm_tin <- rasterize_terrain(ctg, res = 1, algorithm = tin())
@@ -81,7 +81,7 @@ An existing road network is required to perform road extraction using `ALSroads`
 roads <- st_read("path/to/roads")
 ```
 
-```{r, message=FALSE}
+```{r, message=FALSE, fig.align='center', fig.width=8, fig.height=6}
 url = "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
 m = mapview::mapview(roads,
   layer.name = "Road Segments",

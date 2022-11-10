@@ -19,6 +19,105 @@ knitr::opts_chunk$set(
 rgl::setupKnitr(autoprint = TRUE)
 ```
 
-## Standard Parameters {#sec-explanation-of-parameters-measure_roads}
+# Standard Parameters {#sec-explanation-of-parameters-measure_roads}
 
 The `meaure_roads()` function is built with a series of standard parameters. Users can change these parameter to suit the study areas for which road extraction is being completed.
+
+## Extraction Parameters: {#sec-extraction-parameters}
+
+Several parameters are set in the `meaure_roads()` function are used to to extract the point cloud, process it into small sections, and compute profiles. These parameters are:
+
+-   **road_max_len:** Default = 2000 m
+    -   Definition: Maximum size of a processed road. If longer than that it will be split in chunks of equal sizes such as no one is more than this size.
+-   **road_max_width:** Default = 30 m,
+    -   *Definition: Maximum width of a road for metrics measurements.*
+-   **road_buffer:** Default = 80 m,
+    -   *Definition: Width of a buffer around the road for point-cloud extraction.*
+-   **section_length:** Default = 10 m,
+    -   *Definition: Length of sections of road for metrics measurements.*
+-   **profile_resolution:** Default = 0.5 m.
+    -   *Definition: resolution of the profiles and DTMs for metrics measurements.*
+
+Users are **not recommended** to adjust these parameters, unless under specific circumstances (i.e., road extraction is being completed in a region where road widths are commonly greater than 30 m).
+
+## Embankments Parameters: {#sec-embankments-parameters}
+
+The `meaure_roads()` function includes two parameters that specify how to algorithm deals with embankments in the terrain. These are:
+
+-   **min_slope:** Default = 10 degrees,
+
+    -   *Definition: Slope (degrees) greater than the min_slope may initiate or terminate the detection of embankments.*
+
+-   **max_width:** Default = 20 meters.
+
+Users are **not recommended** to adjust these embankments parameters, unless under specific circumstances (i.e., road extraction is being completed in a region where embankments are officially defined by a specific slope).
+
+## Terrain Parameters (excluding embankment): {#sec-terrain-parameters}
+
+The `meaure_roads()` function includes two parameters that specify how to algorithm detects roads in the terrain aspect ,excluding embankment (see section \@ref(sec-embankments-parameters) for embankment parameters). The terrain parameters are:
+
+-   **max_sd_ground_points:** Default = 0.1,
+
+    -   *Definition: LiDAR points belonging to roads have a low dispersion on Z. Maximum standard deviation can be interpreted to represent low dispersion.*
+
+-   **max_elevation_ground_points:** Default = 0.15
+
+    -   *Definition: Once LiDAR points are normalized relatively to the potential road, all the points are expected to be at 0.*
+
+Users are **not recommended** to adjust standard terrain parameters.
+
+## Conductivity Parameters: {#sec-conductivity-parameters}
+
+-   **sigma_min = 0.1,**
+
+    -   Definition:
+
+-   **s = c(5, 20),**
+
+    -   Definition:
+
+-   **r = c(0.05, 0.1),**
+
+    -   Definition:
+
+-   **e = 40,**
+
+    -   Definition:
+
+-   **q = c(0.1, 0.5),**
+
+    -   Definition:
+
+-   **h = c(0.1, 0.2),**
+
+    -   Definition:
+
+-   **d = c(0.25, 0.95),**
+
+    -   Definition:
+
+-   **alpha = list(h = 1, d = 2, r = 1, i = 1) )**
+
+    -   Definition:
+
+## Road State Parameters: {#sec-state-parameters}
+
+Using the `measure_roads()` function users classify roads into 4 classes (see section \@ref(sec-network-update). These classes are determined by assessing the LiDAR point cloud and evaluating the state of each road section. The `measure_roads()` parameters used evaluate the state of a section are:
+
+-   **percentage_veg_thresholds:** Default = 10% min & 40% max,
+
+    -   *Definition: Roads with a percentage vegetation between 10 % and 40 % are considered to be roads. Where a lower percentage vegetation threshold corresponds to a higher road state (i.e., road class 1 or 2)*
+
+-   **drivable_width_thresholds:** Default = 1 m min & 5 m max,
+
+    -   *Definition: Roads with a drivable width between 1 m and 5 m are considered to be drivable. Where a narrower drivable road width is indicative of a poorer quality road (i.e., class 3 and 4 roads).*
+
+-   **conductivity_thresholds:** Default = 0.25 min & 0.5 max,
+
+    -   Definition:
+
+-   **shoulder_thresholds:** Default = 50 min & 75 max (UNIT?).
+
+    -   Definition:
+
+Users are **not recommended** to adjust standard terrain parameters, unless under specific circumstances. (E.g., )

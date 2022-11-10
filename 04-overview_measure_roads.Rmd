@@ -45,11 +45,11 @@ From a reference road (spatial line), `measure_roads()` extracts the line with a
 
 ### Input Data {#sec-input-data}
 
-As detailed in section \@ref(data), the required input data for updating the existing road network are:
+As detailed in section \@ref(sec-road-extraction-data-requirements), the required input data for updating the existing road network are:
 
-1. `LAScatalog` of LiDAR data
-2. Digital Terrain Model (DTM) that corresponds to the LAS catalog coverage
-3. Pre-existing road network
+1.  `LAScatalog` of LiDAR data
+2.  Digital Terrain Model (DTM) that corresponds to the LAS catalog coverage
+3.  Pre-existing road network
 
 ``` r
 ctg <- readLAScatalog("path/to/ctg/files", filter = "-drop_withheld -keep_random_fraction 0.25")
@@ -59,10 +59,10 @@ roads <- st_read("path/to/roads.shp")
 
 Prior to running the `measure_roads()` function, users are recommended to:
 
-1. Insure the coordinate reference system of the existing roads network and `LAScatalog` match.
-2. Crop the roads network to the extent of the `LAScatalog` to confirm that no roads are beyond the extent of the point cloud and DTM.
+1.  Insure the coordinate reference system of the existing roads network and `LAScatalog` match.
+2.  Crop the roads network to the extent of the `LAScatalog` to confirm that no roads are beyond the extent of the point cloud and DTM.
 
-### Road Extraction
+### Network Update {#sec-network-update}
 
 The `measure_roads()` function updates the existing road network by adding eight new attributes to the existing road network:
 
@@ -73,21 +73,21 @@ The `measure_roads()` function updates the existing road network by adding eight
 -   SINUOSITY - The sinuosity (i.e., curvature) of the road.
 -   CONDUCTIVITY - The average conductivity of the road i.e., how much the road facilitates or impedes movement (unitless)
 -   SCORE - The score of the road relates to the quality of the road. Road score ranges from 0 - 100, where a road score of 100 indicated high-quality roads.
--   CLASS - A 'Class' (1 - 4) is assigned to each road segment. The class is simply computed from the SCORE. Class 4 corresponds to a score [0, 25[, Class 3 to a score [25, 50[ and so on.
+-   CLASS - A 'Class' (1 - 4) is assigned to each road segment. The class is computed from the SCORE. Class 4 corresponds to a score [0, 25], Class 3 to a score [25, 50] and so on.
 
-#### Applying the `measure_roads()`function
+## Applying `measure_roads()` {#sec-applying-measure_roads}
 
-In this example, we do not include water bodies, refer to (\@ref(water-case-studies)) for an example application with water bodies. Similarly, here we do not adjust the `ALSroads` default parameters, refer to (\@ref(topo) for example applications of the method with custom parameters.
+In this example, we do not include water bodies, refer to section \@ref(sec-waterbodie) for an example application with water bodies. Similarly, here we do not adjust the `ALSroads` default parameters, refer to section \@ref(sec-edge-case-studies) for example applications of the method with custom parameters.
 
 ``` r
 updated_roads <- measure_roads(ctg = ctg, roads = roads, dtm = dtm)
 ```
 
-#### Spatial plotting Updated Roads {#sec-spatial-plotting-updated-roads}
+## Spatial Plotting Updated Roads {#sec-spatial-plotting-updated-roads}
 
 The updated road network is a spatial feature that can be plotted to visualize the location of updated roads.
 
-```{r}
+```{r plot-roads-network, warning = FALSE, fig.align='center', fig.width=8, fig.height=6}
 url = "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
 
 m <- mapview::mapview(list(roads, roads_upd),
@@ -102,7 +102,7 @@ In addition, following road extraction, the new road width attribute can be used
 road_poly <- sf::st_buffer(updated_roads, updated_roads$ROADWIDTH/2)
 ```
 
-```{r plot-buff-rd, waning = FALSE}
+```{r plot-buff-rd, warning = FALSE, fig.align='center', fig.width=8, fig.height=6}
 url <- "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
 
 m <- mapview::mapview(list(road_upd, road_poly),
@@ -112,7 +112,7 @@ m <- mapview::mapview(list(road_upd, road_poly),
 leaflet::addTiles(m@map, url)
 ```
 
-#### Attribute Plotting Updated Roads {#sec-attribute-plotting-updated-roads}
+## Attribute Plotting Updated Roads {#sec-attribute-plotting-updated-roads}
 
 Information about the quality of roads is beneficial for understanding the characteristics of road networks. Simple plots using the package `ggplot2` allow users to complete a preliminary assessment of the updated road network.
 

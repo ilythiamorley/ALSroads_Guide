@@ -20,4 +20,47 @@ knitr::opts_chunk$set(
 rgl::setupKnitr(autoprint = TRUE)
 ```
 
-# Waterbodie {#waterbodie}
+# Waterbodies {#sec-waterbodie}
+
+The inclusion of water bodies when using the `measure_roads()` function is recommenced for several reasons, as explained in section /@ref(). Here, we provide two road extraction examples for the same study areas. In the first example water bodies are not included as a `measure_roads()` parameter, in the second example water bodies are included. We therefore demonstrate the value of using water bodies with the `measure_roads()` function. 
+
+## Example 1: Road Extraction without Waterbodies
+
+### Loading Data: {#sec-loading-data_wb}
+
+``` r
+ctg <- readLAScatalog"path/to/ctg/files", filter = "-drop_withheld -keep_random_fraction 0.25")
+dtm <- raster("path/to/dtm.tif")
+roads <- st_read("path/to/roads")
+
+st_crs(roads) = st_crs(ctg)
+roads = sf::st_crop(roads, ctg)
+```
+
+### Updating Roads
+
+```R
+updated_roads_custom_param <- measure_roads(ctg = ctg, roads = roads, dtm = dtm)
+```
+
+## Example 2: Road Extraction with Waterbodies
+
+### Loading Data: {#sec-loading-data_wb}
+
+``` r
+ctg <- readLAScatalog"path/to/ctg/files", filter = "-drop_withheld -keep_random_fraction 0.25")
+dtm <- raster("path/to/dtm.tif")
+roads <- st_read("path/to/roads")
+waterbodies <- st_read("path/to/waterbodies")
+
+st_crs(roads) = st_crs(ctg)
+roads = sf::st_crop(roads, ctg)
+```
+
+### Updating Roads
+
+```R
+updated_roads_custom_param <- measure_roads(ctg = ctg, roads = roads, dtm = dtm, water = water)
+```
+## Comparison
+
