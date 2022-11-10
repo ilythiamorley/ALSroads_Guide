@@ -27,7 +27,6 @@ dtm_cs1 <- raster("data/06/01/DTM.tif")
 dtm20 <- raster("data/06/01/DTM20.tif")
 rds_cs1 <- st_read("data/06/01/roads.shp")
 upd_rds_cs1 <- st_read("data/06/01/upd_roads.shp") # Standard Parameters
-
 ```
 
 # Edge Case Studies {#sec-edge-case-studies}
@@ -35,15 +34,10 @@ upd_rds_cs1 <- st_read("data/06/01/upd_roads.shp") # Standard Parameters
 In this section, we present three known edge case studies where the `measure_road()` standard parameters may require tuning:
 
 -   **Low DTM complexity** (i.e., an area of uniform elevation)
-
 -   **Steep slopes** (i.e., an area characterized by steep slopes)
-
 -   **No vegetation** (i.e., an area where the road is not clearly defined by vegetation), there are three known no vegetation scenarios:
-
     1.  The roads are nicely shaped, and it is not an edge case it should works
-
     2.  The DTM is very flat and we are in 2.1
-
     3.  It so hard to find the road that even the least cost path fails because the roads are not highlighted enough compared to the surrounding vegetation. In that case we are facing a hard limit.
 
 ## Structure:
@@ -76,9 +70,7 @@ In this case study, we update a section of roads located in the eastern portion 
 ctg <- readLAScatalog"path/to/ctg/files", filter = "-drop_withheld -keep_random_fraction 0.25")
 dtm <- raster("path/to/dtm.tif")
 roads <- st_read("path/to/roads")
-```
 
-``` r
 st_crs(roads) = st_crs(ctg)
 roads = sf::st_crop(roads, ctg)
 ```
@@ -91,13 +83,7 @@ We adjust the the standard `measure_roads()` parameters, explained in section \@
 custom_param = alsroads_default_parameters
 custom_param$terrain$max_elevation_ground_points = 0.07
 custom_param$terrain$max_sd_ground_points = 0.04
-```
 
-#### Updating roads using `measure_roads()`
-
-`measure_roads()` is run using the custom parameters.
-
-``` r
 updated_roads_custom_param <- measure_roads(ctg = ctg, roads = roads, dtm = dtm, param = custom_param)
 ```
 
@@ -105,12 +91,25 @@ updated_roads_custom_param <- measure_roads(ctg = ctg, roads = roads, dtm = dtm,
 
 Plotting the updated road network alongside the existing road network allows the visualization of the updated roads.
 
-```{r, echo = FALSE, rgl = TRUE, fig.width = 4, fig.height = 3}
-url = "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
-m = mapview::mapview(list(rds_cs1, upd_rds_cs1),
-  layer.name = c("Inaccurate", "Corrected"),
-  color = c("red", "blue"), map.type = "Esri.WorldImagery")
-leaflet::addTiles(m@map, url)
+```{r, echo = FALSE, fig.width = 7.1, fig.height = 7}
+poly = mapply(function(x,y)
+{
+  x = st_geometry(x)
+  if (!is.na(y)) 
+    x = st_buffer(x, dist = y) 
+  else 
+    x = st_buffer(x, dist = 0.1)
+  return(st_sf(st_sfc(x)))
+}, 
+st_geometry(upd_rds_cs1), 
+upd_rds_cs1$ROADWID)
+poly = do.call(c, poly)
+st_crs(poly) = st_crs(upd_rds_cs1)
+
+plot(dtm_cs1, col = gray((0:25)/25))
+plot(st_geometry(rds_cs1), add = T)
+col = c("lightgray", "darkgreen", "orange", "red", "black")[upd_rds_cs1$CLASS+1]
+plot(poly, add = T, col = col, border = col, lwd = 2)
 ```
 
 ## Case Study: Steep Slopes {#sec-case-study-steep-slopes}

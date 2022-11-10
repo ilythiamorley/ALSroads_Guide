@@ -47,38 +47,20 @@ From a reference road (spatial line), `measure_roads()` extracts the line with a
 
 As detailed in section \@ref(data), the required input data for updating the existing road network are:
 
-1.  LAS catalog of LiDAR data
+1. `LAScatalog` of LiDAR data
+2. Digital Terrain Model (DTM) that corresponds to the LAS catalog coverage
+3. Pre-existing road network
 
 ``` r
-ctg_infolder <- "path/to/ctg/files"
-ctg <- readLAScatalog(las_ctg_infolder, filter = "-drop_withheld -keep_random_fraction 0.25")
-```
-
-2.  Digital Terrain Model (DTM) that corresponds to the LAS catalog coverage
-
-``` r
+ctg <- readLAScatalog("path/to/ctg/files", filter = "-drop_withheld -keep_random_fraction 0.25")
 dtm <- raster("path/to/dtm.tif")
-```
-
-3.  Pre-existing road network
-
-``` r
 roads <- st_read("path/to/roads.shp")
 ```
 
 Prior to running the `measure_roads()` function, users are recommended to:
 
-1.  Insure the coordinate reference system of the existing roads network and LAS catalog match.
-
-``` r
-st_crs(roads) = st_crs(ctg)
-```
-
-2.  Crop the roads network to the extent of the LAS catalog to confirm that no roads are beyond the extent of the Catalog and DTM.
-
-``` r
-roads = sf::st_crop(roads, ctg)
-```
+1. Insure the coordinate reference system of the existing roads network and `LAScatalog` match.
+2. Crop the roads network to the extent of the `LAScatalog` to confirm that no roads are beyond the extent of the point cloud and DTM.
 
 ### Road Extraction
 
@@ -98,7 +80,7 @@ The `measure_roads()` function updates the existing road network by adding eight
 In this example, we do not include water bodies, refer to (\@ref(water-case-studies)) for an example application with water bodies. Similarly, here we do not adjust the `ALSroads` default parameters, refer to (\@ref(topo) for example applications of the method with custom parameters.
 
 ``` r
-updated_roads <- measure_roads(ctg = ctg, roads = roads, dtm= dtm)
+updated_roads <- measure_roads(ctg = ctg, roads = roads, dtm = dtm)
 ```
 
 #### Spatial plotting Updated Roads {#sec-spatial-plotting-updated-roads}
@@ -108,7 +90,7 @@ The updated road network is a spatial feature that can be plotted to visualize t
 ```{r}
 url = "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
 
-m = mapview::mapview(list(roads, roads_upd),
+m <- mapview::mapview(list(roads, roads_upd),
   layer.name = c("Inaccurate", "Corrected"),
   color = c("red", "blue"), map.type = "Esri.WorldImagery")
 leaflet::addTiles(m@map, url)
@@ -121,9 +103,9 @@ road_poly <- sf::st_buffer(updated_roads, updated_roads$ROADWIDTH/2)
 ```
 
 ```{r plot-buff-rd, waning = FALSE}
-url = "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
+url <- "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
 
-m = mapview::mapview(list(road_upd, road_poly),
+m <- mapview::mapview(list(road_upd, road_poly),
                       layer.name = c("Corrected Road", "Road Width Buffer"),
                       col.regions=list("blue","orange"),col=list("blue","orange"),
                       map.type = "Esri.WorldImagery")
@@ -138,9 +120,9 @@ The number of roads per new road class can be plotted for visualization.
 
 ``` r
 ggplot(roads_upd, aes(y = CLASS, fill = CLASS)) +
- geom_bar() +
+    geom_bar() +
     labs(x="Count", y="Road Class") +
-  scale_fill_discrete(name = "Road Class") 
+    scale_fill_discrete(name = "Road Class") 
 ```
 
 ![](images/road_class_plot.png)
