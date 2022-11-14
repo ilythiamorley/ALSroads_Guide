@@ -19,35 +19,42 @@ knitr::opts_chunk$set(
 
 rgl::setupKnitr(autoprint = TRUE)
 
+roads <- st_read("data/03/roads.shp")
+
+
 ```
 
 # Tips and Tricks {#sec-tips-and-tricks}
 
-Following the update of road segments using the `ALSroads`package users may wish to edit data, filter results, or plot outcomes. Here, we provide code snippets intended to provide users with some data interpretation tools. 
+Following the update of road segments using the `ALSroads`package users may wish to edit data, filter results, or plot outcomes. Here, we provide code snippets intended to provide users with some basic data manipuation and interpretation tools.
 
-## Reconnecing Roads
+## Casting Roads to Linestring
 
-## Casting Roads to Linestring 
+Existing road networks may be multistring features, the `measure_roads()` function requires that roads are linestrings. Changing multistring features to linestrings requires the `st_cast()` function from the `sf` package (refer to the [sf vignette](https://cran.r-project.org/web/packages/sf/sf.pdf) for detailed information).
 
-
-``` r
+```r
 roads <- st_cast(roads, "LINESTRING")
 ```
 
 ## Adding an ID Column
 
-```r
+Existing road networks frequently include FID and ID columns that will help users select individual roads. In some cases, however, road networks have been edited or updated and the ID/FID columns are missing information.
+
+Users may wish to add a new ID column that specifically relate to the roads on which the ALSroads method was applied. In that case, users can add and populate a new column using the `rowid_to_column` from the `tibble` package (refer to the [tibble vignette](https://cloud.r-project.org/web/packages/tibble/tibble.pdf) for detailed information).
+
+``` r
 roads <- tibble::rowid_to_column(roads, "NUM")
 ```
 
 ## Selecting Specific Roads
 
-```r
+``` r
 road_subset <- roads %>%
   dplyr::filter(NUM %in% c(0:10))
 ```
 
-## Plotting Data 
+## Plotting Data
 
 ## Saving Data
 
+## Reconnecing Roads
