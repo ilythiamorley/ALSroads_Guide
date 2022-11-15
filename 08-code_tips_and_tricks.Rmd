@@ -21,7 +21,6 @@ rgl::setupKnitr(autoprint = TRUE)
 
 roads <- st_read("data/03/roads.shp")
 
-
 ```
 
 # Tips and Tricks {#sec-tips-and-tricks}
