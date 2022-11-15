@@ -21,103 +21,52 @@ rgl::setupKnitr(autoprint = TRUE)
 
 # Standard Parameters {#sec-explanation-of-parameters-measure_roads}
 
-The `meaure_roads()` function is built with a series of standard parameters. Users can change these parameter to suit the study areas for which road extraction is being completed.
+The `meaure_roads()` function is built with a series of standard parameters. Users can change these parameter to suit the study areas for which road extraction is being completed. Most of the parameters are not expected to be changed. All the parameters are described below but only the ones in **bold** may have a significant impact to really retain attention.
 
 ## Extraction Parameters: {#sec-extraction-parameters}
 
-Several parameters are set in the `meaure_roads()` function are used to to extract the point cloud, process it into small sections, and compute profiles. These parameters are:
+Several parameters are set in the `meaure_roads()` function are used to extract the point cloud, process it into small sections, and compute profiles.
 
--   **road_max_len:** Default = 2000 m
-    -   Definition: Maximum size of a processed road. If longer than that it will be split in chunks of equal sizes such as no one is more than this size.
--   **road_max_width:** Default = 30 m,
-    -   *Definition: Maximum width of a road for metrics measurements.*
--   **road_buffer:** Default = 80 m,
-    -   *Definition: Width of a buffer around the road for point-cloud extraction.*
--   **section_length:** Default = 10 m,
-    -   *Definition: Length of sections of road for metrics measurements.*
--   **profile_resolution:** Default = 0.5 m.
-    -   *Definition: resolution of the profiles and DTMs for metrics measurements.*
-
-Users are **not recommended** to adjust these parameters, unless under specific circumstances (i.e., road extraction is being completed in a region where road widths are commonly greater than 30 m).
+- [road_max_len] Default = 2000 m. Maximum size of a processed road section. If a road is longer than that it will be split in chunks of equal sizes such as no one is more than this size. The goal is to reduce the memory usage and computation time and avoid processing a 10 km long road strait without optimization.
+- [road_max_width] Default = 30 m. Maximum width of a road for metrics measurements. If the road is relocated with a default buffer of 80 m the measurement of the road is done with a buffer of 30 m only to reduce computation time. Indeed once we have the proper location of the road the edges are necessarily at +/- 10 m of the centerline at maximum. Using 30 m ensures to have more context on the sides.
+- **[road_buffer]** Default = 80 m. Width of a buffer around the road for point-cloud extraction. The algorithm processes only the point without a buffer around the reference roads and does not explore the entire space. This correspond to the biggest road offset error that can be fixed by the method. If the buffer is 80 m but a given road is 100 m off the real track, then the real road will be outside the extracted point cloud and won't be found. If the user knows that the error can be up to 100 m then a value of 120 is a good choice. If the user knows that the maximum error is at most 30 m then a buffer of 40 m will increase computation speed and reduce the chance to produce erroneous results.
+- [section_length] Default = 10 m. Length of sections of road for metrics measurements. The road width, road state and other metrics are by computing iteratively along the road by processing slices perpendicular to the road. This value is the size of the slices.
+- [profile_resolution] Default = 0.5 m. Definition: resolution of the profiles and DTMs for metrics measurements (fig 6 in the [paper](https://www.sciencedirect.com/science/article/pii/S1569843222002084?via%3Dihub)).
 
 ## Embankments Parameters: {#sec-embankments-parameters}
 
 The `meaure_roads()` function includes two parameters that specify how to algorithm deals with embankments in the terrain. These are:
 
--   **min_slope:** Default = 10 degrees,
-
-    -   *Definition: Slope (degrees) greater than the min_slope may initiate or terminate the detection of embankments.*
-
--   **max_width:** Default = 20 meters.
-
-Users are **not recommended** to adjust these embankments parameters, unless under specific circumstances (i.e., road extraction is being completed in a region where embankments are officially defined by a specific slope).
+- [min_slope] Default = 10 degrees. Slope (degrees) greater than the min_slope may initiate or terminate the detection of embankments.
 
 ## Terrain Parameters (excluding embankment): {#sec-terrain-parameters}
 
-The `meaure_roads()` function includes two parameters that specify how to algorithm detects roads in the terrain aspect ,excluding embankment (see section \@ref(sec-embankments-parameters) for embankment parameters). The terrain parameters are:
+The `meaure_roads()` function includes two parameters that specify how to algorithm detects roads in the terrain aspect, excluding embankment (see section \@ref(sec-embankments-parameters) for embankment parameters). The idea is that the algorithm must be able to find the edges of the roads even in absence of embankment.  The presence of embankments is the privilegied way to detect the edge of the roads but in absence of clear slope the method falls back to a rescue methods using the complexity of the DTM in each slice. The terrain parameters are:
 
--   **max_sd_ground_points:** Default = 0.1,
+-  **[max_sd_ground_points]** Default = 0.1. LiDAR ground points belonging to roads have a low dispersion on Z on the profiles because a road is relatively flat. However outside the limits of the road this standard deviation start to increase because the terrain is more complex. This value is a threshold at which the edge of the road are detected with the rescue method.
 
-    -   *Definition: LiDAR points belonging to roads have a low dispersion on Z. Maximum standard deviation can be interpreted to represent low dispersion.*
-
--   **max_elevation_ground_points:** Default = 0.15
-
-    -   *Definition: Once LiDAR points are normalized relatively to the potential road, all the points are expected to be at 0.*
-
-Users are **not recommended** to adjust standard terrain parameters.
+-  **[max_elevation_ground_points]** Default = 0.15. The algorihtm normalized the point cloud relatively to the road i.e. the ground point from the road are expected to be at 0 and the surrounding points are expected to be non-zero. The rescue edge method used this property to detected road edges.
 
 ## Conductivity Parameters: {#sec-conductivity-parameters}
 
--   **sigma_min = 0.1,**
+Theses parameters correspond to the method used to estimate the overall conductivity using multiple sub-conductivity layers. Each layer is described in the fig 3 of the [paper](https://www.sciencedirect.com/science/article/pii/S1569843222002084?via%3Dihub) and is activated using activation function. These activation functions have two thresholds. The value below correspond to that, expect if something else is mentionned .
 
-    -   Definition:
-
--   **s = c(5, 20),**
-
-    -   Definition:
-
--   **r = c(0.05, 0.1),**
-
-    -   Definition:
-
--   **e = 40,**
-
-    -   Definition:
-
--   **q = c(0.1, 0.5),**
-
-    -   Definition:
-
--   **h = c(0.1, 0.2),**
-
-    -   Definition:
-
--   **d = c(0.25, 0.95),**
-
-    -   Definition:
-
--   **alpha = list(h = 1, d = 2, r = 1, i = 1) )**
-
-    -   Definition:
+-   **[sigma_min]** Default 0.1. The conductivity cannot be lower than this value. The conductivity layer contruction is done such as conductivity values can range in [0,1]. But very very low values may be a problem when they form a gap in the road (false negative). Version 0.2.0 (not the one describe in the paper which is 0.1.0) introduced this parameter to allow crossing small gap.
+-   [s] Default c(5, 20)
+-   [r] Default c(0.05, 0.1)
+-   [e] Default = 40 This one is a simple threshold activation function.
+-   [q] Default c(0.1, 0.5)
+-   [h] Default c(0.1, 0.2)
+-   [d] Default c(0.25, 0.95)
+-   [alpha] Default list(h = 1, d = 2, r = 1, i = 1)). This is the alphas parameters in equation 1 in the [paper](https://www.sciencedirect.com/science/article/pii/S1569843222002084?via%3Dihub)
 
 ## Road State Parameters: {#sec-state-parameters}
 
-Using the `measure_roads()` function users classify roads into 4 classes (see section \@ref(sec-network-update). These classes are determined by assessing the LiDAR point cloud and evaluating the state of each road section. The `measure_roads()` parameters used evaluate the state of a section are:
+Using the `measure_roads()` function users classify roads into 4 classes (see section \@ref(sec-network-update). These classes are determined using 4 metrics derived from the point-clouds (fig 7 of the [paper](https://www.sciencedirect.com/science/article/pii/S1569843222002084?via%3Dihub)). An activation function is applied to the 4 metrics. This activation function has 2 parameters. The following are the two parameters of each activation function:
 
--   **percentage_veg_thresholds:** Default = 10% min & 40% max,
+- [percentage_veg_thresholds] Default = 10% min & 40% max. Roads with a percentage vegetation below 10% are assigned a score of 100. Roads with a percentage greater than 40% are assigned a score of 0%. There is a linear relationship in between.
+- [drivable_width_thresholds] Default = 1 m min & 5 m max. The same idea but with the width of the roads. If the width is too narrow it is unlikely to be a nice road.
+- [conductivity_thresholds] Default = 0.25 min & 0.5 max The same idea but with the conductivity of the road. If the conductivity is too low the score is 0%. Above 0.5 the score is 100%. Linearity in-between.
+- [shoulder_thresholds] Default = 50% min & 75% max. The same idea but counting the embankments found. For each slice the algorithm retains the count of the shoulder/embankments. I can find 0, 1 or 2 of them. If the algorithm always find 2 shoulder each side it means that the road is extremely well shaped and we have 100% of the possible count. However in practice the road are never enough shaped to find 2 shoulder everywhere. This metrics count the number of percentage of shoulders found. At 0% it means that the algorithm did not find any of them not even once. This is unlikely to be a nice road or to be a road at all. At 100% the score is 100%. Below 50% the score is 0%.
 
-    -   *Definition: Roads with a percentage vegetation between 10 % and 40 % are considered to be roads. Where a lower percentage vegetation threshold corresponds to a higher road state (i.e., road class 1 or 2)*
-
--   **drivable_width_thresholds:** Default = 1 m min & 5 m max,
-
-    -   *Definition: Roads with a drivable width between 1 m and 5 m are considered to be drivable. Where a narrower drivable road width is indicative of a poorer quality road (i.e., class 3 and 4 roads).*
-
--   **conductivity_thresholds:** Default = 0.25 min & 0.5 max,
-
-    -   Definition:
-
--   **shoulder_thresholds:** Default = 50 min & 75 max (UNIT?).
-
-    -   Definition:
-
-Users are **not recommended** to adjust standard terrain parameters, unless under specific circumstances. (E.g., )
+At the end the 4 scores are combined in a final score (fig 7 of the [paper](https://www.sciencedirect.com/science/article/pii/S1569843222002084?via%3Dihub)). This score can be used as is  but is also binned in 4 classes. So a road may have a score of 74% and be classified as class 2.
