@@ -69,7 +69,7 @@ plot_dtm3d(dtm, bg = "white")
 
 The `rasterize_terrain()` function interpolates ground points and creates a DTM. Here we demonstrate the Triangular irregular network (tin) interpolation method. The TIN method is fast, efficient, and generates good DTMs. To generate a 1 m resolution DTM model with the TIN algorithm we use the `rasterize_terrain()` function and (1) specify the algorithm using `algorithm = tin()`, and (2) specify the DTM resolution using `res = 1`.
 
-```r
+``` r
 dtm_tin <- rasterize_terrain(ctg, res = 1, algorithm = tin())
 ```
 
@@ -81,7 +81,7 @@ An existing road network is required to perform road extraction using `ALSroads`
 roads <- st_read("path/to/roads")
 ```
 
-```{r, message=FALSE, fig.align='center', fig.width=8, fig.height=6}
+```{r, message=FALSE, fig.align='center', fig.width=6, fig.height=4}
 url = "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
 m = mapview::mapview(roads,
   layer.name = "Road Segments",

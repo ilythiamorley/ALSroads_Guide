@@ -32,7 +32,8 @@ Several of the `meaure_roads()` parameters are used to extract the point cloud, 
 -   [road_max_len] Default = 2000 m. Maximum size of a processed road section. If a road is longer than this value it will be split in chunks of equal sizes that are each less than than the max road length value. The goal of this parameter is to reduce memory usage and computation time, and avoid processing a long road strait without optimization.
 
 -   **[road_buffer]** Default = 80 m. Width of a buffer around the existing road for point-cloud extraction. The algorithm processes only the point cloud within the buffer around the reference roads (see figure below). This value corresponds to the biggest road offset error (i.e., how incorrect the existing road track is) that can be fixed by the method. If the road buffer is 80 m, but a given road is 100 m off the real track, then the real road will be outside the extracted point cloud and won't be found. If the user knows that the road track error can be up to 100 m then a road buffer value of 120 m is necessary rather than the default value (80 m ). If the user knows that the maximum road track error is at most 30 m, then a buffer of 40 m will increase computation speed and reduce the chance of produce erroneous results.
-<center>![](images/schema_buffer.png)</center>
+
+    <center>![](images/schema_buffer.png)</center>
 
 -   [road_max_width] Default = 30 m. Maximum width of a road for metric measurements. If the road is relocated with a default buffer of 80 m (see parameter **road_buffer** below) the measurement of the road is done with a buffer of 30 m only to reduce computation time. Indeed once we have the proper location of the road the edges are necessarily at +/- 10 m of the centerline at maximum. Using 30 m ensures to have more context on the sides.
 
@@ -50,11 +51,11 @@ The `meaure_roads()` function includes one parameter that specifies how the algo
 
 ## Terrain Parameters (excluding embankment): {#sec-terrain-parameters}
 
-The `meaure_roads()` function includes two parameters that specify how the algorithm detects roads edges in the terrain aspect, excluding embankment/shoulder (see section \@ref(sec-embankments-parameters) for embankment parameters). 
+The `meaure_roads()` function includes two parameters that specify how the algorithm detects roads edges in the terrain aspect, excluding embankment/shoulder (see section \@ref(sec-embankments-parameters) for embankment parameters).
 
 The purpose of these parameters is to allow the algorithm to find the edges of the road, even in the absence of embankments. Classifying the edges of roads using embankments is the preferable method. In the absence of clear embankments, defined by the road edge slopes, the method relies on the DTM complexity of each road section (see section \@ref(sec-extraction-parameters) for information on road sections) to classify the edges of the road. We refer to the classification of road edges using DTM complexity as the *"rescue method"* as it is used when the preferred method based on road embankment is not possible.
 
-The idea is that a road is flat an simple. If we get rid of the potential slope along its direction a road is roughly a 2D strip without variations on Z. The outer of the road on another hand correspond to natural landscape and is more complex. It corresponds to a 3D structure with variations on Z. On a given slice perpendicular to the road if we compute some adequate metrics on the ground points from the left to the right we obtain a profile that is expected to have higher values outside the boundaries of the road and lowe values close to zero inside. This profile often looks a bit like a parabola. By choosing an adequate threshold we can define road edges. This is illustrated in the figure below. 
+The idea is that a road is flat an simple. If we get rid of the potential slope along its direction a road is roughly a 2D strip without variations on Z. The outer of the road on another hand correspond to natural landscape and is more complex. It corresponds to a 3D structure with variations on Z. On a given slice perpendicular to the road if we compute some adequate metrics on the ground points from the left to the right we obtain a profile that is expected to have higher values outside the boundaries of the road and low values close to zero inside. This profile often looks a bit like a parabola. By choosing an adequate threshold we can define road edges. This is illustrated in the figure below.
 
 <center>![](images/schema_road_rescue.png)</center>
 
@@ -66,7 +67,7 @@ Notice that the embankments and rescue methods are not mutualy exclusive. In man
 
 ## Vegetation: {#sec-vegetation-parameters}
 
-Once we have the width of the road i.e. the size of the road that has been build the method estimate the drivable width which is the road width minus the vegetation that impede the passage. The idea is that is is possible to recognize a road in the DTM because the geometry is there but the vegetation has grown and the road is no longer drivable. On a road all the lidar point are expected to be on the ground. Accounting for innacuracies we assume that 100% of the point must be between 0 and 50 cm. If some points are above that it means that there is some vegetations. 1 point might be an outlier but a significant percentage of the point trigger a stop signal. Starting from the centerline and going both to the left and right, the method compute the cumulative percentage of non ground points. This produce a profile that is thresholded like for the regular width measurement (see figure bellow).
+Once we have the width of the road i.e. the size of the road that has been build the method estimate the drivable width which is the road width minus the vegetation that impede the passage. The idea is that is is possible to recognize a road in the DTM because the geometry is there but the vegetation has grown and the road is no longer drivable. On a road all the lidar point are expected to be on the ground. Accounting for innacuracies we assume that 100% of the point must be between 0 and 50 cm. If some points are above that it means that there is some vegetation. 1 point might be an outline but a significant percentage of the point trigger a stop signal. Starting from the centerline and going both to the left and right, the method compute the cumulative percentage of non ground points. This produce a profile that is threshold like for the regular width measurement (see figure bellow).
 
 <center>![](images/schema_road_drivable.png)</center>
 
@@ -98,12 +99,12 @@ Using the `measure_roads()` function users classify roads into four classes (see
 
 1.  W - the drivable width of the road,
 2.  P - the percentage of vegetation points between 0.5 and 5 meters above the road,
-3.  S  - the average number of shoulders detected and,
+3.  S - the average number of shoulders detected and,
 4.  σ - the conductivity per linear meter.
 
 An activation function is applied to the four metrics. These activation functions have two parameters. The following are the two parameters of each activation function. Modifying these thresholds have predictable behaviours but it is hard to quantify these behaviours. The idea is that each metrics weight in a simple voting system for a class. If the method detected something large `W` is "voting" for a nice and large class 1 road but in the mean time `P` may "vote" for an abandoned road because there is a lot of vegetation. And S may indicate that nice ditches where found everywhere so the road looks nice. Overall the road my be classified 2.
 
--  **[drivable_width_thresholds]** Default `c(1, 5)`. Roads with a drivable road width above 5 m are assigned a score of 100. Roads with a width less than 1 m are assigned a score of 0.Indeed if the width is too narrow it is unlikely to be a nice road. The is a linear relationship between 1 and 5 i.e. a with of 2 m returns a score of 50%. If the users do know that in their context a road of 4 m is a fair road we recommend changing the parameter to  something like `c(1, 3)` for example.
+-   **[drivable_width_thresholds]** Default `c(1, 5)`. Roads with a drivable road width above 5 m are assigned a score of 100. Roads with a width less than 1 m are assigned a score of 0.Indeed if the width is too narrow it is unlikely to be a nice road. The is a linear relationship between 1 and 5 i.e. a with of 2 m returns a score of 50%. If the users do know that in their context a road of 4 m is a fair road we recommend changing the parameter to something like `c(1, 3)` for example.
 
 -   **[percentage_veg_thresholds]** Default = `c(10,40)`. Roads with a percentage vegetation (point above ground in a range of [0.5m, 5m]) below 10% are assigned a score of 100%. Roads with a percentage greater than 40% are assigned a score of 0%. There is a linear relationship between the lower and upper percentage vegetation thresholds.
 

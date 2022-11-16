@@ -27,7 +27,7 @@ roads_upd <-  transform(roads_upd, CLASS = as.factor(CLASS))
 roads_upd_filt <- subset(roads_upd, CLASS == 1| CLASS == 2)
 ```
 
-# Road Extraction using `ALSroads` {#sec-road-extraction-using-alsroads}
+# Road Extraction with `ALSroads` {#sec-road-extraction-using-alsroads}
 
 The `ALSroads` package includes functions developed for correcting and updating vectorial and topologically valid forest road networks. Using an existing map of road centrelines, the method relocates roads, measures their width, and assigns a class for each road segment [Roussel et al. (2022)](https://www.sciencedirect.com/science/article/pii/S1569843222002084#d1e1483).
 
@@ -87,9 +87,8 @@ updated_roads <- measure_roads(ctg = ctg, roads = roads, dtm = dtm)
 
 The updated road network is a spatial feature that can be plotted to visualize the location of updated roads.
 
-```{r plot-roads-network, warning = FALSE, fig.align='center', fig.width=8, fig.height=6}
+```{r plot-roads-network, warning = FALSE, fig.align='center', fig.width=6, fig.height=4}
 url = "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
-
 m <- mapview::mapview(list(roads, roads_upd),
   layer.name = c("Inaccurate", "Corrected"),
   color = c("red", "blue"), map.type = "Esri.WorldImagery")
@@ -102,9 +101,8 @@ In addition, following road extraction, the new road width attribute can be used
 road_poly <- sf::st_buffer(updated_roads, updated_roads$ROADWIDTH/2)
 ```
 
-```{r plot-buff-rd, warning = FALSE, fig.align='center', fig.width=8, fig.height=6}
+```{r plot-buff-rd, warning = FALSE, fig.align='center', fig.width=6, fig.height=4}
 url <- "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
-
 m <- mapview::mapview(list(road_upd, road_poly),
                       layer.name = c("Corrected Road", "Road Width Buffer"),
                       col.regions=list("blue","orange"),col=list("blue","orange"),

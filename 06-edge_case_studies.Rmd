@@ -16,14 +16,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   fig.align = "center")
 
-
-options(crayon.enabled = TRUE)
-old_hooks <- fansi::set_knit_hooks(knitr::knit_hooks, which = c("output", "message", "error"))
-
 rgl::setupKnitr(autoprint = TRUE)
 knitr::opts_chunk$set(echo = TRUE)
-rgl::setupKnitr(autoprint = TRUE)
-
 #Case study: DTM compx
 
 las_infolder <- ("data/06/01/ctg/")
@@ -38,9 +32,22 @@ upd_rds_cs1 <- st_read("data/06/01/upd_roads.shp") # Standard Parameters
 
 In this section, we present three known edge case studies where the `measure_road()` standard parameters (see section \@ref(sec-explanation-of-parameters-measure_roads) may require tuning:
 
--   **Low DTM complexity** - an area of uniform elevation
--   **Steep slopes** - an area characterized by steep slopes
--   **No vegetation** - an area where the road is not clearly defined by vegetation, there are three known no vegetation scenarios:
+-   **Case Study 1: Low DTM complexity**
+
+-   **Case Study 2: Narrow/Wide Roads**
+
+-   **Case Study 3: max_percentage_drivable**
+
+-   **Case Study 4: Road State Classifications**
+
+    -   drivable_width_thresholds
+
+    -   percentage_veg_thresholds
+
+    -   shoulder_thresholds
+
+-   **Case Study 5: No vegetation** - an area where the road is not clearly defined by vegetation, there are three known no vegetation scenarios:
+
     1.  The roads are nicely shaped, is not an edge case, and the algorithm should be able to accurate update the road.
     2.  The DTM is very flat and locating the road is a challenge.
     3.  It so hard to find the road that even the least cost path fails because the roads are not highlighted enough compared to the surrounding vegetation, refer to [Roussel et al. (2022)](https://www.sciencedirect.com/science/article/pii/S1569843222002084#d1e1483) on how the least cost algorithm works to identify roads. In this case we are facing a hard limit.
@@ -49,30 +56,44 @@ In this section, we present three known edge case studies where the `measure_roa
 
 For each case study, we include code snippets outlining how to:
 
-1.  Read the required input data, detailed information is available in Section \@ref(sec-reading-generating-and-plotting-input-data).
-2.  Check the Coordinate Reference System of input data and clip the existing road network to the spatial extent of the LAZ catalog.
-3.  Update the existing road network using the `measure_roads()` function.
-4.  Adjust standard road extraction parameters to improve method accuracy. Information on `measure_roads()` standard parameters is available in Section \@ref(sec-explanation-of-parameters-measure_roads).
+1.  Read the required input data (refer to section \@ref(sec-reading-generating-and-plotting-input-data) for detailed information).
+2.  Check the Coordinate Reference System (CRS) of input data and clip the existing road network to the spatial extent of the LAS catalog.
+3.  Update the existing road network using the `measure_roads()` function from the `ALSroads` package.
+4.  Adjust the standard road extraction parameters to improve method accuracy. Information on the `measure_roads()` standard parameters is available in Section \@ref(sec-explanation-of-parameters-measure_roads).
 5.  Visualize road extraction results.
 
 Each case study is 'stand-alone' and users do not need to refer to other sections of the user guide. As such, some code snippets, such as loading data, are repeated for each case study.
 
-## Case Study: Low DTM complexity {#sec-case-study-low-dtm-complexity}
+## Case Study 1: Low DTM complexity {#sec-case-study-low-dtm-complexity}
 
 ### Overview: {#sec-overview}
 
-Among other factors, such as vegetation and slope, the road extraction method developed by [Roussel et al. (2022)](%5Bhttps://www.sciencedirect.com/science/article/pii/S1569843222002084#d1e1483) uses the complexity of the input DTM to correctly position the updated road. The road extraction works by applying a Sobel filter [(Sobel. 2014)](https://www.researchgate.net/publication/239398674_An_Isotropic_3x3_Image_Gradient_Operator) on the DTM to detect sharp road edges. In areas where the DTM is not complex (i.e., there is minimal variation between pixels in the DTM) the road may still be detectable using other surfaces, such as a CHM, slope, or roughness raster. Under ideal circumstances, the DTM is complex enough that the algorithm can distinguish between the drivable and total road edge by assessing groves in the road edge and road shoulder.
+Among other factors, such as vegetation and slope, the road extraction method developed by [Roussel et al. (2022)](%5Bhttps://www.sciencedirect.com/science/article/pii/S1569843222002084#d1e1483) uses the complexity of the input DTM to correctly position the updated road. The road extraction method works by applying a Sobel filter [(Sobel. 2014)](https://www.researchgate.net/publication/239398674_An_Isotropic_3x3_Image_Gradient_Operator) on the DTM to detect sharp road edges. Under ideal circumstances, the Slope complex enough that the algorithm can distinguish between the drivable and total road edge and determine the road width (see section \@ref(sec-embankments-parameters)).
 
-In this case study, we update a section of roads located in the eastern portion of the Nipissing Forest, located in the province of Ontario.
+In the absence of embankments the `measure_roads` function uses the DTM complexity to detect road edges (see section \@ref(sec-terrain-parameters)). In the event that users are updating roads in very flat areas where there is little DTM complexity the standard parameters can be tuned to improve method accuracy.
+
+In this case study we demonstrate how users can tune `measure_roads` parameters in low DTM complexity conditions. The example case study roads are located in the eastern portion of the Nipissing Forest, located in the province of Ontario.
 
 ![](images/06_01_dtm.PNG)
 
-### Method and Application: {#sec-method-and-application}
+### Data, Method, and Application: {#sec-method-and-application}
+
+### Required R Packages: {#sec-required-r-packages}
+
+``` r
+remotes::install_github("Jean-Romain/ALSroads") #Install the ALSroads Package
+
+library("ALSroads") 
+library("lidR")
+library("raster")
+library("sf")
+library("ggplot2")
+```
 
 #### Loading Data: {#sec-loading-data}
 
 ``` r
-ctg <- readLAScatalog"path/to/ctg/files", filter = "-drop_withheld -keep_random_fraction 0.25")
+ctg <- readLAScatalog"path/to/ctg/files", filter = "-drop_withheld-keep_random_fraction 0.25")
 dtm <- raster("path/to/dtm.tif")
 roads <- st_read("path/to/roads")
 
@@ -82,7 +103,12 @@ roads = sf::st_crop(roads, ctg)
 
 #### Parameter Tuning {#sec-parameter-tuning}
 
-We adjust the the standard `measure_roads()` parameters, explained in section \@ref(sec-explanation-of-parameters-measure_roads). **The maximum elevation ground points is set to to 0.07 and the maximum standard deviation of ground points to 0.04.**
+The `measure_roads()` **terrain parameters** dictate how the method handles DTM complexity (see section \@ref(sec-terrain-parameters)). The standard terrain parameters are:
+
+1.  max_elevation_ground_points: `Default = 0.1`
+2.  max_sd_ground_points: `Default = 0.15`
+
+In a low DTM complexity area decreasing the `max_elevation_ground_points` and `max_sd_ground_points` improves the accuracy of road extraction. **In this case study we decrees the `max_elevation_ground_points` to 0.07 and decrees the `max_sd_ground_points` to 0.04.**
 
 ``` r
 custom_param = alsroads_default_parameters
@@ -117,38 +143,49 @@ col = c("lightgray", "darkgreen", "orange", "red", "black")[upd_rds_cs1$CLASS+1]
 plot(poly, add = T, col = col, border = col, lwd = 2)
 ```
 
-## Case Study: Steep Slopes {#sec-case-study-steep-slopes}
+## Case Study 2: Narrow/Wide Roads {#sec-case-study-steep-slopes}
 
 ### Overview:
 
-The road extraction method functions by combining information, such as terrain slope, intensity map, and CHM, to estimate how difficult it is to move from cell to cell. Low conductivity is attributed to pixels where a road is unlikely to be, and high conductivity where a road is likely to be. The road shoulders are detected to derive the road width based on abrupt variations of the slope. In the absence of clear shoulders, road edges are detected using the DTM complexity as shown in \@ref().
+The road extraction method developed by [Roussel et al. (2022)](%5Bhttps://www.sciencedirect.com/science/article/pii/S1569843222002084#d1e1483) updated an existing road network by searching within a buffer area of the existing road for an updated road line. The algorithm processes only the point cloud within the buffer around the reference roads (see section \@ref(sec-extraction-parameters)). This value corresponds to the biggest road offset error (i.e., how incorrect the existing road track is) that can be fixed by the method.
 
-Within the `measure_roads()` function, terrain slope is computed according to [Horn (1981)](https://www.researchgate.net/publication/2996084_Hill_shading_and_the_reflectance_map) method, and implemented using the `raster` package. The slope of the terrain indicates where a road cannot be with certainty. If the slope of the terrain is greater than a pre-set degree value S, then a road cannot be present. S is often defined by local legislation and is considered a known parameter. A slope of \< 5° has a conductivity of 1, between 5 and S ° the conductivity decreases linearly to 0, making it impossible to move through pixels with steeper slopes.
+In some circumstances users may know that the updated is beyond the standard road buffer distance (80 m) and tune the `road_buffer` parameter accordingly. Similar, if a user knows that the maximum road track error is less than the standard buffer the`road_buffer`can be reduced to increase accuracy and reduce computation.
 
-The standard parameter for S, refer to section \@ref(), in the road extract algorithm is 20 °. This parameter can be adjusted to account for areas where local legislation provides a specific S value.
+In this case study we demonstrate how users can tune `measure_roads` parameters in an area where the updated road is very close to the existing road. The example case study roads are located in the eastern portion of the Nipissing Forest, located in the province of Ontario.
 
-### Method and Application
+### Data, Method, and Application:
+
+#### Required R Packages:
+
+``` r
+remotes::install_github("Jean-Romain/ALSroads") #Install the ALSroads Package
+
+library("ALSroads") 
+library("lidR")
+library("raster")
+library("sf")
+library("ggplot2")
+```
 
 #### Loading Data:
 
 ``` r
-ctg <- readLAScatalog"path/to/ctg/files", filter = "-drop_withheld -keep_random_fraction 0.25")
+ctg <- readLAScatalog"path/to/ctg/files", filter = "-drop_withheld-keep_random_fraction 0.25")
 dtm <- raster("path/to/dtm.tif")
 roads <- st_read("path/to/roads")
-```
 
-``` r
 st_crs(roads) = st_crs(ctg)
 roads = sf::st_crop(roads, ctg)
 ```
 
-#### Parameter Tuning
+#### Parameter Tuning:
 
-#### Updating roads using `measure_roads()`
-
-`measure_roads()` is run using the custom parameters.
+The `measure_roads()` **extraction parameters** include a parameter called `road_buffer` for defining the road buffer width (see section \@ref(sec-extraction-parameters)). The default `road_buffer` distance is 80 m, but in this case study we know that the updated road is \< 10 m from the existing road network. **In this case study we decrees the `road_buffer` to 40 m**
 
 ``` r
+custom_param = alsroads_default_parameters
+custom_param$extraction$road_buffer = 40
+
 updated_roads_custom_param <- measure_roads(ctg = ctg, roads = roads, dtm = dtm, param = custom_param)
 ```
 
@@ -156,17 +193,12 @@ updated_roads_custom_param <- measure_roads(ctg = ctg, roads = roads, dtm = dtm,
 
 Plotting the updated road network alongside the existing road network allows the visualization of the updated roads.
 
-``` r
-m = mapview::mapview(list(roads, updated_roads),
-  layer.name = c("Inaccurate", "Corrected"),
-  color = c("red", "blue"), map.type = "Esri.WorldImagery")
-leaflet::addTiles(m@map)
-```
+## Case Study 2: Narrow/Wide Roads
+
+## Case Study 2: Narrow/Wide Roads
+
+## Case Study 2: Narrow/Wide Roads
 
 ## Case Study: No Vegetation {#sec-case-study-no-veg}
-
-### Scenario One: The roads are nicely shaped, and it is not an edge case it should works
-
-### Scenario Two: The DTM is very flat and we are in 2.1
 
 ### Scenario Three: It so hard to find the road that even the least cost path fails because the roads are not highlighted enough compared to the surrounding vegetation. In that case we are facing a hard limit.
