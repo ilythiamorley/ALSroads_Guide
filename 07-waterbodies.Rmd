@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 rgl::setupKnitr(autoprint = TRUE)
 ```
 
-# Waterbodies {#sec-waterbodie}
+# Waterbodies {#sec-waterbodies}
 
 The inclusion of water bodies when using the `measure_roads()` function is recommenced for several reasons, as explained in section /@ref(). Here, we provide two road extraction examples for the same study areas. In the first example water bodies are not included as a `measure_roads()` parameter, in the second example water bodies are included. We therefore demonstrate the value of using water bodies with the `measure_roads()` function. 
 

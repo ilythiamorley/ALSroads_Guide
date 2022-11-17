@@ -38,7 +38,7 @@ A `LAScatalog` is a representation in R of a LAS file or a collection of LAS fil
 ctg <- readLAScatalog("path/to/ctg/files")
 ```
 
-The `print()` function can be used to summaries information about the catalog, such as the number of points, and density of points.
+The `print()` function can be used to summarize information about the catalog, such as the number of points and density of points.
 
 ```{r, message=FALSE}
 print(ctg)
@@ -48,7 +48,7 @@ print(ctg)
 
 ### Reading raster DTM data using `raster` {#sec-reading-raster-dtm-data-using-raster}
 
-`ALSroads` users may be provided a 1 m resolution DTM that covers the `LAScatalog` coverage (refer to section \@ref(sec-dtm-data) for DTM requirements). If DTM data is provided, then users can load this information using the `raster` package.
+`ALSroads` users may be provided with a 1 m resolution DTM that covers the `LAScatalog` coverage (refer to section \@ref(sec-dtm-data) for DTM requirements). If DTM data is provided, users can load this information using the `raster` package.
 
 ``` r
 library(raster)
@@ -67,7 +67,7 @@ plot_dtm3d(dtm, bg = "white")
 
 `ALSroads` users that do not have an existing 1 m resolution DTM can produce a DTM using LAS data and the function `grid_terrain()` from the `lidR` packages.
 
-The `rasterize_terrain()` function interpolates ground points and creates a DTM. Here we demonstrate the Triangular irregular network (tin) interpolation method. The TIN method is fast, efficient, and generates good DTMs. To generate a 1 m resolution DTM model with the TIN algorithm we use the `rasterize_terrain()` function and (1) specify the algorithm using `algorithm = tin()`, and (2) specify the DTM resolution using `res = 1`.
+The `rasterize_terrain()` function interpolates ground points and creates a DTM. Here we demonstrate the Triangular irregular network (tin) interpolation method. The TIN method is fast, efficient, and generates good DTMs. To generate a 1 m resolution DTM model with the TIN algorithm, we use the `rasterize_terrain()` function and (1) specify the algorithm using `algorithm = tin()`, and (2) specify the DTM resolution using `res = 1`.
 
 ``` r
 dtm_tin <- rasterize_terrain(ctg, res = 1, algorithm = tin())
@@ -75,7 +75,7 @@ dtm_tin <- rasterize_terrain(ctg, res = 1, algorithm = tin())
 
 ## Reading Vector Road Data using `st_read()` {#sec-reading-vector-road-data-using-st_read}
 
-An existing road network is required to perform road extraction using `ALSroads`. Once users have sourced road data (file format = shapefile), the entire road network can be loaded into R using the `sf` package. The function `st_read()` reads simple features from file. Detailed information on the `st_read()` function and the `sf` package is available online in a [dedicated vignette](https://r-spatial.github.io/sf/articles/).
+An existing road network is required to perform road extraction using `ALSroads`. Once users have sourced road data (file format = shapefile), the entire road network can be loaded into R using the `sf` package. The function `st_read()` reads simple features from a file. Detailed information on the `st_read()` function and the `sf` package is available online in a [dedicated vignette](https://r-spatial.github.io/sf/articles/).
 
 ``` r
 roads <- st_read("path/to/roads")

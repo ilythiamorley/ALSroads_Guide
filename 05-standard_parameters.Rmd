@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 rgl::setupKnitr(autoprint = TRUE)
 ```
 
-# Standard Parameters {#sec-explanation-of-parameters-measure_roads}
+# Standard Parameters {#sec-standard-parameters}
 
 The `meaure_roads()` function is built with a series of standard parameters. Users can change these parameter to suit the study areas for which road extraction is being completed. Most of the standard parameters are not expected to be changed, and are suitable for road extraction across different areas. All the `measure_roads()` parameters are described below but only the ones in **bold** will significantly impact method in a predictable way, and should be considered by users.
 

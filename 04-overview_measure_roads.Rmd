@@ -41,7 +41,19 @@ Broadly, the road extraction method consists of three steps:
 
 Here, we explain a standard application of the `measure_roads()` function.
 
-From a reference road (spatial line), `measure_roads()` extracts the line with a buffer from the point cloud and computes the exact position of the road. Then, using the updated road shape, road metrics are computed, these include the total width, drivable width, sinuosity, and class.
+From a reference road (spatial line), `measure_roads()` extracts the line with a buffer from the point cloud and computes the exact position of the road. Then, using the updated road shape, road metrics are computed; these include the total width, drivable width, sinuosity, and class.
+
+### Required R Packages: {#sec-required-r-packages}
+
+``` r
+remotes::install_github("Jean-Romain/ALSroads") #Install the ALSroads Package
+
+library("ALSroads") 
+library("lidR")
+library("raster")
+library("sf")
+library("ggplot2")
+```
 
 ### Input Data {#sec-input-data}
 
@@ -57,10 +69,10 @@ dtm <- raster("path/to/dtm.tif")
 roads <- st_read("path/to/roads.shp")
 ```
 
-Prior to running the `measure_roads()` function, users are recommended to:
+Before running the `measure_roads()` function, users are recommended to:
 
-1.  Insure the coordinate reference system of the existing roads network and `LAScatalog` match.
-2.  Crop the roads network to the extent of the `LAScatalog` to confirm that no roads are beyond the extent of the point cloud and DTM.
+1. Ensure the coordinate reference system of the existing roads network and `LAScatalog` match.
+2. Crop the roads network to the extent of the `LAScatalog` to confirm that no roads are beyond the extent of the point cloud and DTM.
 
 ### Network Update {#sec-network-update}
 
@@ -68,16 +80,16 @@ The `measure_roads()` function updates the existing road network by adding eight
 
 -   ROADWIDTH - The total width (meters) of the road.
 -   DRIVABLEWIDTH - The drivable width (meters) of the road.
--   PERCABOVEROAD - The percentage of point above the road in a range [0.5, 5] m
+-   PERCABOVEROAD - The percentage of points above the road in a range [0.5, 5] m
 -   SHOULDERS - The average number of shoulders found along the roads.
 -   SINUOSITY - The sinuosity (i.e., curvature) of the road.
--   CONDUCTIVITY - The average conductivity of the road i.e., how much the road facilitates or impedes movement (unitless)
--   SCORE - The score of the road relates to the quality of the road. Road score ranges from 0 - 100, where a road score of 100 indicated high-quality roads.
+-   CONDUCTIVITY - The average conductivity of the road, i.e., how much the road facilitates or impedes movement (unitless)
+-   SCORE - The score of the road relates to the quality of the road. Road score ranges from 0 - 100, with a road score of 100 indicating high-quality roads.
 -   CLASS - A 'Class' (1 - 4) is assigned to each road segment. The class is computed from the SCORE. Class 4 corresponds to a score [0, 25], Class 3 to a score [25, 50] and so on.
 
 ## Applying `measure_roads()` {#sec-applying-measure_roads}
 
-In this example, we do not include water bodies, refer to section \@ref(sec-waterbodie) for an example application with water bodies. Similarly, here we do not adjust the `ALSroads` default parameters, refer to section \@ref(sec-edge-case-studies) for example applications of the method with custom parameters.
+In this example, we do not include water bodies, refer to section \@ref(sec-waterbodies) for an example application with water bodies. Similarly, here we do not adjust the `ALSroads` default parameters; refer to section \@ref(sec-edge-case-studies) for example, applications of the method with custom parameters.
 
 ``` r
 updated_roads <- measure_roads(ctg = ctg, roads = roads, dtm = dtm)
@@ -95,7 +107,7 @@ m <- mapview::mapview(list(roads, roads_upd),
 leaflet::addTiles(m@map, url)
 ```
 
-In addition, following road extraction, the new road width attribute can be used to buffer the road and show the road footprint. Buffering is performed using the `sf` package function `st_buffer ()`.
+In addition, following road extraction, the new road width attribute can be used to buffer the road and show the road footprint. Buffering is performed using the `sf` package function `st_buffer()`.
 
 ``` r
 road_poly <- sf::st_buffer(updated_roads, updated_roads$ROADWIDTH/2)
@@ -122,10 +134,9 @@ ggplot(roads_upd, aes(y = CLASS, fill = CLASS)) +
     labs(x="Count", y="Road Class") +
     scale_fill_discrete(name = "Road Class") 
 ```
+<center> ![](images/road_class_plot.png) <center>
 
-![](images/road_class_plot.png)
-
-The drivable widths of roads, grouped by road class, can be plotted for comparison. Only Class 1 and 2 roads are included as Class 3 and 4 roads do not have updated road widths.
+The drivable widths of roads, grouped by road class, can be plotted for comparison. Only Class 1 and 2 roads are included, as Class 3 and 4 roads do not have updated road widths.
 
 ``` r
 ggplot(data=roads_upd_filt, aes(x=CLASS, y= DRIVABL, fill=CLASS)) +
@@ -134,5 +145,4 @@ ggplot(data=roads_upd_filt, aes(x=CLASS, y= DRIVABL, fill=CLASS)) +
       theme(text = element_text(size = 16)) +
       scale_fill_manual(values = c("#F8766D", "#7CAE00"), (name = "Road Class"))
 ```
-
-![](images/road_width_plot.png)
+<center> ![](images/road_width_plot.png) <center>
