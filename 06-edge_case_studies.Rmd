@@ -78,15 +78,73 @@ Each case study is 'stand-alone' and users do not need to refer to other section
 
 ## Case Study 1: Low DTM complexity {#sec-case-study-low-dtm-complexity}
 
-### Overview: {#sec-overview}
+The road extraction method developed by [Roussel et al. (2022)](https://www.sciencedirect.com/science/article/pii/S1569843222002084#d1e1483) uses the geometry of the terrain to correctly relocate and measure the roads. Under ideal circumstances a road is expected to be unnaturally flat with steep slopes on its edges (shoulders or embankments). Also , a road is embedded within an environment that is more complex and non flat. Under these assumptions a road is not that hard to find and measure. However problems arise when there is no geometry at all to detect. This may happen, for example, if the roads are not shaped with ditches on their sides. In this case the algorithm is still supposed to work with a rescue method that does not uses the shoulders but rather uses the terrain complexity. Yet, if the terrain is perfectly flat there is no remaining geometrical feature to rely on. How could we find the limits of a flat road in a flat environment using only geometrical features? Hopefully in the real world nothing is perfectly flat. In the following example we will see an edge case that works when adjusting some parameters.
 
-Among other factors, such as vegetation and slope, the road extraction method developed by [Roussel et al. (2022)](%5Bhttps://www.sciencedirect.com/science/article/pii/S1569843222002084#d1e1483) uses the complexity of the input DTM to correctly position the updated road. The road extraction method works by applying a Sobel filter [(Sobel. 2014)](https://www.researchgate.net/publication/239398674_An_Isotropic_3x3_Image_Gradient_Operator) on the DTM to detect sharp road edges. Under ideal circumstances, the Slope complex enough that the algorithm can distinguish between the drivable and total road edge and determine the road width (see section \@ref(sec-embankments-parameters)).
+In the following example, the topography is almost perfectly flat and the roads are not nicely shaped. Let see if the road are properly relocated and measured. As the 3D plot of the ground points demonstrates here, the road is easily identifiable but there is no geometrical feature that can be used to measure it. The road is flat in flat environment.
 
-In the absence of embankments the `measure_roads` function uses the DTM complexity to detect road edges (see section \@ref(sec-terrain-parameters)). In the event that users are updating roads in very flat areas where there is little DTM complexity the standard parameters can be tuned to improve method accuracy.
+```{r, disp = FALSE}
+#I'm not sharing the data you can regen it:
+#las = ALSroads:::clip_longline(ctg_cs1, rds_cs1[5,], buffer = 80)
+#writeLAS(las, "data/06/01/road_10462.las")
+las = readLAS("data/06/01/road_10462.las")
+plot(filter_ground(las))
+```
+ 
+First let's have a look at the conductivity layer:
+ 
+```{r}
+sig = ALSroads::rasterize_conductivity(las, dtm_cs1)
+plot(sig, col = viridis::inferno(50))
+```
 
-In this case study we demonstrate how users can tune `measure_roads` parameters in low DTM complexity conditions. The example case study roads are located in the eastern portion of the Nipissing Forest, located in the province of Ontario.
+As we can see the conductivity map is absolutely perfect. Geometrical features are not that important to locate the road. Many other features are used, including the vegetation, the local density of point and so on. Thus the road will be perfectly relocated even if the road is flat in a flat environment. Nno trouble here.
 
-![](images/06_01_dtm.PNG)
+```{r}
+sig = ALSroads::rasterize_conductivity(las, dtm_cs1)
+plot(sig, col = viridis::inferno(50))
+```
+
+```{r, render=F, disp = FALSE}
+# Code to reproduce and get images. Do not run in Rmarkdown
+library(lidR)
+library(ggplot2)
+library(raster)
+library(sf)
+las_infolder <- ("data/06/01/ctg/")
+ctg_cs1 <- readLAScatalog(las_infolder, filter = "-drop_withheld -keep_random_fraction 0.25")
+dtm_cs1 <- raster("data/06/01/DTM.tif")
+rds_cs1 <- st_read("data/06/01/roads.shp")
+options(ALSroads.debug.verbose = T)
+options(ALSroads.debug.measuring = T)
+s1 = ALSroads::measure_road(ctg_cs1, rds_cs1[5,], dtm_cs1)
+
+param = ALSroads::alsroads_default_parameters
+param$terrain$max_sd_ground_points = 0.02
+param$terrain$max_elevation_ground_points = 0.03
+s2 = ALSroads::measure_road(ctg_cs1, rds_cs1[5,], dtm_cs1, param = param)
+
+s1 = st_buffer(s1, s1$ROADWIDTH/2)
+s2 = st_buffer(s2, s2$ROADWIDTH/2)
+
+url <- "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
+m <- mapview::mapview(list(s1, s2),
+                      layer.name = c("Default", "Manual"),
+                      col.regions=list("blue","orange"),col=list("blue","orange"),
+                      alpha = 0.1,
+                      map.type = "Esri.WorldImagery")
+leaflet::addTiles(m@map, url)
+```
+However the measurement of the road is likely to fail because of the absence of clear geometry. Below we can see one slice of the point cloud perpendicularly to the road. For a better understanding of the figure reader can refer to section \@ref(sec-standard-parameters). What matters here are the red and green arrows that represents road width and drivable width respectively. Clearly this road is not 21 m wide. The reason the algorithm fail is because everything is perfectly flat there is nothing to stop the algorithm. 
+
+![](images/slice_dtm_flat_1.png)
+
+But as mentioned earlier nothing is perfectly flat in real life. By changing the parameter to parameters more aggressive and much less tolerant to various sources of noise we can easily get something that is much better. 
+
+![](images/slice_dtm_flat_2.png)
+
+Here, in this specific slice, 6 m is probably a bit too narrow but one must remember than measurements are performed on numerous consecutive slices and averaged. For this specific road the default parameters give a 13.6 meters class 2 road. With adjusted parameters it gives a 7.6 meters class 1 road. The width is much better and the class is also better. Indeed, assuming a 13.6 meters road, many points were found above the ground, i.e vegetation. This means that the method interpreted that the vegetation grew on the road. However if the road is only 7.6 m then the algorithm detected a very clean class 1 road.
+
+Tuning the parameters for each road is not possible and not even suitable. It would completely invalidate the interest of running an automatic method. User should tune by landscape. For this type of landscape those parameters are fitting but in the general case default parameters are performing well. One must remember that this example is an **edge case**.
 
 ### Data, Method, and Application: {#sec-method-and-application}
 
