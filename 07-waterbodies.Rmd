@@ -63,4 +63,3 @@ roads = sf::st_crop(roads, ctg)
 updated_roads_custom_param <- measure_roads(ctg = ctg, roads = roads, dtm = dtm, water = water)
 ```
 ## Comparison
-

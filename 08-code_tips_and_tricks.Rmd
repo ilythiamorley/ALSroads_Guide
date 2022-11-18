@@ -25,7 +25,7 @@ roads <- st_read("data/03/roads.shp")
 
 # Tips and Tricks {#sec-tips-and-tricks}
 
-Following the update of road segments using the `ALSroads`package users may wish to edit data, filter results, or plot outcomes. Here, we provide code snippets intended to provide users with some basic data manipuation and interpretation tools.
+Following the update of road segments using the `ALSroads`package users may wish to edit data, filter results, or plot outcomes. Here, we provide code snippets intended to provide users with some basic data manipulation and interpretation tools.
 
 ## Casting Roads to Linestring
 
