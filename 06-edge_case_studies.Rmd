@@ -100,6 +100,7 @@ plot(sig, col = viridis::inferno(50))
 As we can see the conductivity map is absolutely perfect. Geometrical features are not that important to locate the road. Many other features are used, including the vegetation, the local density of point and so on. Thus the road will be perfectly relocated even if the road is flat in a flat environment. Nno trouble here.
 
 ```{r}
+# 3D interactive rendering in rmakdown should work. Need so parameter tuning in the chunk
 sig = ALSroads::rasterize_conductivity(las, dtm_cs1)
 plot(sig, col = viridis::inferno(50))
 ```
