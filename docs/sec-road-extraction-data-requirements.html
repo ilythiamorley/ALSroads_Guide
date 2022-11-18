@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 Road Extraction Data Requirements | User Guide: The ALSroads Package</title>
+  <meta name="description" content="A user guide for road extraction using the ALSroads package" />
+  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 Road Extraction Data Requirements | User Guide: The ALSroads Package" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="A user guide for road extraction using the ALSroads package" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 Road Extraction Data Requirements | User Guide: The ALSroads Package" />
+  
+  <meta name="twitter:description" content="A user guide for road extraction using the ALSroads package" />
+  
+
+<meta name="author" content="Ilythia D. Morley, Jean-Romain Roussel" />
+
+
+<meta name="date" content="2022-11-18" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="sec-reading-generating-and-plotting-input-data.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.1.1/leaflet.js"></script>
+<script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+<script src="libs/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script>
+<script src="libs/FlatGeoBuf-3.21.3/fgb.js"></script>
+<script src="libs/FlatGeoBuf-3.21.3/flatgeobuf-geojson.min.js"></script>
+<script src="libs/chromajs-2.1.0/chroma.min.js"></script>
+<link id="ctg-1-attachment" rel="attachment" href="libs/ctg-0.0.1/ctg_layer.fgb"/>
+<link href="libs/HomeButton-0.0.1/home-button.css" rel="stylesheet" />
+<script src="libs/HomeButton-0.0.1/home-button.js"></script>
+<script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script>
+<script src="libs/clipboard-0.0.1/setClipboardText.js"></script>
+<link href="libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
+<link href="libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
+<link id="Water-1-attachment" rel="attachment" href="libs/Water-0.0.1/Water_layer.fgb"/>
+<link id="RoadSegments-1-attachment" rel="attachment" href="libs/RoadSegments-0.0.1/RoadSegments_layer.fgb"/>
+<link id="Inaccurate-1-attachment" rel="attachment" href="libs/Inaccurate-0.0.1/Inaccurate_layer.fgb"/>
+<link id="Corrected-1-attachment" rel="attachment" href="libs/Corrected-0.0.1/Corrected_layer.fgb"/>
+<link id="CorrectedRoad-1-attachment" rel="attachment" href="libs/CorrectedRoad-0.0.1/CorrectedRoad_layer.fgb"/>
+<link id="RoadWidthBuffer-1-attachment" rel="attachment" href="libs/RoadWidthBuffer-0.0.1/RoadWidthBuffer_layer.fgb"/>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="sec-road-extraction-data-requirements.html"><a href="sec-road-extraction-data-requirements.html"><i class="fa fa-check"></i><b>2</b> Road Extraction Data Requirements</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="sec-road-extraction-data-requirements.html"><a href="sec-road-extraction-data-requirements.html#sec-lidar-data"><i class="fa fa-check"></i><b>2.1</b> LiDAR Data</a></li>
+<li class="chapter" data-level="2.2" data-path="sec-road-extraction-data-requirements.html"><a href="sec-road-extraction-data-requirements.html#sec-dtm-data"><i class="fa fa-check"></i><b>2.2</b> DTM Data</a></li>
+<li class="chapter" data-level="2.3" data-path="sec-road-extraction-data-requirements.html"><a href="sec-road-extraction-data-requirements.html#sec-existing-road-network"><i class="fa fa-check"></i><b>2.3</b> Existing Road Network</a></li>
+<li class="chapter" data-level="2.4" data-path="sec-road-extraction-data-requirements.html"><a href="sec-road-extraction-data-requirements.html#sec-water-bodies"><i class="fa fa-check"></i><b>2.4</b> Water Bodies (optional)</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html"><i class="fa fa-check"></i><b>3</b> Reading, Generating, and Plotting Input Data</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-lidar-data"><i class="fa fa-check"></i><b>3.1</b> Reading LiDAR data</a></li>
+<li class="chapter" data-level="3.2" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-lidar-data-using-readlascatalog"><i class="fa fa-check"></i><b>3.2</b> Reading LiDAR data using <code>readLAScatalog</code></a></li>
+<li class="chapter" data-level="3.3" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-and-generating-dtm-raster-data"><i class="fa fa-check"></i><b>3.3</b> Reading and Generating DTM Raster Data</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-raster-dtm-data-using-raster"><i class="fa fa-check"></i><b>3.3.1</b> Reading raster DTM data using <code>raster</code></a></li>
+<li class="chapter" data-level="3.3.2" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-generating-dtm-data-using-grid_terrain"><i class="fa fa-check"></i><b>3.3.2</b> Generating DTM data using <code>rasterize_terrain()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-vector-road-data-using-st_read"><i class="fa fa-check"></i><b>3.4</b> Reading Vector Road Data using <code>st_read()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html"><i class="fa fa-check"></i><b>4</b> Road Extraction with <code>ALSroads</code></a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-standard-road-extraction-using-measure_roads"><i class="fa fa-check"></i><b>4.1</b> Standard Road Extraction using <code>measure_roads()</code></a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-required-r-packages"><i class="fa fa-check"></i><b>4.1.1</b> Required R Packages:</a></li>
+<li class="chapter" data-level="4.1.2" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-input-data"><i class="fa fa-check"></i><b>4.1.2</b> Input Data</a></li>
+<li class="chapter" data-level="4.1.3" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-network-update"><i class="fa fa-check"></i><b>4.1.3</b> Network Update</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-applying-measure_roads"><i class="fa fa-check"></i><b>4.2</b> Applying <code>measure_roads()</code></a></li>
+<li class="chapter" data-level="4.3" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-spatial-plotting-updated-roads"><i class="fa fa-check"></i><b>4.3</b> Spatial Plotting Updated Roads</a></li>
+<li class="chapter" data-level="4.4" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-attribute-plotting-updated-roads"><i class="fa fa-check"></i><b>4.4</b> Attribute Plotting Updated Roads</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="sec-standard-parameters.html"><a href="sec-standard-parameters.html"><i class="fa fa-check"></i><b>5</b> Standard Parameters</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="sec-standard-parameters.html"><a href="sec-standard-parameters.html#sec-extraction-parameters"><i class="fa fa-check"></i><b>5.1</b> Extraction Parameters:</a></li>
+<li class="chapter" data-level="5.2" data-path="sec-standard-parameters.html"><a href="sec-standard-parameters.html#sec-embankment-parameters"><i class="fa fa-check"></i><b>5.2</b> Embankment Parameters:</a></li>
+<li class="chapter" data-level="5.3" data-path="sec-standard-parameters.html"><a href="sec-standard-parameters.html#sec-terrain-parameters"><i class="fa fa-check"></i><b>5.3</b> Terrain Parameters (excluding embankment):</a></li>
+<li class="chapter" data-level="5.4" data-path="sec-standard-parameters.html"><a href="sec-standard-parameters.html#sec-vegetation-parameters"><i class="fa fa-check"></i><b>5.4</b> Vegetation:</a></li>
+<li class="chapter" data-level="5.5" data-path="sec-standard-parameters.html"><a href="sec-standard-parameters.html#sec-conductivity-parameters"><i class="fa fa-check"></i><b>5.5</b> Conductivity Parameters:</a></li>
+<li class="chapter" data-level="5.6" data-path="sec-standard-parameters.html"><a href="sec-standard-parameters.html#sec-state-parameters"><i class="fa fa-check"></i><b>5.6</b> Road State Parameters:</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html"><i class="fa fa-check"></i><b>6</b> Case Studies</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#case-study-structure"><i class="fa fa-check"></i><b>6.1</b> Case Study Structure:</a></li>
+<li class="chapter" data-level="6.2" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#sec-case-study-low-dtm-complexity"><i class="fa fa-check"></i><b>6.2</b> Case Study 1: Low DTM complexity</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#overview"><i class="fa fa-check"></i><b>6.2.1</b> Overview:</a></li>
+<li class="chapter" data-level="6.2.2" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#sec-method-and-application"><i class="fa fa-check"></i><b>6.2.2</b> Data, Method, and Application:</a></li>
+<li class="chapter" data-level="6.2.3" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-required-r-packages"><i class="fa fa-check"></i><b>6.2.3</b> Required R Packages:</a></li>
+<li class="chapter" data-level="6.2.4" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#sec-results"><i class="fa fa-check"></i><b>6.2.4</b> Results:</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#sec-case-study-no-veg"><i class="fa fa-check"></i><b>6.3</b> Case Study 2: No Vegetation</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#overview-1"><i class="fa fa-check"></i><b>6.3.1</b> Overview:</a></li>
+<li class="chapter" data-level="6.3.2" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#data-method-and-application"><i class="fa fa-check"></i><b>6.3.2</b> Data, Method, and Application:</a></li>
+<li class="chapter" data-level="6.3.3" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#results"><i class="fa fa-check"></i><b>6.3.3</b> Results:</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#sec-case-study-steep-slopes"><i class="fa fa-check"></i><b>6.4</b> Case Study 3: Narrow/Wide Roads</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#overview-2"><i class="fa fa-check"></i><b>6.4.1</b> Overview:</a></li>
+<li class="chapter" data-level="6.4.2" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#data-method-and-application-1"><i class="fa fa-check"></i><b>6.4.2</b> Data, Method, and Application:</a></li>
+<li class="chapter" data-level="6.4.3" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#results-1"><i class="fa fa-check"></i><b>6.4.3</b> Results:</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#case-study-4-drivable-width-thresholds"><i class="fa fa-check"></i><b>6.5</b> Case Study 4: Drivable Width Thresholds</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#overview-3"><i class="fa fa-check"></i><b>6.5.1</b> Overview:</a></li>
+<li class="chapter" data-level="6.5.2" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#data-method-and-application-2"><i class="fa fa-check"></i><b>6.5.2</b> Data, Method, and Application:</a></li>
+<li class="chapter" data-level="6.5.3" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#results-2"><i class="fa fa-check"></i><b>6.5.3</b> Results:</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html"><i class="fa fa-check"></i><b>7</b> Waterbodies</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#example-1-road-extraction-without-waterbodies"><i class="fa fa-check"></i><b>7.1</b> Example 1: Road Extraction without Waterbodies</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#sec-loading-data_wb"><i class="fa fa-check"></i><b>7.1.1</b> Loading Data:</a></li>
+<li class="chapter" data-level="7.1.2" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#updating-roads"><i class="fa fa-check"></i><b>7.1.2</b> Updating Roads</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#example-2-road-extraction-with-waterbodies"><i class="fa fa-check"></i><b>7.2</b> Example 2: Road Extraction with Waterbodies</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#sec-loading-data_wb"><i class="fa fa-check"></i><b>7.2.1</b> Loading Data:</a></li>
+<li class="chapter" data-level="7.2.2" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#updating-roads-1"><i class="fa fa-check"></i><b>7.2.2</b> Updating Roads</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#comparison"><i class="fa fa-check"></i><b>7.3</b> Comparison</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html"><i class="fa fa-check"></i><b>8</b> Tips and Tricks</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#casting-roads-to-linestring"><i class="fa fa-check"></i><b>8.1</b> Casting Roads to Linestring</a></li>
+<li class="chapter" data-level="8.2" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#adding-an-id-column"><i class="fa fa-check"></i><b>8.2</b> Adding an ID Column</a></li>
+<li class="chapter" data-level="8.3" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#selecting-specific-roads"><i class="fa fa-check"></i><b>8.3</b> Selecting Specific Roads</a></li>
+<li class="chapter" data-level="8.4" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#plotting-data"><i class="fa fa-check"></i><b>8.4</b> Plotting Data</a></li>
+<li class="chapter" data-level="8.5" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#saving-data"><i class="fa fa-check"></i><b>8.5</b> Saving Data</a></li>
+<li class="chapter" data-level="8.6" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#reconnecing-roads"><i class="fa fa-check"></i><b>8.6</b> Reconnecing Roads</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="sec-getting-started-with-r.html"><a href="sec-getting-started-with-r.html"><i class="fa fa-check"></i><b>9</b> Getting Started with R</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="sec-getting-started-with-r.html"><a href="sec-getting-started-with-r.html#sec-installing-r-and-rstudio"><i class="fa fa-check"></i><b>9.1</b> Installing R and RStudio</a></li>
+<li class="chapter" data-level="9.2" data-path="sec-getting-started-with-r.html"><a href="sec-getting-started-with-r.html#sec-installing-alsroad"><i class="fa fa-check"></i><b>9.2</b> Installing <code>ALSroads</code></a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="sec-team.html"><a href="sec-team.html"><i class="fa fa-check"></i><b>10</b> Project Team Members</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">User Guide: The <code>ALSroads</code> Package</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="sec-road-extraction-data-requirements" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">2</span> Road Extraction Data Requirements<a href="sec-road-extraction-data-requirements.html#sec-road-extraction-data-requirements" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>The road enhancement method, implemented using the <code>ALSroads</code> package, requires three inputs:</p>
+<ol style="list-style-type: decimal">
+<li>A lidar point cloud in the format of a collection of <code>.las</code> or <code>.laz</code> format files. Each file must be spatially indexed with a <code>.lax</code> file (see also the lidR book <a href="https://r-lidar.github.io/lidRbook/spatial-indexing.html#spatial-indexing-files">chapter 18.3</a>).</li>
+<li>A Digital Terrain Model (DTM) that corresponds to the point cloud collection coverage. This DTM can be generated with <code>lidR</code> (refer to the <code>lidR</code> book <a href="https://r-lidar.github.io/lidRbook/dtm.html">chapter 4</a>.</li>
+<li>A pre-existing vectorial road network (lines), typically in a shapefile or geopackage format.</li>
+</ol>
+<p>A fourth, optional input can be included to strongly enhance the method.</p>
+<ol start="4" style="list-style-type: decimal">
+<li>A vectorial map (polygons) of the water bodies.</li>
+</ol>
+<div id="sec-lidar-data" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> LiDAR Data<a href="sec-road-extraction-data-requirements.html#sec-lidar-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Road enhancement using <code>ALSroads</code> requires LiDAR data that covers the roads being updated. For use in the <code>ALSroads</code> package, LiDAR data must be:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Non-normalized:</strong> to preserve the geometry of the landscape.</li>
+<li><strong>Spatially indexed:</strong> to query areas of interest quickly and improve performance.</li>
+<li><strong>Include intensity values:</strong> used by the method.</li>
+<li><strong>In a projected coordinate system and in meters:</strong> some parameters are hardcoded in meters.</li>
+<li><strong>Have a density of 5-10 points/m²:</strong> less than 5-10 points/m² and the algorithm is not guaranteed to work; more than 5-10 points/m² is not useful and will increase the computation time. If the density of the input point cloud is over 10 points/m², it can be decimated on-the-fly using the <code>filter</code> argument (see ‘lidR’ book <a href="https://r-lidar.github.io/lidRbook/io.html#filter">chapter 2.1.1</a>).</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="sec-road-extraction-data-requirements.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lidR)</span>
+<span id="cb2-2"><a href="sec-road-extraction-data-requirements.html#cb2-2" aria-hidden="true" tabindex="-1"></a>ctg <span class="ot">&lt;-</span> <span class="fu">readLAScatalog</span>(<span class="st">&quot;data/03/ctg/&quot;</span>,  <span class="at">filter =</span> <span class="st">&quot;-drop_withheld -keep_random_fraction 0.25&quot;</span>)</span>
+<span id="cb2-3"><a href="sec-road-extraction-data-requirements.html#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ctg)</span></code></pre></div>
+<p><img src="ALSroads-book_files/figure-html/unnamed-chunk-1-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="sec-dtm-data" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> DTM Data<a href="sec-road-extraction-data-requirements.html#sec-dtm-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Road enhancement using <code>ALSroads</code> requires a Digital Terrain Model (DTM) as an input. DTMs, broadly described as an ‘image’ of the ground, are used for several purposes that include stream flow, basin hydrology, and watershed analysis. The <code>ALSroads</code> method uses a 1-meter resolution DTM to estimate the slopes and roughness of the terrain. For use in the <code>ALSroads</code> package, the input DTM must:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Have a resolution of at least 1 m:</strong> higher resolution will be downscale on-the-fly.</li>
+<li><strong>Cover the extent of the LiDAR coverage.</strong></li>
+<li><strong>Match the coordinate system of the LiDAR coverage.</strong></li>
+</ol>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="sec-road-extraction-data-requirements.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(raster)</span>
+<span id="cb3-2"><a href="sec-road-extraction-data-requirements.html#cb3-2" aria-hidden="true" tabindex="-1"></a>dtm <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;data/03/DTM.tif&quot;</span>)</span>
+<span id="cb3-3"><a href="sec-road-extraction-data-requirements.html#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ctg)</span>
+<span id="cb3-4"><a href="sec-road-extraction-data-requirements.html#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dtm, <span class="at">col =</span> <span class="fu">gray</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span><span class="sc">/</span><span class="dv">50</span>), <span class="at">add =</span> T)</span></code></pre></div>
+<p><img src="ALSroads-book_files/figure-html/unnamed-chunk-2-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="sec-existing-road-network" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Existing Road Network<a href="sec-road-extraction-data-requirements.html#sec-existing-road-network" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Road enhancement using <code>ALSroads</code> updates an existing road network. Therefore, an existing network is a critical input. The method will only enhance the roads that are on the existing network. The existing road network must:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Be a simple feature (sf) format (line).</strong></li>
+<li><strong>Match the coordinate system of the LiDAR coverage.</strong></li>
+</ol>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="sec-road-extraction-data-requirements.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb4-2"><a href="sec-road-extraction-data-requirements.html#cb4-2" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;data/03/roads.shp&quot;</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-3"><a href="sec-road-extraction-data-requirements.html#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ctg)</span>
+<span id="cb4-4"><a href="sec-road-extraction-data-requirements.html#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(roads), <span class="at">add =</span> T)</span></code></pre></div>
+<p><img src="ALSroads-book_files/figure-html/unnamed-chunk-3-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="sec-water-bodies" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> Water Bodies (optional)<a href="sec-road-extraction-data-requirements.html#sec-water-bodies" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>An optional input for road extraction using <code>ALSroads</code> is a set of spatial polygons (sf format) of water bodies. An accurate map of water bodies is not necessary to perform the road extraction computation but:</p>
+<ol style="list-style-type: decimal">
+<li><p>It helps to find the road properly by masking lakes that can easily be interpreted as highly drivable areas because they are perfectly flat, homogeneous, and located in cleared areas. From a geometrical point of view, lakes are the best place to drive a car. Unless the LiDAR point cloud is water classified, there is no way to determine that these flat cleared areas are not passable.</p></li>
+<li><p>Water bodies are required to correctly identify and update roads that cross rivers using bridges. In a DTM, a river is a gap with strong slopes at each edge. These slopes represent an impassable obstacle and cannot be roads. Bridges are visible in the point cloud, but these points must be classified as bridges; otherwise, they have the same status as surrounding points. Geometrically speaking, a bridge in the point cloud is just a set of points above the ground, like trees. Therefore, an unlabeled bridge above a river is technically similar to a tree above the ground.</p></li>
+<li><p>Providing a map of water bodies enables users to inform the method that the road being updated is known to cross a river. Therefore, the method will allow the passage of a gap (as it appears on the DTM) that would be otherwise considered impassable.</p></li>
+</ol>
+<p>If water bodies are included in road extraction (recommended), they must:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Be a simple feature (sf) format (polygon).</strong></li>
+<li><strong>Match the coordinate system of the LiDAR coverage.</strong></li>
+</ol>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="sec-road-extraction-data-requirements.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb5-2"><a href="sec-road-extraction-data-requirements.html#cb5-2" aria-hidden="true" tabindex="-1"></a>waterbodies <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;data/03/waterbodies.shp&quot;</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div id="htmlwidget-ab1681e7370ca0c07fd5" style="width:768px;height:576px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ab1681e7370ca0c07fd5">{"x":{"options":{"minZoom":1,"maxZoom":52,"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}},"preferCanvas":false,"bounceAtZoomLimits":false,"maxBounds":[[[-90,-370]],[[90,370]]]},"calls":[{"method":"addProviderTiles","args":["Esri.WorldImagery","Esri.WorldImagery","Esri.WorldImagery",{"errorTileUrl":"","noWrap":false,"detectRetina":false,"pane":"tilePane"}]},{"method":"createMapPane","args":["polygon",420]},{"method":"addFlatGeoBuf","args":["ctg","ctg",null,true,["1","2","3","4","5","6","7","8","9"],{"radius":6,"stroke":true,"color":"#FFFFFF","weight":0.5,"opacity":0.9,"fill":true,"fillColor":"#FF9999","fillOpacity":0.6},{"className":"","pane":"polygon"},"mapview-popup",{"radius":{"to":[3,15],"from":[3,15]},"weight":{"to":[1,10],"from":[1,10]},"opacity":{"to":[0,1],"from":[0,1]},"fillOpacity":{"to":[0,1],"from":[0,1]}}]},{"method":"addScaleBar","args":[{"maxWidth":100,"metric":true,"imperial":true,"updateWhenIdle":true,"position":"bottomleft"}]},{"method":"addHomeButton","args":[-80.08758496869,46.5086203838101,-80.0480153839217,46.5359340057987,true,"ctg","Zoom to ctg","<strong> ctg <\/strong>","bottomright"]},{"method":"addLegend","args":[{"colors":["#FF9999"],"labels":["ctg"],"na_color":null,"na_label":"NA","opacity":1,"position":"topright","type":"factor","title":"","extra":null,"layerId":null,"className":"info legend","group":"ctg"}]},{"method":"addFlatGeoBuf","args":["Water","Water",null,true,["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"],{"radius":6,"stroke":true,"color":"#FFFFFF","weight":0.5,"opacity":0.9,"fill":true,"fillColor":"#0000FF","fillOpacity":0.6},{"className":"","pane":"polygon"},"mapview-popup",{"radius":{"to":[3,15],"from":[3,15]},"weight":{"to":[1,10],"from":[1,10]},"opacity":{"to":[0,1],"from":[0,1]},"fillOpacity":{"to":[0,1],"from":[0,1]}}]},{"method":"addHomeButton","args":[-80.0874543963138,46.516455,-80.0482428402604,46.5332403,true,"Water","Zoom to Water","<strong> Water <\/strong>","bottomright"]},{"method":"addLayersControl","args":["Esri.WorldImagery",["ctg","Water"],{"collapsed":true,"autoZIndex":true,"position":"topleft"}]},{"method":"addLegend","args":[{"colors":["#0000FF"],"labels":["Water"],"na_color":null,"na_label":"NA","opacity":1,"position":"topright","type":"factor","title":"","extra":null,"layerId":null,"className":"info legend","group":"Water"}]},{"method":"addHomeButton","args":[-80.08758496869,46.5086203838101,-80.0480153839217,46.5359340057987,true,null,"Zoom to full extent","<strong>Zoom full<\/strong>","bottomleft"]},{"method":"addTiles","args":["https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false}]}],"fitBounds":[46.5086203838101,-80.08758496869,46.5359340057987,-80.0480153839217,[]]},"evals":[],"jsHooks":{"render":[{"code":"function(el, x, data) {\n  return (\n      function(el, x, data) {\n      // get the leaflet map\n      var map = this; //HTMLWidgets.find('#' + el.id);\n      // we need a new div element because we have to handle\n      // the mouseover output separately\n      // debugger;\n      function addElement () {\n      // generate new div Element\n      var newDiv = $(document.createElement('div'));\n      // append at end of leaflet htmlwidget container\n      $(el).append(newDiv);\n      //provide ID and style\n      newDiv.addClass('lnlt');\n      newDiv.css({\n      'position': 'relative',\n      'bottomleft':  '0px',\n      'background-color': 'rgba(255, 255, 255, 0.7)',\n      'box-shadow': '0 0 2px #bbb',\n      'background-clip': 'padding-box',\n      'margin': '0',\n      'padding-left': '5px',\n      'color': '#333',\n      'font': '9px/1.5 \"Helvetica Neue\", Arial, Helvetica, sans-serif',\n      'z-index': '700',\n      });\n      return newDiv;\n      }\n\n\n      // check for already existing lnlt class to not duplicate\n      var lnlt = $(el).find('.lnlt');\n\n      if(!lnlt.length) {\n      lnlt = addElement();\n\n      // grab the special div we generated in the beginning\n      // and put the mousmove output there\n\n      map.on('mousemove', function (e) {\n      if (e.originalEvent.ctrlKey) {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                           ' lon: ' + (e.latlng.lng).toFixed(5) +\n                           ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                           ' | zoom: ' + map.getZoom() +\n                           ' | x: ' + L.CRS.EPSG3857.project(e.latlng).x.toFixed(0) +\n                           ' | y: ' + L.CRS.EPSG3857.project(e.latlng).y.toFixed(0) +\n                           ' | epsg: 3857 ' +\n                           ' | proj4: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs ');\n      } else {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                      ' lon: ' + (e.latlng.lng).toFixed(5) +\n                      ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                      ' | zoom: ' + map.getZoom() + ' ');\n      }\n      });\n\n      // remove the lnlt div when mouse leaves map\n      map.on('mouseout', function (e) {\n      var strip = document.querySelector('.lnlt');\n      if( strip !==null) strip.remove();\n      });\n\n      };\n\n      //$(el).keypress(67, function(e) {\n      map.on('preclick', function(e) {\n      if (e.originalEvent.ctrlKey) {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                      ' lon: ' + (e.latlng.lng).toFixed(5) +\n                      ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                      ' | zoom: ' + map.getZoom() + ' ');\n      var txt = document.querySelector('.lnlt').textContent;\n      console.log(txt);\n      //txt.innerText.focus();\n      //txt.select();\n      setClipboardText('\"' + txt + '\"');\n      }\n      });\n\n      }\n      ).call(this.getMap(), el, x, data);\n}","data":null},{"code":"function(el, x, data) {\n  return (function(el,x,data){\n           var map = this;\n\n           map.on('keypress', function(e) {\n               console.log(e.originalEvent.code);\n               var key = e.originalEvent.code;\n               if (key === 'KeyE') {\n                   var bb = this.getBounds();\n                   var txt = JSON.stringify(bb);\n                   console.log(txt);\n\n                   setClipboardText('\\'' + txt + '\\'');\n               }\n           })\n        }).call(this.getMap(), el, x, data);\n}","data":null}]}}</script>
+
+<pre><code>#&gt; Reading layer `roads&#39; from data source `E:\ALSroads_Guide\data\03\roads.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; Simple feature collection with 23 features and 20 fields
+#&gt; Geometry type: LINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: 570000 ymin: 5151000 xmax: 573000 ymax: 5154000
+#&gt; Projected CRS: NAD83(CSRS) / UTM zone 17N</code></pre>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sec-reading-generating-and-plotting-input-data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

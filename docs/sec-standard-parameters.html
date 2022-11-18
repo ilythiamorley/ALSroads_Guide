@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>5 Standard Parameters | User Guide: The ALSroads Package</title>
+  <meta name="description" content="A user guide for road extraction using the ALSroads package" />
+  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="5 Standard Parameters | User Guide: The ALSroads Package" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="A user guide for road extraction using the ALSroads package" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="5 Standard Parameters | User Guide: The ALSroads Package" />
+  
+  <meta name="twitter:description" content="A user guide for road extraction using the ALSroads package" />
+  
+
+<meta name="author" content="Ilythia D. Morley, Jean-Romain Roussel" />
+
+
+<meta name="date" content="2022-11-18" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="sec-road-extraction-using-alsroads.html"/>
+<link rel="next" href="sec-edge-case-studies.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.1.1/leaflet.js"></script>
+<script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+<script src="libs/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script>
+<script src="libs/FlatGeoBuf-3.21.3/fgb.js"></script>
+<script src="libs/FlatGeoBuf-3.21.3/flatgeobuf-geojson.min.js"></script>
+<script src="libs/chromajs-2.1.0/chroma.min.js"></script>
+<link id="ctg-1-attachment" rel="attachment" href="libs/ctg-0.0.1/ctg_layer.fgb"/>
+<link href="libs/HomeButton-0.0.1/home-button.css" rel="stylesheet" />
+<script src="libs/HomeButton-0.0.1/home-button.js"></script>
+<script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script>
+<script src="libs/clipboard-0.0.1/setClipboardText.js"></script>
+<link href="libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
+<link href="libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
+<link id="Water-1-attachment" rel="attachment" href="libs/Water-0.0.1/Water_layer.fgb"/>
+<link id="RoadSegments-1-attachment" rel="attachment" href="libs/RoadSegments-0.0.1/RoadSegments_layer.fgb"/>
+<link id="Inaccurate-1-attachment" rel="attachment" href="libs/Inaccurate-0.0.1/Inaccurate_layer.fgb"/>
+<link id="Corrected-1-attachment" rel="attachment" href="libs/Corrected-0.0.1/Corrected_layer.fgb"/>
+<link id="CorrectedRoad-1-attachment" rel="attachment" href="libs/CorrectedRoad-0.0.1/CorrectedRoad_layer.fgb"/>
+<link id="RoadWidthBuffer-1-attachment" rel="attachment" href="libs/RoadWidthBuffer-0.0.1/RoadWidthBuffer_layer.fgb"/>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="sec-road-extraction-data-requirements.html"><a href="sec-road-extraction-data-requirements.html"><i class="fa fa-check"></i><b>2</b> Road Extraction Data Requirements</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="sec-road-extraction-data-requirements.html"><a href="sec-road-extraction-data-requirements.html#sec-lidar-data"><i class="fa fa-check"></i><b>2.1</b> LiDAR Data</a></li>
+<li class="chapter" data-level="2.2" data-path="sec-road-extraction-data-requirements.html"><a href="sec-road-extraction-data-requirements.html#sec-dtm-data"><i class="fa fa-check"></i><b>2.2</b> DTM Data</a></li>
+<li class="chapter" data-level="2.3" data-path="sec-road-extraction-data-requirements.html"><a href="sec-road-extraction-data-requirements.html#sec-existing-road-network"><i class="fa fa-check"></i><b>2.3</b> Existing Road Network</a></li>
+<li class="chapter" data-level="2.4" data-path="sec-road-extraction-data-requirements.html"><a href="sec-road-extraction-data-requirements.html#sec-water-bodies"><i class="fa fa-check"></i><b>2.4</b> Water Bodies (optional)</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html"><i class="fa fa-check"></i><b>3</b> Reading, Generating, and Plotting Input Data</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-lidar-data"><i class="fa fa-check"></i><b>3.1</b> Reading LiDAR data</a></li>
+<li class="chapter" data-level="3.2" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-lidar-data-using-readlascatalog"><i class="fa fa-check"></i><b>3.2</b> Reading LiDAR data using <code>readLAScatalog</code></a></li>
+<li class="chapter" data-level="3.3" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-and-generating-dtm-raster-data"><i class="fa fa-check"></i><b>3.3</b> Reading and Generating DTM Raster Data</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-raster-dtm-data-using-raster"><i class="fa fa-check"></i><b>3.3.1</b> Reading raster DTM data using <code>raster</code></a></li>
+<li class="chapter" data-level="3.3.2" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-generating-dtm-data-using-grid_terrain"><i class="fa fa-check"></i><b>3.3.2</b> Generating DTM data using <code>rasterize_terrain()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-vector-road-data-using-st_read"><i class="fa fa-check"></i><b>3.4</b> Reading Vector Road Data using <code>st_read()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html"><i class="fa fa-check"></i><b>4</b> Road Extraction with <code>ALSroads</code></a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-standard-road-extraction-using-measure_roads"><i class="fa fa-check"></i><b>4.1</b> Standard Road Extraction using <code>measure_roads()</code></a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-required-r-packages"><i class="fa fa-check"></i><b>4.1.1</b> Required R Packages:</a></li>
+<li class="chapter" data-level="4.1.2" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-input-data"><i class="fa fa-check"></i><b>4.1.2</b> Input Data</a></li>
+<li class="chapter" data-level="4.1.3" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-network-update"><i class="fa fa-check"></i><b>4.1.3</b> Network Update</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-applying-measure_roads"><i class="fa fa-check"></i><b>4.2</b> Applying <code>measure_roads()</code></a></li>
+<li class="chapter" data-level="4.3" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-spatial-plotting-updated-roads"><i class="fa fa-check"></i><b>4.3</b> Spatial Plotting Updated Roads</a></li>
+<li class="chapter" data-level="4.4" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-attribute-plotting-updated-roads"><i class="fa fa-check"></i><b>4.4</b> Attribute Plotting Updated Roads</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="sec-standard-parameters.html"><a href="sec-standard-parameters.html"><i class="fa fa-check"></i><b>5</b> Standard Parameters</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="sec-standard-parameters.html"><a href="sec-standard-parameters.html#sec-extraction-parameters"><i class="fa fa-check"></i><b>5.1</b> Extraction Parameters:</a></li>
+<li class="chapter" data-level="5.2" data-path="sec-standard-parameters.html"><a href="sec-standard-parameters.html#sec-embankment-parameters"><i class="fa fa-check"></i><b>5.2</b> Embankment Parameters:</a></li>
+<li class="chapter" data-level="5.3" data-path="sec-standard-parameters.html"><a href="sec-standard-parameters.html#sec-terrain-parameters"><i class="fa fa-check"></i><b>5.3</b> Terrain Parameters (excluding embankment):</a></li>
+<li class="chapter" data-level="5.4" data-path="sec-standard-parameters.html"><a href="sec-standard-parameters.html#sec-vegetation-parameters"><i class="fa fa-check"></i><b>5.4</b> Vegetation:</a></li>
+<li class="chapter" data-level="5.5" data-path="sec-standard-parameters.html"><a href="sec-standard-parameters.html#sec-conductivity-parameters"><i class="fa fa-check"></i><b>5.5</b> Conductivity Parameters:</a></li>
+<li class="chapter" data-level="5.6" data-path="sec-standard-parameters.html"><a href="sec-standard-parameters.html#sec-state-parameters"><i class="fa fa-check"></i><b>5.6</b> Road State Parameters:</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html"><i class="fa fa-check"></i><b>6</b> Case Studies</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#case-study-structure"><i class="fa fa-check"></i><b>6.1</b> Case Study Structure:</a></li>
+<li class="chapter" data-level="6.2" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#sec-case-study-low-dtm-complexity"><i class="fa fa-check"></i><b>6.2</b> Case Study 1: Low DTM complexity</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#overview"><i class="fa fa-check"></i><b>6.2.1</b> Overview:</a></li>
+<li class="chapter" data-level="6.2.2" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#sec-method-and-application"><i class="fa fa-check"></i><b>6.2.2</b> Data, Method, and Application:</a></li>
+<li class="chapter" data-level="6.2.3" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-required-r-packages"><i class="fa fa-check"></i><b>6.2.3</b> Required R Packages:</a></li>
+<li class="chapter" data-level="6.2.4" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#sec-results"><i class="fa fa-check"></i><b>6.2.4</b> Results:</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#sec-case-study-no-veg"><i class="fa fa-check"></i><b>6.3</b> Case Study 2: No Vegetation</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#overview-1"><i class="fa fa-check"></i><b>6.3.1</b> Overview:</a></li>
+<li class="chapter" data-level="6.3.2" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#data-method-and-application"><i class="fa fa-check"></i><b>6.3.2</b> Data, Method, and Application:</a></li>
+<li class="chapter" data-level="6.3.3" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#results"><i class="fa fa-check"></i><b>6.3.3</b> Results:</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#sec-case-study-steep-slopes"><i class="fa fa-check"></i><b>6.4</b> Case Study 3: Narrow/Wide Roads</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#overview-2"><i class="fa fa-check"></i><b>6.4.1</b> Overview:</a></li>
+<li class="chapter" data-level="6.4.2" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#data-method-and-application-1"><i class="fa fa-check"></i><b>6.4.2</b> Data, Method, and Application:</a></li>
+<li class="chapter" data-level="6.4.3" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#results-1"><i class="fa fa-check"></i><b>6.4.3</b> Results:</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#case-study-4-drivable-width-thresholds"><i class="fa fa-check"></i><b>6.5</b> Case Study 4: Drivable Width Thresholds</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#overview-3"><i class="fa fa-check"></i><b>6.5.1</b> Overview:</a></li>
+<li class="chapter" data-level="6.5.2" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#data-method-and-application-2"><i class="fa fa-check"></i><b>6.5.2</b> Data, Method, and Application:</a></li>
+<li class="chapter" data-level="6.5.3" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#results-2"><i class="fa fa-check"></i><b>6.5.3</b> Results:</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html"><i class="fa fa-check"></i><b>7</b> Waterbodies</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#example-1-road-extraction-without-waterbodies"><i class="fa fa-check"></i><b>7.1</b> Example 1: Road Extraction without Waterbodies</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#sec-loading-data_wb"><i class="fa fa-check"></i><b>7.1.1</b> Loading Data:</a></li>
+<li class="chapter" data-level="7.1.2" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#updating-roads"><i class="fa fa-check"></i><b>7.1.2</b> Updating Roads</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#example-2-road-extraction-with-waterbodies"><i class="fa fa-check"></i><b>7.2</b> Example 2: Road Extraction with Waterbodies</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#sec-loading-data_wb"><i class="fa fa-check"></i><b>7.2.1</b> Loading Data:</a></li>
+<li class="chapter" data-level="7.2.2" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#updating-roads-1"><i class="fa fa-check"></i><b>7.2.2</b> Updating Roads</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#comparison"><i class="fa fa-check"></i><b>7.3</b> Comparison</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html"><i class="fa fa-check"></i><b>8</b> Tips and Tricks</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#casting-roads-to-linestring"><i class="fa fa-check"></i><b>8.1</b> Casting Roads to Linestring</a></li>
+<li class="chapter" data-level="8.2" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#adding-an-id-column"><i class="fa fa-check"></i><b>8.2</b> Adding an ID Column</a></li>
+<li class="chapter" data-level="8.3" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#selecting-specific-roads"><i class="fa fa-check"></i><b>8.3</b> Selecting Specific Roads</a></li>
+<li class="chapter" data-level="8.4" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#plotting-data"><i class="fa fa-check"></i><b>8.4</b> Plotting Data</a></li>
+<li class="chapter" data-level="8.5" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#saving-data"><i class="fa fa-check"></i><b>8.5</b> Saving Data</a></li>
+<li class="chapter" data-level="8.6" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#reconnecing-roads"><i class="fa fa-check"></i><b>8.6</b> Reconnecing Roads</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="sec-getting-started-with-r.html"><a href="sec-getting-started-with-r.html"><i class="fa fa-check"></i><b>9</b> Getting Started with R</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="sec-getting-started-with-r.html"><a href="sec-getting-started-with-r.html#sec-installing-r-and-rstudio"><i class="fa fa-check"></i><b>9.1</b> Installing R and RStudio</a></li>
+<li class="chapter" data-level="9.2" data-path="sec-getting-started-with-r.html"><a href="sec-getting-started-with-r.html#sec-installing-alsroad"><i class="fa fa-check"></i><b>9.2</b> Installing <code>ALSroads</code></a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="sec-team.html"><a href="sec-team.html"><i class="fa fa-check"></i><b>10</b> Project Team Members</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">User Guide: The <code>ALSroads</code> Package</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="sec-standard-parameters" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">5</span> Standard Parameters<a href="sec-standard-parameters.html#sec-standard-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>The <code>meaure_roads()</code> function is built with a series of standard parameters. Users can change these parameters to suit the study areas for which road extraction is being completed. Most of the standard parameters are not expected to be changed and are suitable for road extraction across different areas. All the <code>measure_roads()</code> parameters are described below, but only the ones in <strong>bold</strong> should be considered by users.</p>
+<p>If users need to customize the <code>measure_roads()</code> standard parameters, it is strongly recommended that they read the <a href="https://www.sciencedirect.com/science/article/pii/S1569843222002084#d1e1483">method source paper</a>.</p>
+<div id="sec-extraction-parameters" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Extraction Parameters:<a href="sec-standard-parameters.html#sec-extraction-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Several of the <code>meaure_roads()</code> parameters are used to extract the point cloud, process it into small sections, and compute road profiles.</p>
+<ul>
+<li><p>[road_max_len] Default = <code>2000 m</code>. The maximum size of a processed road section. If a road is longer than this value, it will be split into chunks of equal sizes (each less than the max road length value). The goal of this parameter is to reduce memory usage and computation time and avoid processing a long road without optimization.</p></li>
+<li><p><strong>[road_buffer]</strong> Default = <code>80 m</code>. The width of a buffer around the existing road for point cloud extraction. The algorithm processes only the point cloud within the buffer around the reference roads (see figure below). This value corresponds to the biggest road offset error (i.e., how incorrect the existing road track is) that can be fixed by the method. If the road buffer is 80 m, but a given road is 100 m off the real track, then the real road will be outside the extracted point cloud and won’t be found. If the user knows that the road track error can be up to 100 m, then a road buffer value of 120 m is better suited than the 80 m default value. If the user knows that the maximum road track error is at most 30 m, then a buffer of 40 m will increase computation speed and reduce the chance of producing erroneous results.</p>
+<center>
+<p><img src="images/schema_buffer.png" /></p>
+</center></li>
+<li><p>[road_max_width] Default = <code>30 m</code>. The maximum width of a road for metrics measurements. Editing the <strong>road_buffer</strong> distance supports the relocation of the road and minimizes computation time. Once the proper location of the road is determined, the road edges are generally +/- 10 m from the centerline. No matter the <strong>road_buffer</strong> distance used, once the proper road centerline is located, the <strong>road_max_width</strong> is set to 30 m to ensure that the method accurately classifies the road and road edges.</p></li>
+<li><p>[section_length] Default = <code>10 m</code>. The length of sections of the road for metrics measurements. Roads are divided into sections, and for each section, the road width, road state, and other metrics are computed iteratively by processing slices perpendicular to the road. For example, using the default road section length (10 m), a 500m road will be split into 50 sections.</p></li>
+<li><p>[profile_resolution] Default = <code>0.5 m</code>. The resolution of the profiles and DTMs for metrics measurements (see Figure 6 in the method <a href="https://www.sciencedirect.com/science/article/pii/S1569843222002084?via%3Dihub">paper</a>).</p></li>
+</ul>
+</div>
+<div id="sec-embankment-parameters" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Embankment Parameters:<a href="sec-standard-parameters.html#sec-embankment-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The <code>meaure_roads()</code> function includes one parameter that specifies how the algorithm deals with embankments in the terrain.</p>
+<ul>
+<li>[min_slope] Default = <code>10 degrees</code>. Slope (degrees) greater than the min_slope may initiate or terminate the detection of embankments. For example, if a slope of greater than 10 degrees is encountered on the right or the left of the road centerline, the method will consider this point to be an edge of the road. This is illustrated in the figure below. Nice slopes and ditches are expected to be detected to delimitate the road.</li>
+</ul>
+<center>
+<img src="images/schema_road_base.png" />
+</center>
+</div>
+<div id="sec-terrain-parameters" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> Terrain Parameters (excluding embankment):<a href="sec-standard-parameters.html#sec-terrain-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The <code>meaure_roads()</code> function includes two parameters that specify how the algorithm detects road edges in the terrain aspect, excluding embankment/shoulder (see section <a href="sec-standard-parameters.html#sec-embankment-parameters">5.2</a> for embankment parameters).</p>
+<p>The purpose of these parameters is to allow the algorithm to find the edges of the road, even in the absence of embankments. Classifying the edges of roads using embankments is the preferable method. In the absence of clear embankments, defined by the road edge slopes, the method relies on the DTM complexity of each road section (see section <a href="sec-standard-parameters.html#sec-extraction-parameters">5.1</a> for information on road sections) to classify the edges of the road. We refer to the classification of road edges using DTM complexity as the <em>“rescue method”</em> as it is used when the preferred method, based on road embankment, is not possible.</p>
+<p>The assumptions that support the interpretation of DTM complexity to relocate roads is that roads are flat and not complex. If we remove potential slopes that follow the direction of the road, a road is roughly a 2D strip without variations in height (Z). On the other hand, the edges of a road correspond to the natural landscape and are more complex with a 3D structure and variations on the Z axis. On a given slice perpendicular to the road (see section <a href="sec-standard-parameters.html#sec-extraction-parameters">5.1</a> for information on road slices), metrics on the ground points from left to right can be computed to assess the road profile. The road profile is expected to have higher values outside the boundaries of the road and low or close to zero values inside the boundaries of the road. The road profile frequently resembles the shape of a parabola. Adjusting the method parameters determines the thresholds which define road edges, as illustrated in the figure below.</p>
+<center>
+<img src="images/schema_road_rescue.png" />
+</center>
+<ul>
+<li><p><strong>[max_sd_ground_points]</strong> Default = <code>0.1</code>. The LiDAR ground points belonging to roads have a low dispersion on Z profiles because roads are relatively flat (refer to Figure 6 in the method <a href="https://www.sciencedirect.com/science/article/pii/S1569843222002084?via%3Dihub">paper</a>). Beyond the boundaries of a road, the standard deviation of ground points starts to increase because the terrain is more complex. This value is a threshold at which the edges of the roads are detected with the rescue method.</p></li>
+<li><p><strong>[max_elevation_ground_points]</strong> Default = <code>0.15</code>. The algorithm normalizes the point cloud relative to the road (i.e., the ground points from a road are expected to be at 0, and the surrounding points are expected to be non-zero). The rescue method uses this property to detect road edges.</p></li>
+</ul>
+<p>The embankment method (section <a href="sec-standard-parameters.html#sec-embankment-parameters">5.2</a>) and rescue method are not mutually exclusive. In many cases, an embankment may be detected on only one side of a road, meaning that the rescue method is used to detect the road edge on the other side. Changing terrain parameters is particularly important when the topography is flat. As the reader can see, a road can be detected, using both methods, based on geometrical features. However, when there is almost nothing to detect (i.e., no embankments and no DTM complexity), the algorithm fails and overestimates the road width. In this situation, decreasing the terrain parameter thresholds will lead to a narrowing of the detected road.</p>
+</div>
+<div id="sec-vegetation-parameters" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> Vegetation:<a href="sec-standard-parameters.html#sec-vegetation-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Once the width of the road is determined (see sections <a href="sec-standard-parameters.html#sec-embankment-parameters">5.2</a> and <a href="sec-standard-parameters.html#sec-terrain-parameters">5.3</a>), the method estimates the drivable road width using the parameter <strong>max_percentage_drivable</strong>, which is the total road width minus the vegetation that impedes road passage. The motivation for this parameter is that while the Slope and DTM can be used to locate a road on the landscape, that road may not be drivable due to vegetation growth. All the LiDAR points located on the road are expected to be ground points. To account for inaccuracies, we assume that 100% of the points on the road must be between 0 and 50 cm. If LiDAR points on the road are above 50 cm, there is vegetation on the road. A single point above 50 cm may be an outline, but a significant percentage of the point above this value will trigger a stop signal. Starting from the centerline and going to the left and right, the method computes the cumulative percentage of non-ground points on the road. This produces a ‘threshold-like’ road profile for width measurement (see figure below).</p>
+<center>
+<img src="images/schema_road_drivable.png" />
+</center>
+<ul>
+<li><strong>[max_percentage_drivable]</strong> Default = <code>0.15</code>. The maximum percentage of LiDAR points above 50 cm (explained above).</li>
+</ul>
+</div>
+<div id="sec-conductivity-parameters" class="section level2 hasAnchor" number="5.5">
+<h2><span class="header-section-number">5.5</span> Conductivity Parameters:<a href="sec-standard-parameters.html#sec-conductivity-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A key component of the <code>measure_roads()</code> method is the development of a conductivity layer, where pixel values indicate the likelihood that a pixel is or is not drivable. Conductivity parameters correspond to the method used to estimate the overall conductivity layer using multiple sub-conductivity layers. Each layer is described in Figure 3 of the method <a href="https://www.sciencedirect.com/science/article/pii/S1569843222002084?via%3Dihub">paper</a> and is activated using an activation function. These activation functions have two thresholds; unless otherwise stated. The values below correspond to these thresholds. It is <strong>not</strong> recommended for users to change the default values of these parameters.</p>
+<ul>
+<li><p><strong>[sigma_min]</strong> Default = <code>0.1</code>. The minimum conductivity layer value cannot be lower than this value. The conductivity layer construction is done such as conductivity values can range from 0 to 1. However, very low values (&lt;0.1) are problematic as they may form a gap in the road and result in a false negative (e.g., the gap may be interpreted as an impassible obstacle). Version 0.2.0 of the <code>ALSroads</code> package (not the one described in the method <a href="https://www.sciencedirect.com/science/article/pii/S1569843222002084?via%3Dihub">paper</a>, which is 0.1.0) introduced this parameter to allow the method to cross small gaps in the conductivity layer.</p></li>
+<li><p>[s] Default = <code>c(5, 20)</code>. The slope (s) of the terrain indicates where a road cannot be. If the slope of the terrain is greater than the max slope, then a road cannot be present. To avoid binary logic and a hard threshold, a second threshold is introduced at 5° to transform the slope map into a sub-conductivity map using a piecewise-linear activation function. A slope of &lt; 5° has a conductivity of 1; between 5° and 20°, the conductivity decreases linearly to 0, making it impossible to move through pixels with steeper slopes.</p></li>
+<li><p>[r] Default = <code>c(0.05, 0.1)</code>. The roughness (r) sub-conductivity layer is based on the assumption that a road surface is anticipated to be a smooth surface in a relatively rough environment.</p></li>
+<li><p>[e] Default = <code>40</code>. This is a simple threshold activation function.</p></li>
+<li><p>[q] Default = <code>c(0.1, 0.5)</code>. Intensity range (q) (difference between the maximum and the minimum) as an estimation of the intensity homogeneity. Rather than using the absolute thresholds, which are not applicable broadly with intensity, we use local and auto-adaptive thresholds based on two percentiles of intensity. Here the 10th and 50th percentiles of intensities are used as threshold values for the activation function.</p></li>
+<li><p>[h] Default = <code>c(0.1, 0.2)</code>. The CHM can be interpreted to inform gaps in the canopy. Low CHM (h) values are interpreted to indicate the location of a drivable surface.</p></li>
+<li><p>[d] Default = <code>c(0.25, 0.95)</code>. Ground point density values cannot be used directly because of their dependence on the local nominative sampling density. Consequently, we opted for auto-adaptive thresholds based on two percentiles of density (d).</p></li>
+<li><p>[alpha] Default <code>list(h = 1, d = 2, r = 1, i = 1)</code>. These are the alphas parameters in equation 1 in the method <a href="https://www.sciencedirect.com/science/article/pii/S1569843222002084?via%3Dihub">paper</a>.</p></li>
+</ul>
+</div>
+<div id="sec-state-parameters" class="section level2 hasAnchor" number="5.6">
+<h2><span class="header-section-number">5.6</span> Road State Parameters:<a href="sec-standard-parameters.html#sec-state-parameters" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Using the <code>measure_roads()</code> function, users classify roads into four classes (see section <a href="sec-road-extraction-using-alsroads.html#sec-network-update">4.1.3</a>. These classes are determined using four metrics derived from the point cloud (Figure 7 of the method <a href="https://www.sciencedirect.com/science/article/pii/S1569843222002084?via%3Dihub">paper</a>):</p>
+<ol style="list-style-type: decimal">
+<li>W - the drivable width of the road,</li>
+<li>P - the percentage of vegetation points between 0.5 and 5 meters above the road,</li>
+<li>S - the average number of shoulders detected and,</li>
+<li>σ - the conductivity per linear meter.</li>
+</ol>
+<p>An activation function is applied to the four metrics. These activation functions have two parameters. The following are the two parameters of each activation function. Modifying these thresholds has predictable behaviours, but it is hard to quantify them. A simple voting system calculates the weight of each metric (W, P, S, and σ) for determining the road Class.</p>
+<p>For example, if the method detects a large ‘W’ (drivable width), then this is a ‘vote’ towards the road being a Class 1, but if the ‘P’ (vegetation above the road) value for the road is high, then this is a ‘vote’ for the road being a Class 4 because it appears to be abandoned. Meanwhile, the ‘S’ (average number of shoulders) value for the road may indicate that the road has nice ditches and is well-shaped, which is a ‘vote’ towards the road being a Class 1. Interpreting all these ‘Votes’ facilitates the determination of an overall Class for the road; in this example, the road may be classified as a ‘Class 2’ road.</p>
+<ul>
+<li><p><strong>[drivable_width_thresholds]</strong> <code>Default c(1, 5)</code>. Roads with a drivable road width above 5 m are assigned a score of 100. Roads with a width of less than 1 m are assigned a score of 0. The is a linear relationship between 1 and 5 (i.e., a with of 2 m returns a score of 50%). If a user knows that a road of 4 m is a good road in their context, we recommend changing the parameter, for example, to <code>c(1, 3)</code>.</p></li>
+<li><p><strong>[percentage_veg_thresholds]</strong> Default = <code>c(10,40)</code>. Roads with a percentage of vegetation (point above ground in a range of [0.5m, 5m]) below 10% are assigned a score of 100%. Roads with a percentage greater than 40% are assigned a score of 0%. There is a linear relationship between the lower and upper percentage vegetation thresholds.</p></li>
+<li><p><strong>[shoulder_thresholds]</strong> Default = <code>c(50, 75)</code>. For each slice of the road (see ‘section_length’ in section <a href="sec-standard-parameters.html#sec-extraction-parameters">5.1</a>), the algorithm retains the count of the shoulder/embankments found. For each road, it is possible to find 0, 1, or 2 shoulder/embankments. If the algorithm consistently finds two shoulders (one on the left and one on the right) for each road segment, the road is extremely well-shaped, and we have 100% of the possible count. However, in practice, roads are very rarely shaped well enough that two shoulder/embankments per section can be consistently found. This parameter counts the percentage of shoulders found. A shoulder percentage of 0 % means that the algorithm did not find any shoulders at any road section, and the road is likely poor quality, if a road at all. If 100% of the road shoulders are found, the road is well shaped, and the road score is 100%. If under 50 % of the road shoulders are found for the entire road, the road score is 0%. Changing this parameter is advised if users know that the roads in their study area are not well-shaped by strong ditches. Ultimately users may opt to deactivate this parameter, which is not currently possible but could be done on demand.</p></li>
+<li><p>[conductivity_thresholds] Default = <code>c(0.25, 0.5)</code>. If the conductivity of the road is too low (&lt; 0.25), the road score is 0% (see section <a href="sec-standard-parameters.html#sec-conductivity-parameters">5.5</a>). If the conductivity is above 0.5, the score is 100%. The road score between these thresholds is linear. We do not recommend changing this threshold because users do not have control of the conductivity layer, and manipulating this parameter would be done blindly.</p></li>
+</ul>
+<p>Once the algorithm calculates a score for each of the four road state parameters, these scores are combined into a final score (Figure 7 of the method <a href="https://www.sciencedirect.com/science/article/pii/S1569843222002084?via%3Dihub">paper</a>). This score can be used as is but is also binned in four classes where Class 4 corresponds to a score [0, 25], Class 3 to a score [25, 50] and so on.</p>
+
+<pre><code>#&gt; Reading layer `roads&#39; from data source `E:\ALSroads_Guide\data\06\01\roads.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; Simple feature collection with 12 features and 20 fields
+#&gt; Geometry type: LINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: 638000 ymin: 5142000 xmax: 639000 ymax: 5143000
+#&gt; Projected CRS: NAD83(CSRS) / UTM zone 17N
+#&gt; Reading layer `upd_roads&#39; from data source `E:\ALSroads_Guide\data\06\01\upd_roads.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; Simple feature collection with 12 features and 28 fields
+#&gt; Geometry type: LINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: 637998.8 ymin: 5142000 xmax: 639000 ymax: 5142999
+#&gt; Projected CRS: NAD83(CSRS) / UTM zone 17N
+#&gt; Reading layer `road&#39; from data source `E:\ALSroads_Guide\data\06\02\road.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; Simple feature collection with 1 feature and 36 fields
+#&gt; Geometry type: LINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: 451156.3 ymin: 5389576 xmax: 451767.8 ymax: 5389814
+#&gt; Projected CRS: NAD83 / UTM zone 17N
+#&gt; Reading layer `roads&#39; from data source `E:\ALSroads_Guide\data\06\03\roads.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; Simple feature collection with 1 feature and 36 fields
+#&gt; Geometry type: LINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: 433270.3 ymin: 5336398 xmax: 434000 ymax: 5336992
+#&gt; Projected CRS: NAD83 / UTM zone 17N
+#&gt; Reading layer `upd_roads&#39; from data source `E:\ALSroads_Guide\data\06\03\upd_roads.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; Simple feature collection with 1 feature and 45 fields
+#&gt; Geometry type: LINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: 433481 ymin: 5336562 xmax: 434000 ymax: 5336989
+#&gt; Projected CRS: NAD83(CSRS) / UTM zone 17N
+#&gt; Reading layer `upd_roads_custom&#39; from data source `E:\ALSroads_Guide\data\06\03\upd_roads_custom.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; Simple feature collection with 1 feature and 44 fields
+#&gt; Geometry type: LINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: 433275.5 ymin: 5336400 xmax: 434001.2 ymax: 5336989
+#&gt; Projected CRS: NAD83 / UTM zone 17N
+#&gt; Reading layer `roads&#39; from data source `E:\ALSroads_Guide\data\06\03\roads.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; Simple feature collection with 1 feature and 36 fields
+#&gt; Geometry type: LINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: 433270.3 ymin: 5336398 xmax: 434000 ymax: 5336992
+#&gt; Projected CRS: NAD83 / UTM zone 17N
+#&gt; Reading layer `upd_roads&#39; from data source `E:\ALSroads_Guide\data\06\04\upd_roads.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; Simple feature collection with 8 features and 44 fields
+#&gt; Geometry type: LINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: 433142.5 ymin: 5336329 xmax: 434000.8 ymax: 5337000
+#&gt; Projected CRS: NAD83 / UTM zone 17N
+#&gt; Reading layer `upd_roads_custom&#39; from data source `E:\ALSroads_Guide\data\06\04\upd_roads_custom.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; Simple feature collection with 8 features and 44 fields
+#&gt; Geometry type: LINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: 433141.7 ymin: 5336329 xmax: 434000.8 ymax: 5337000
+#&gt; Projected CRS: NAD83 / UTM zone 17N
+#&gt; Reading layer `upd_roads_custom_and_standard&#39; from data source `E:\ALSroads_Guide\data\06\04\upd_roads_custom_and_standard.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; Simple feature collection with 16 features and 45 fields
+#&gt; Geometry type: LINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: 433141.7 ymin: 5336329 xmax: 434000.8 ymax: 5337000
+#&gt; Projected CRS: NAD83 / UTM zone 17N</code></pre>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="sec-road-extraction-using-alsroads.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sec-edge-case-studies.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

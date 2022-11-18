@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>7 Waterbodies | User Guide: The ALSroads Package</title>
+  <meta name="description" content="A user guide for road extraction using the ALSroads package" />
+  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="7 Waterbodies | User Guide: The ALSroads Package" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="A user guide for road extraction using the ALSroads package" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="7 Waterbodies | User Guide: The ALSroads Package" />
+  
+  <meta name="twitter:description" content="A user guide for road extraction using the ALSroads package" />
+  
+
+<meta name="author" content="Ilythia D. Morley, Jean-Romain Roussel" />
+
+
+<meta name="date" content="2022-11-16" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="sec-edge-case-studies.html"/>
+<link rel="next" href="sec-tips-and-tricks.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="sec-road-extraction-data-requirements.html"><a href="sec-road-extraction-data-requirements.html"><i class="fa fa-check"></i><b>2</b> Road Extraction Data Requirements</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="sec-road-extraction-data-requirements.html"><a href="sec-road-extraction-data-requirements.html#sec-lidar-data"><i class="fa fa-check"></i><b>2.1</b> LiDAR Data</a></li>
+<li class="chapter" data-level="2.2" data-path="sec-road-extraction-data-requirements.html"><a href="sec-road-extraction-data-requirements.html#sec-dtm-data"><i class="fa fa-check"></i><b>2.2</b> DTM Data</a></li>
+<li class="chapter" data-level="2.3" data-path="sec-road-extraction-data-requirements.html"><a href="sec-road-extraction-data-requirements.html#sec-existing-road-network"><i class="fa fa-check"></i><b>2.3</b> Existing Road Network</a></li>
+<li class="chapter" data-level="2.4" data-path="sec-road-extraction-data-requirements.html"><a href="sec-road-extraction-data-requirements.html#sec-water-bodies"><i class="fa fa-check"></i><b>2.4</b> Water Bodies (optional)</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html"><i class="fa fa-check"></i><b>3</b> Reading, Generating, and Plotting Input Data</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-lidar-data"><i class="fa fa-check"></i><b>3.1</b> Reading LiDAR data</a></li>
+<li class="chapter" data-level="3.2" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-lidar-data-using-readlascatalog"><i class="fa fa-check"></i><b>3.2</b> Reading LiDAR data using <code>readLAScatalog</code></a></li>
+<li class="chapter" data-level="3.3" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-and-generating-dtm-raster-data"><i class="fa fa-check"></i><b>3.3</b> Reading and Generating DTM Raster Data</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-raster-dtm-data-using-raster"><i class="fa fa-check"></i><b>3.3.1</b> Reading raster DTM data using <code>raster</code></a></li>
+<li class="chapter" data-level="3.3.2" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-generating-dtm-data-using-grid_terrain"><i class="fa fa-check"></i><b>3.3.2</b> Generating DTM data using <code>rasterize_terrain()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-vector-road-data-using-st_read"><i class="fa fa-check"></i><b>3.4</b> Reading Vector Road Data using <code>st_read()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html"><i class="fa fa-check"></i><b>4</b> Road Extraction with <code>ALSroads</code></a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-standard-road-extraction-using-measure_roads"><i class="fa fa-check"></i><b>4.1</b> Standard Road Extraction using <code>measure_roads()</code></a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-input-data"><i class="fa fa-check"></i><b>4.1.1</b> Input Data</a></li>
+<li class="chapter" data-level="4.1.2" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-network-update"><i class="fa fa-check"></i><b>4.1.2</b> Network Update</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-applying-measure_roads"><i class="fa fa-check"></i><b>4.2</b> Applying <code>measure_roads()</code></a></li>
+<li class="chapter" data-level="4.3" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-spatial-plotting-updated-roads"><i class="fa fa-check"></i><b>4.3</b> Spatial Plotting Updated Roads</a></li>
+<li class="chapter" data-level="4.4" data-path="sec-road-extraction-using-alsroads.html"><a href="sec-road-extraction-using-alsroads.html#sec-attribute-plotting-updated-roads"><i class="fa fa-check"></i><b>4.4</b> Attribute Plotting Updated Roads</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="sec-explanation-of-parameters-measure_roads.html"><a href="sec-explanation-of-parameters-measure_roads.html"><i class="fa fa-check"></i><b>5</b> Standard Parameters</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="sec-explanation-of-parameters-measure_roads.html"><a href="sec-explanation-of-parameters-measure_roads.html#sec-extraction-parameters"><i class="fa fa-check"></i><b>5.1</b> Extraction Parameters:</a></li>
+<li class="chapter" data-level="5.2" data-path="sec-explanation-of-parameters-measure_roads.html"><a href="sec-explanation-of-parameters-measure_roads.html#sec-embankments-parameters"><i class="fa fa-check"></i><b>5.2</b> Embankments Parameters:</a></li>
+<li class="chapter" data-level="5.3" data-path="sec-explanation-of-parameters-measure_roads.html"><a href="sec-explanation-of-parameters-measure_roads.html#sec-terrain-parameters"><i class="fa fa-check"></i><b>5.3</b> Terrain Parameters (excluding embankment):</a></li>
+<li class="chapter" data-level="5.4" data-path="sec-explanation-of-parameters-measure_roads.html"><a href="sec-explanation-of-parameters-measure_roads.html#sec-vegetation-parameters"><i class="fa fa-check"></i><b>5.4</b> Vegetation:</a></li>
+<li class="chapter" data-level="5.5" data-path="sec-explanation-of-parameters-measure_roads.html"><a href="sec-explanation-of-parameters-measure_roads.html#sec-conductivity-parameters"><i class="fa fa-check"></i><b>5.5</b> Conductivity Parameters:</a></li>
+<li class="chapter" data-level="5.6" data-path="sec-explanation-of-parameters-measure_roads.html"><a href="sec-explanation-of-parameters-measure_roads.html#sec-state-parameters"><i class="fa fa-check"></i><b>5.6</b> Road State Parameters:</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html"><i class="fa fa-check"></i><b>6</b> Edge Case Studies</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#case-study-structure"><i class="fa fa-check"></i><b>6.1</b> Case Study Structure:</a></li>
+<li class="chapter" data-level="6.2" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#sec-case-study-low-dtm-complexity"><i class="fa fa-check"></i><b>6.2</b> Case Study: Low DTM complexity</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#sec-overview"><i class="fa fa-check"></i><b>6.2.1</b> Overview:</a></li>
+<li class="chapter" data-level="6.2.2" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#sec-method-and-application"><i class="fa fa-check"></i><b>6.2.2</b> Method and Application:</a></li>
+<li class="chapter" data-level="6.2.3" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#sec-results"><i class="fa fa-check"></i><b>6.2.3</b> Results:</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#sec-case-study-steep-slopes"><i class="fa fa-check"></i><b>6.3</b> Case Study: Steep Slopes</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#overview"><i class="fa fa-check"></i><b>6.3.1</b> Overview:</a></li>
+<li class="chapter" data-level="6.3.2" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#method-and-application"><i class="fa fa-check"></i><b>6.3.2</b> Method and Application</a></li>
+<li class="chapter" data-level="6.3.3" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#results"><i class="fa fa-check"></i><b>6.3.3</b> Results:</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#sec-case-study-no-veg"><i class="fa fa-check"></i><b>6.4</b> Case Study: No Vegetation</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#scenario-one-the-roads-are-nicely-shaped-and-it-is-not-an-edge-case-it-should-works"><i class="fa fa-check"></i><b>6.4.1</b> Scenario One: The roads are nicely shaped, and it is not an edge case it should works</a></li>
+<li class="chapter" data-level="6.4.2" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#scenario-two-the-dtm-is-very-flat-and-we-are-in-2.1"><i class="fa fa-check"></i><b>6.4.2</b> Scenario Two: The DTM is very flat and we are in 2.1</a></li>
+<li class="chapter" data-level="6.4.3" data-path="sec-edge-case-studies.html"><a href="sec-edge-case-studies.html#scenario-three-it-so-hard-to-find-the-road-that-even-the-least-cost-path-fails-because-the-roads-are-not-highlighted-enough-compared-to-the-surrounding-vegetation.-in-that-case-we-are-facing-a-hard-limit."><i class="fa fa-check"></i><b>6.4.3</b> Scenario Three: It so hard to find the road that even the least cost path fails because the roads are not highlighted enough compared to the surrounding vegetation. In that case we are facing a hard limit.</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="sec-waterbodie.html"><a href="sec-waterbodie.html"><i class="fa fa-check"></i><b>7</b> Waterbodies</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="sec-waterbodie.html"><a href="sec-waterbodie.html#example-1-road-extraction-without-waterbodies"><i class="fa fa-check"></i><b>7.1</b> Example 1: Road Extraction without Waterbodies</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="sec-waterbodie.html"><a href="sec-waterbodie.html#sec-loading-data_wb"><i class="fa fa-check"></i><b>7.1.1</b> Loading Data:</a></li>
+<li class="chapter" data-level="7.1.2" data-path="sec-waterbodie.html"><a href="sec-waterbodie.html#updating-roads"><i class="fa fa-check"></i><b>7.1.2</b> Updating Roads</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="sec-waterbodie.html"><a href="sec-waterbodie.html#example-2-road-extraction-with-waterbodies"><i class="fa fa-check"></i><b>7.2</b> Example 2: Road Extraction with Waterbodies</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="sec-waterbodie.html"><a href="sec-waterbodie.html#sec-loading-data_wb"><i class="fa fa-check"></i><b>7.2.1</b> Loading Data:</a></li>
+<li class="chapter" data-level="7.2.2" data-path="sec-waterbodie.html"><a href="sec-waterbodie.html#updating-roads-1"><i class="fa fa-check"></i><b>7.2.2</b> Updating Roads</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="sec-waterbodie.html"><a href="sec-waterbodie.html#comparison"><i class="fa fa-check"></i><b>7.3</b> Comparison</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html"><i class="fa fa-check"></i><b>8</b> Tips and Tricks</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#casting-roads-to-linestring"><i class="fa fa-check"></i><b>8.1</b> Casting Roads to Linestring</a></li>
+<li class="chapter" data-level="8.2" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#adding-an-id-column"><i class="fa fa-check"></i><b>8.2</b> Adding an ID Column</a></li>
+<li class="chapter" data-level="8.3" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#selecting-specific-roads"><i class="fa fa-check"></i><b>8.3</b> Selecting Specific Roads</a></li>
+<li class="chapter" data-level="8.4" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#plotting-data"><i class="fa fa-check"></i><b>8.4</b> Plotting Data</a></li>
+<li class="chapter" data-level="8.5" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#saving-data"><i class="fa fa-check"></i><b>8.5</b> Saving Data</a></li>
+<li class="chapter" data-level="8.6" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#reconnecing-roads"><i class="fa fa-check"></i><b>8.6</b> Reconnecing Roads</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="sec-getting-started-with-r.html"><a href="sec-getting-started-with-r.html"><i class="fa fa-check"></i><b>9</b> Getting Started with R</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="sec-getting-started-with-r.html"><a href="sec-getting-started-with-r.html#sec-installing-r-and-rstudio"><i class="fa fa-check"></i><b>9.1</b> Installing R and RStudio</a></li>
+<li class="chapter" data-level="9.2" data-path="sec-getting-started-with-r.html"><a href="sec-getting-started-with-r.html#sec-installing-alsroad"><i class="fa fa-check"></i><b>9.2</b> Installing <code>ALSroad</code></a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="sec-team.html"><a href="sec-team.html"><i class="fa fa-check"></i><b>10</b> Project Team Members</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">User Guide: The <code>ALSroads</code> Package</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="sec-waterbodie" class="section level1 hasAnchor" number="7">
+<h1><span class="header-section-number">7</span> Waterbodies<a href="sec-waterbodie.html#sec-waterbodie" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>The inclusion of water bodies when using the <code>measure_roads()</code> function is recommenced for several reasons, as explained in section /<span class="citation">@ref</span>(). Here, we provide two road extraction examples for the same study areas. In the first example water bodies are not included as a <code>measure_roads()</code> parameter, in the second example water bodies are included. We therefore demonstrate the value of using water bodies with the <code>measure_roads()</code> function.</p>
+<div id="example-1-road-extraction-without-waterbodies" class="section level2 hasAnchor" number="7.1">
+<h2><span class="header-section-number">7.1</span> Example 1: Road Extraction without Waterbodies<a href="sec-waterbodie.html#example-1-road-extraction-without-waterbodies" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="sec-loading-data_wb" class="section level3 hasAnchor" number="7.1.1">
+<h3><span class="header-section-number">7.1.1</span> Loading Data:<a href="sec-waterbodie.html#sec-loading-data_wb" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="sec-waterbodie.html#cb1-1" aria-hidden="true" tabindex="-1"></a>ctg <span class="ot">&lt;-</span> readLAScatalog<span class="st">&quot;path/to/ctg/files&quot;</span>, filter <span class="ot">=</span> <span class="st">&quot;-drop_withheld -keep_random_fraction 0.25&quot;</span><span class="er">)</span></span>
+<span id="cb1-2"><a href="sec-waterbodie.html#cb1-2" aria-hidden="true" tabindex="-1"></a>dtm <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;path/to/dtm.tif&quot;</span>)</span>
+<span id="cb1-3"><a href="sec-waterbodie.html#cb1-3" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;path/to/roads&quot;</span>)</span>
+<span id="cb1-4"><a href="sec-waterbodie.html#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="sec-waterbodie.html#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(roads) <span class="ot">=</span> <span class="fu">st_crs</span>(ctg)</span>
+<span id="cb1-6"><a href="sec-waterbodie.html#cb1-6" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">st_crop</span>(roads, ctg)</span></code></pre></div>
+</div>
+<div id="updating-roads" class="section level3 hasAnchor" number="7.1.2">
+<h3><span class="header-section-number">7.1.2</span> Updating Roads<a href="sec-waterbodie.html#updating-roads" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="sec-waterbodie.html#cb2-1" aria-hidden="true" tabindex="-1"></a>updated_roads_custom_param <span class="ot">&lt;-</span> <span class="fu">measure_roads</span>(<span class="at">ctg =</span> ctg, <span class="at">roads =</span> roads, <span class="at">dtm =</span> dtm)</span></code></pre></div>
+</div>
+</div>
+<div id="example-2-road-extraction-with-waterbodies" class="section level2 hasAnchor" number="7.2">
+<h2><span class="header-section-number">7.2</span> Example 2: Road Extraction with Waterbodies<a href="sec-waterbodie.html#example-2-road-extraction-with-waterbodies" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="sec-loading-data_wb" class="section level3 hasAnchor" number="7.2.1">
+<h3><span class="header-section-number">7.2.1</span> Loading Data:<a href="sec-waterbodie.html#sec-loading-data_wb" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="sec-waterbodie.html#cb3-1" aria-hidden="true" tabindex="-1"></a>ctg <span class="ot">&lt;-</span> readLAScatalog<span class="st">&quot;path/to/ctg/files&quot;</span>, filter <span class="ot">=</span> <span class="st">&quot;-drop_withheld -keep_random_fraction 0.25&quot;</span><span class="er">)</span></span>
+<span id="cb3-2"><a href="sec-waterbodie.html#cb3-2" aria-hidden="true" tabindex="-1"></a>dtm <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;path/to/dtm.tif&quot;</span>)</span>
+<span id="cb3-3"><a href="sec-waterbodie.html#cb3-3" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;path/to/roads&quot;</span>)</span>
+<span id="cb3-4"><a href="sec-waterbodie.html#cb3-4" aria-hidden="true" tabindex="-1"></a>waterbodies <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;path/to/waterbodies&quot;</span>)</span>
+<span id="cb3-5"><a href="sec-waterbodie.html#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="sec-waterbodie.html#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(roads) <span class="ot">=</span> <span class="fu">st_crs</span>(ctg)</span>
+<span id="cb3-7"><a href="sec-waterbodie.html#cb3-7" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">st_crop</span>(roads, ctg)</span></code></pre></div>
+</div>
+<div id="updating-roads-1" class="section level3 hasAnchor" number="7.2.2">
+<h3><span class="header-section-number">7.2.2</span> Updating Roads<a href="sec-waterbodie.html#updating-roads-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="sec-waterbodie.html#cb4-1" aria-hidden="true" tabindex="-1"></a>updated_roads_custom_param <span class="ot">&lt;-</span> <span class="fu">measure_roads</span>(<span class="at">ctg =</span> ctg, <span class="at">roads =</span> roads, <span class="at">dtm =</span> dtm, <span class="at">water =</span> water)</span></code></pre></div>
+</div>
+</div>
+<div id="comparison" class="section level2 hasAnchor" number="7.3">
+<h2><span class="header-section-number">7.3</span> Comparison<a href="sec-waterbodie.html#comparison" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="sec-edge-case-studies.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sec-tips-and-tricks.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
