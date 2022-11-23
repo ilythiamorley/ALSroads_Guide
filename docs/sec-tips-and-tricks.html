@@ -23,7 +23,7 @@
 <meta name="author" content="Ilythia D. Morley, Jean-Romain Roussel" />
 
 
-<meta name="date" content="2022-11-18" />
+<meta name="date" content="2022-11-23" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -173,7 +173,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.2" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-lidar-data-using-readlascatalog"><i class="fa fa-check"></i><b>3.2</b> Reading LiDAR data using <code>readLAScatalog</code></a></li>
 <li class="chapter" data-level="3.3" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-and-generating-dtm-raster-data"><i class="fa fa-check"></i><b>3.3</b> Reading and Generating DTM Raster Data</a>
 <ul>
-<li class="chapter" data-level="3.3.1" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-raster-dtm-data-using-raster"><i class="fa fa-check"></i><b>3.3.1</b> Reading raster DTM data using <code>raster</code></a></li>
+<li class="chapter" data-level="3.3.1" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-raster-dtm-data-using-raster"><i class="fa fa-check"></i><b>3.3.1</b> Reading a raster DTM using <code>raster</code></a></li>
 <li class="chapter" data-level="3.3.2" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-generating-dtm-data-using-grid_terrain"><i class="fa fa-check"></i><b>3.3.2</b> Generating DTM data using <code>rasterize_terrain()</code></a></li>
 </ul></li>
 <li class="chapter" data-level="3.4" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-vector-road-data-using-st_read"><i class="fa fa-check"></i><b>3.4</b> Reading Vector Road Data using <code>st_read()</code></a></li>
@@ -280,18 +280,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="casting-roads-to-linestring" class="section level2 hasAnchor" number="8.1">
 <h2><span class="header-section-number">8.1</span> Casting Roads to Linestring<a href="sec-tips-and-tricks.html#casting-roads-to-linestring" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Existing road networks may be multistring features, the <code>measure_roads()</code> function requires that roads are linestrings. Changing multistring features to linestrings requires the <code>st_cast()</code> function from the <code>sf</code> package (refer to the <a href="https://cran.r-project.org/web/packages/sf/sf.pdf">sf vignette</a> for detailed information).</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="sec-tips-and-tricks.html#cb46-1" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">&lt;-</span> <span class="fu">st_cast</span>(roads, <span class="st">&quot;LINESTRING&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="sec-tips-and-tricks.html#cb47-1" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">&lt;-</span> <span class="fu">st_cast</span>(roads, <span class="st">&quot;LINESTRING&quot;</span>)</span></code></pre></div>
 </div>
 <div id="adding-an-id-column" class="section level2 hasAnchor" number="8.2">
 <h2><span class="header-section-number">8.2</span> Adding an ID Column<a href="sec-tips-and-tricks.html#adding-an-id-column" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Existing road networks frequently include FID and ID columns that will help users select individual roads. In some cases, however, road networks have been edited or updated and the ID/FID columns are missing information.</p>
 <p>Users may wish to add a new ID column that specifically relate to the roads on which the ALSroads method was applied. In that case, users can add and populate a new column using the <code>rowid_to_column</code> from the <code>tibble</code> package (refer to the <a href="https://cloud.r-project.org/web/packages/tibble/tibble.pdf">tibble vignette</a> for detailed information).</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="sec-tips-and-tricks.html#cb47-1" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">rowid_to_column</span>(roads, <span class="st">&quot;NUM&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="sec-tips-and-tricks.html#cb48-1" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">rowid_to_column</span>(roads, <span class="st">&quot;NUM&quot;</span>)</span></code></pre></div>
 </div>
 <div id="selecting-specific-roads" class="section level2 hasAnchor" number="8.3">
 <h2><span class="header-section-number">8.3</span> Selecting Specific Roads<a href="sec-tips-and-tricks.html#selecting-specific-roads" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="sec-tips-and-tricks.html#cb48-1" aria-hidden="true" tabindex="-1"></a>road_subset <span class="ot">&lt;-</span> roads <span class="sc">%&gt;%</span></span>
-<span id="cb48-2"><a href="sec-tips-and-tricks.html#cb48-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(NUM <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="sec-tips-and-tricks.html#cb49-1" aria-hidden="true" tabindex="-1"></a>road_subset <span class="ot">&lt;-</span> roads <span class="sc">%&gt;%</span></span>
+<span id="cb49-2"><a href="sec-tips-and-tricks.html#cb49-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(NUM <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>))</span></code></pre></div>
 </div>
 <div id="plotting-data" class="section level2 hasAnchor" number="8.4">
 <h2><span class="header-section-number">8.4</span> Plotting Data<a href="sec-tips-and-tricks.html#plotting-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>

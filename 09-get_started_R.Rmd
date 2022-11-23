@@ -33,7 +33,7 @@ Several tutorials detailing the initial setup and introduction to R are availabl
 
 ## Installing `ALSroads` {#sec-installing-alsroad}
 
-`ALSroads` is available on [Github](https://github.com/Jean-Romain/ALSroads) but is not part of the available packages on CRAN. To install  `ALSroads` you must first install the package `remotes` then use `remotes` to install the package from Github seamlessly.
+`ALSroads` is available on [Github](https://github.com/Jean-Romain/ALSroads) but is not part of the available packages on CRAN. To install `ALSroads`, you must first install the package `remotes` and then use `remotes` to install the `ALSroads` package from Github.
 
 ```r
 install.packages("remotes")

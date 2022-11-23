@@ -23,7 +23,7 @@
 <meta name="author" content="Ilythia D. Morley, Jean-Romain Roussel" />
 
 
-<meta name="date" content="2022-11-18" />
+<meta name="date" content="2022-11-23" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -173,7 +173,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.2" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-lidar-data-using-readlascatalog"><i class="fa fa-check"></i><b>3.2</b> Reading LiDAR data using <code>readLAScatalog</code></a></li>
 <li class="chapter" data-level="3.3" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-and-generating-dtm-raster-data"><i class="fa fa-check"></i><b>3.3</b> Reading and Generating DTM Raster Data</a>
 <ul>
-<li class="chapter" data-level="3.3.1" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-raster-dtm-data-using-raster"><i class="fa fa-check"></i><b>3.3.1</b> Reading raster DTM data using <code>raster</code></a></li>
+<li class="chapter" data-level="3.3.1" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-raster-dtm-data-using-raster"><i class="fa fa-check"></i><b>3.3.1</b> Reading a raster DTM using <code>raster</code></a></li>
 <li class="chapter" data-level="3.3.2" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-generating-dtm-data-using-grid_terrain"><i class="fa fa-check"></i><b>3.3.2</b> Generating DTM data using <code>rasterize_terrain()</code></a></li>
 </ul></li>
 <li class="chapter" data-level="3.4" data-path="sec-reading-generating-and-plotting-input-data.html"><a href="sec-reading-generating-and-plotting-input-data.html#sec-reading-vector-road-data-using-st_read"><i class="fa fa-check"></i><b>3.4</b> Reading Vector Road Data using <code>st_read()</code></a></li>
@@ -281,33 +281,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">7.1</span> Example 1: Road Extraction without Waterbodies<a href="sec-waterbodies.html#example-1-road-extraction-without-waterbodies" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="sec-loading-data_wb" class="section level3 hasAnchor" number="7.1.1">
 <h3><span class="header-section-number">7.1.1</span> Loading Data:<a href="sec-waterbodies.html#sec-loading-data_wb" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="sec-waterbodies.html#cb41-1" aria-hidden="true" tabindex="-1"></a>ctg <span class="ot">&lt;-</span> readLAScatalog<span class="st">&quot;path/to/ctg/files&quot;</span>, filter <span class="ot">=</span> <span class="st">&quot;-drop_withheld -keep_random_fraction 0.25&quot;</span><span class="er">)</span></span>
-<span id="cb41-2"><a href="sec-waterbodies.html#cb41-2" aria-hidden="true" tabindex="-1"></a>dtm <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;path/to/dtm.tif&quot;</span>)</span>
-<span id="cb41-3"><a href="sec-waterbodies.html#cb41-3" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;path/to/roads&quot;</span>)</span>
-<span id="cb41-4"><a href="sec-waterbodies.html#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-5"><a href="sec-waterbodies.html#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(roads) <span class="ot">=</span> <span class="fu">st_crs</span>(ctg)</span>
-<span id="cb41-6"><a href="sec-waterbodies.html#cb41-6" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">st_crop</span>(roads, ctg)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="sec-waterbodies.html#cb42-1" aria-hidden="true" tabindex="-1"></a>ctg <span class="ot">&lt;-</span> readLAScatalog<span class="st">&quot;path/to/ctg/files&quot;</span>, filter <span class="ot">=</span> <span class="st">&quot;-drop_withheld -keep_random_fraction 0.25&quot;</span><span class="er">)</span></span>
+<span id="cb42-2"><a href="sec-waterbodies.html#cb42-2" aria-hidden="true" tabindex="-1"></a>dtm <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;path/to/dtm.tif&quot;</span>)</span>
+<span id="cb42-3"><a href="sec-waterbodies.html#cb42-3" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;path/to/roads&quot;</span>)</span>
+<span id="cb42-4"><a href="sec-waterbodies.html#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-5"><a href="sec-waterbodies.html#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(roads) <span class="ot">=</span> <span class="fu">st_crs</span>(ctg)</span>
+<span id="cb42-6"><a href="sec-waterbodies.html#cb42-6" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">st_crop</span>(roads, ctg)</span></code></pre></div>
 </div>
 <div id="updating-roads" class="section level3 hasAnchor" number="7.1.2">
 <h3><span class="header-section-number">7.1.2</span> Updating Roads<a href="sec-waterbodies.html#updating-roads" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="sec-waterbodies.html#cb42-1" aria-hidden="true" tabindex="-1"></a>updated_roads_custom_param <span class="ot">&lt;-</span> <span class="fu">measure_roads</span>(<span class="at">ctg =</span> ctg, <span class="at">roads =</span> roads, <span class="at">dtm =</span> dtm)</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="sec-waterbodies.html#cb43-1" aria-hidden="true" tabindex="-1"></a>updated_roads_custom_param <span class="ot">&lt;-</span> <span class="fu">measure_roads</span>(<span class="at">ctg =</span> ctg, <span class="at">roads =</span> roads, <span class="at">dtm =</span> dtm)</span></code></pre></div>
 </div>
 </div>
 <div id="example-2-road-extraction-with-waterbodies" class="section level2 hasAnchor" number="7.2">
 <h2><span class="header-section-number">7.2</span> Example 2: Road Extraction with Waterbodies<a href="sec-waterbodies.html#example-2-road-extraction-with-waterbodies" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="sec-loading-data_wb" class="section level3 hasAnchor" number="7.2.1">
 <h3><span class="header-section-number">7.2.1</span> Loading Data:<a href="sec-waterbodies.html#sec-loading-data_wb" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="sec-waterbodies.html#cb43-1" aria-hidden="true" tabindex="-1"></a>ctg <span class="ot">&lt;-</span> readLAScatalog<span class="st">&quot;path/to/ctg/files&quot;</span>, filter <span class="ot">=</span> <span class="st">&quot;-drop_withheld -keep_random_fraction 0.25&quot;</span><span class="er">)</span></span>
-<span id="cb43-2"><a href="sec-waterbodies.html#cb43-2" aria-hidden="true" tabindex="-1"></a>dtm <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;path/to/dtm.tif&quot;</span>)</span>
-<span id="cb43-3"><a href="sec-waterbodies.html#cb43-3" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;path/to/roads&quot;</span>)</span>
-<span id="cb43-4"><a href="sec-waterbodies.html#cb43-4" aria-hidden="true" tabindex="-1"></a>waterbodies <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;path/to/waterbodies&quot;</span>)</span>
-<span id="cb43-5"><a href="sec-waterbodies.html#cb43-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-6"><a href="sec-waterbodies.html#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(roads) <span class="ot">=</span> <span class="fu">st_crs</span>(ctg)</span>
-<span id="cb43-7"><a href="sec-waterbodies.html#cb43-7" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">st_crop</span>(roads, ctg)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="sec-waterbodies.html#cb44-1" aria-hidden="true" tabindex="-1"></a>ctg <span class="ot">&lt;-</span> readLAScatalog<span class="st">&quot;path/to/ctg/files&quot;</span>, filter <span class="ot">=</span> <span class="st">&quot;-drop_withheld -keep_random_fraction 0.25&quot;</span><span class="er">)</span></span>
+<span id="cb44-2"><a href="sec-waterbodies.html#cb44-2" aria-hidden="true" tabindex="-1"></a>dtm <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;path/to/dtm.tif&quot;</span>)</span>
+<span id="cb44-3"><a href="sec-waterbodies.html#cb44-3" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;path/to/roads&quot;</span>)</span>
+<span id="cb44-4"><a href="sec-waterbodies.html#cb44-4" aria-hidden="true" tabindex="-1"></a>waterbodies <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;path/to/waterbodies&quot;</span>)</span>
+<span id="cb44-5"><a href="sec-waterbodies.html#cb44-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-6"><a href="sec-waterbodies.html#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(roads) <span class="ot">=</span> <span class="fu">st_crs</span>(ctg)</span>
+<span id="cb44-7"><a href="sec-waterbodies.html#cb44-7" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">st_crop</span>(roads, ctg)</span></code></pre></div>
 </div>
 <div id="updating-roads-1" class="section level3 hasAnchor" number="7.2.2">
 <h3><span class="header-section-number">7.2.2</span> Updating Roads<a href="sec-waterbodies.html#updating-roads-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="sec-waterbodies.html#cb44-1" aria-hidden="true" tabindex="-1"></a>updated_roads_custom_param <span class="ot">&lt;-</span> <span class="fu">measure_roads</span>(<span class="at">ctg =</span> ctg, <span class="at">roads =</span> roads, <span class="at">dtm =</span> dtm, <span class="at">water =</span> water)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="sec-waterbodies.html#cb45-1" aria-hidden="true" tabindex="-1"></a>updated_roads_custom_param <span class="ot">&lt;-</span> <span class="fu">measure_roads</span>(<span class="at">ctg =</span> ctg, <span class="at">roads =</span> roads, <span class="at">dtm =</span> dtm, <span class="at">water =</span> water)</span></code></pre></div>
 </div>
 </div>
 <div id="comparison" class="section level2 hasAnchor" number="7.3">

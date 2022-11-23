@@ -21,22 +21,22 @@ ctg_extent <- st_read("data/03/ctg_extent.shp")
 
 # Road Extraction Data Requirements {#sec-road-extraction-data-requirements}
 
-The road enhancement method, implemented using the `ALSroads` package, requires three inputs:
+The road extraction method, implemented using the `ALSroads` package, requires three inputs:
 
-1.  A lidar point cloud in the format of a collection of `.las` or `.laz` format files. Each file must be spatially indexed with a `.lax` file (see also the lidR book [chapter 18.3](https://r-lidar.github.io/lidRbook/spatial-indexing.html#spatial-indexing-files)).
+1.  A LiDAR point cloud in the format of a collection of `.las` or `.laz` files. Each file must be spatially indexed with a `.lax` file (see also the lidR book [chapter 18.3](https://r-lidar.github.io/lidRbook/spatial-indexing.html#spatial-indexing-files)).
 2.  A Digital Terrain Model (DTM) that corresponds to the point cloud collection coverage. This DTM can be generated with `lidR` (refer to the `lidR` book [chapter 4](https://r-lidar.github.io/lidRbook/dtm.html).
 3.  A pre-existing vectorial road network (lines), typically in a shapefile or geopackage format.
 
 A fourth, optional input can be included to strongly enhance the method.
 
-4.  A vectorial map (polygons) of the water bodies.
+4.  A vectorial map (polygons) of water bodies.
 
 ## LiDAR Data {#sec-lidar-data}
 
-Road enhancement using `ALSroads` requires LiDAR data that covers the roads being updated. For use in the `ALSroads` package, LiDAR data must be:
+Updating and enhancing road segments using `ALSroads` requires LiDAR data that covers the spatial extent of the roads being updated. For use in the `ALSroads` package, LiDAR data must be:
 
 1.  **Non-normalized:** to preserve the geometry of the landscape.
-2.  **Spatially indexed:** to query areas of interest quickly and improve performance.
+2.  **Spatially indexed:** to query areas of interest quickly and improve method performance.
 3.  **Include intensity values:** used by the method.
 4.  **In a projected coordinate system and in meters:** some parameters are hardcoded in meters.
 5.  **Have a density of 5-10 points/m²:** less than 5-10 points/m² and the algorithm is not guaranteed to work; more than 5-10 points/m² is not useful and will increase the computation time. If the density of the input point cloud is over 10 points/m², it can be decimated on-the-fly using the `filter` argument (see 'lidR' book [chapter 2.1.1](https://r-lidar.github.io/lidRbook/io.html#filter)).
@@ -49,7 +49,7 @@ plot(ctg)
 
 ## DTM Data {#sec-dtm-data}
 
-Road enhancement using `ALSroads` requires a Digital Terrain Model (DTM) as an input. DTMs, broadly described as an 'image' of the ground, are used for several purposes that include stream flow, basin hydrology, and watershed analysis. The `ALSroads` method uses a 1-meter resolution DTM to estimate the slopes and roughness of the terrain. For use in the `ALSroads` package, the input DTM must:
+Road enhancement using `ALSroads` requires a Digital Terrain Model (DTM) as an input. DTMs, broadly described as an 'image' of the ground, are used for several purposes, including stream flow, basin hydrology, and watershed analysis. The `ALSroads` method uses a 1-meter resolution DTM to estimate the slopes and roughness of the terrain. For use in the `ALSroads` package, the input DTM must:
 
 1.  **Have a resolution of at least 1 m:** higher resolution will be downscale on-the-fly.
 2.  **Cover the extent of the LiDAR coverage.**
@@ -64,7 +64,7 @@ plot(dtm, col = gray(1:50/50), add = T)
 
 ## Existing Road Network {#sec-existing-road-network}
 
-Road enhancement using `ALSroads` updates an existing road network. Therefore, an existing network is a critical input. The method will only enhance the roads that are on the existing network. The existing road network must:
+The road extraction method implemented using `ALSroads` updates an existing road network. Therefore, an existing network is a critical input. The method will only enhance the roads that are on the existing network. The existing road network must:
 
 1.  **Be a simple feature (sf) format (line).**
 2.  **Match the coordinate system of the LiDAR coverage.**
@@ -80,11 +80,11 @@ plot(st_geometry(roads), add = T)
 
 An optional input for road extraction using `ALSroads` is a set of spatial polygons (sf format) of water bodies. An accurate map of water bodies is not necessary to perform the road extraction computation but:
 
-1.  It helps to find the road properly by masking lakes that can easily be interpreted as highly drivable areas because they are perfectly flat, homogeneous, and located in cleared areas. From a geometrical point of view, lakes are the best place to drive a car. Unless the LiDAR point cloud is water classified, there is no way to determine that these flat cleared areas are not passable.
+1.  It helps to find roads by masking lakes that can easily be interpreted as highly drivable areas because they are perfectly flat, homogeneous, and located in cleared areas. From a geometrical point of view, lakes are the best place to drive a car. Unless the LiDAR point cloud is water classified, there is no way to determine that these flat cleared areas are not passable.
 
-2.  Water bodies are required to correctly identify and update roads that cross rivers using bridges. In a DTM, a river is a gap with strong slopes at each edge. These slopes represent an impassable obstacle and cannot be roads. Bridges are visible in the point cloud, but these points must be classified as bridges; otherwise, they have the same status as surrounding points. Geometrically speaking, a bridge in the point cloud is just a set of points above the ground, like trees. Therefore, an unlabeled bridge above a river is technically similar to a tree above the ground.
+2.  Water bodies are required to correctly identify and update roads that cross rivers using bridges. In a DTM, a river is a gap with strong slopes at each edge. These slopes represent an impassable obstacle and cannot be roads. Bridges are visible in the point cloud, but these points must be classified as bridges; otherwise, they have the same status as surrounding points. Geometrically speaking, a bridge in the point cloud is just a set of points above the ground, like trees. Therefore, an unlabeled bridge above a river is similar to a tree above the ground.
 
-3.  Providing a map of water bodies enables users to inform the method that the road being updated is known to cross a river. Therefore, the method will allow the passage of a gap (as it appears on the DTM) that would be otherwise considered impassable.
+3.  Providing a map of water bodies enables users to inform the method that the road being updated is known to cross a river. Therefore, the method will allow the passage of a gap (as it appears on the DTM) that would otherwise be considered impassable.
 
 If water bodies are included in road extraction (recommended), they must:
 

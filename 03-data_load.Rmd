@@ -26,19 +26,19 @@ roads <- st_read("data/03/roads.shp")
 
 ## Reading LiDAR data {#sec-reading-lidar-data}
 
-The `lidR` function `readLAS()` reads a LAS or LAZ file and returns an object of class `LAS`. Detailed information on loading LiDAR data using the `lidR` package can be found in the [dedicated lidR vignette](https://cran.r-project.org/web/packages/lidR/vignettes/lidR-LAS-class.html). In this user guide, we do not delve deeply into methods for working with ALS data and instead refer interested users to the [lidR book](https://r-lidar.github.io/lidRbook/io.html#read).
+The `lidR` function `readLAS()` reads a LAS or LAZ file and returns an object of class `LAS`. Detailed information on loading LiDAR data using the `lidR` package can be found in the [dedicated `lidR` vignette](https://cran.r-project.org/web/packages/lidR/vignettes/lidR-LAS-class.html). In this user guide, we do not delve deeply into methods for working with ALS data and instead refer interested users to the [lidR book](https://r-lidar.github.io/lidRbook/io.html#read).
 
 ![](images/las_circle.PNG)
 
 ## Reading LiDAR data using `readLAScatalog` {#sec-reading-lidar-data-using-readlascatalog}
 
-A `LAScatalog` is a representation in R of a LAS file or a collection of LAS files not loaded in memory. In `lidR`, the function `readLAScatalog()` creates an object that represents, in R, a collection of LAS files not loaded in memory.
+A `LAScatalog` is a representation in R of a LAS file or a collection of LAS files. In `lidR`, the function `readLAScatalog()` creates an object that represents, in R, a collection of LAS files not loaded in memory.
 
 ``` r
 ctg <- readLAScatalog("path/to/ctg/files")
 ```
 
-The `print()` function can be used to summarize information about the catalog, such as the number of points and density of points.
+The `print()` function can summarize information about the `LAScatalog`, such as the number and density of points.
 
 ```{r, message=FALSE}
 print(ctg)
@@ -46,16 +46,15 @@ print(ctg)
 
 ## Reading and Generating DTM Raster Data {#sec-reading-and-generating-dtm-raster-data}
 
-### Reading raster DTM data using `raster` {#sec-reading-raster-dtm-data-using-raster}
+### Reading a raster DTM using `raster` {#sec-reading-raster-dtm-data-using-raster}
 
-`ALSroads` users may be provided with a 1 m resolution DTM that covers the `LAScatalog` coverage (refer to section \@ref(sec-dtm-data) for DTM requirements). If DTM data is provided, users can load this information using the `raster` package.
+`ALSroads` users may be provided with a 1 m resolution DTM that covers the `LAScatalog` coverage (refer to section \@ref(sec-dtm-data) for DTM requirements). If a 1 m DTM is provided, users can load this information using the `raster` package.
 
 ``` r
 library(raster)
 dtm <- raster("path/to/dtm.tif)
 ```
-
-The loaded DTM can be plotted for user visualization using the `plot_dtm3d()` function from the `lidR` package.
+The loaded DTM can be plotted for visualization using the `plot_dtm3d()` function from the `lidR` package.
 
 ``` r
 plot_dtm3d(dtm, bg = "white")
