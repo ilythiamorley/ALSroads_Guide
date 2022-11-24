@@ -8,6 +8,12 @@ documentclass: book
 description: "A user guide for road extraction using the `ALSroads` package"
 ---
 
+<style>
+.leaflet {
+    margin: auto;
+}
+</style>
+
 # Introduction {#sec-introduction}
 
 `ALSroads` is an R package for correcting, updating, and enhancing vectorial forest road maps using airborne laser scanning (ALS) data. Using a reference map and an ALS point clouds the method -- which is described in [Roussel et al. (2022)](https://www.sciencedirect.com/science/article/pii/S1569843222002084#d1e1483) -- relocates existing roads to their correct path, measures the width of roads, and assigns a class to each road segment.
