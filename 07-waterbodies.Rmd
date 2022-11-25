@@ -18,13 +18,44 @@ knitr::opts_chunk$set(
   fig.align = "center")
 
 rgl::setupKnitr(autoprint = TRUE)
+
+
+#Data
+las_infolder <- ("data/07/ctg/")
+ctg <- readLAScatalog(las_infolder, filter = "-drop_withheld -keep_random_fraction 0.25")
+las <- readLAS("data/07/ctg/1kmZ174660536302018L.laz")
+dtm <- raster("data/07/DTM.tif")
+road <- st_read("I:/02_RMF/04_Road_Network/06_Existing_Network/RMF_Roads_Network.shp")
+updated_road <- st_read("data/07/updated_road.shp")
+
+# Data 2
+las_infolder_2 <- ("data/07/ctg2/")
+ctg_2 <- readLAScatalog(las_infolder_2, filter = "-drop_withheld -keep_random_fraction 0.25")
+las_2 <- readLAS("data/07/ctg2/1kmZ174470533202018L.laz")
+dtm_2 <- raster("data/07/DTM2.tif")
+road_2 <- st_read("data/07/road_2.shp")
+water_2 <- st_read("data/07/water_2.shp")
 ```
 
 # Waterbodies {#sec-waterbodies}
 
-The inclusion of water bodies when using the `measure_roads()` function is recommenced for several reasons, as explained in section /@ref(). Here, we provide two road extraction examples for the same study areas. In the first example water bodies are not included as a `measure_roads()` parameter, in the second example water bodies are included. We therefore demonstrate the value of using water bodies with the `measure_roads()` function. 
+The inclusion of water bodies when using the `measure_roads()` function is recommended for several reasons, as explained in section /@ref(sec-water-bodies). 
 
-## Example 1: Road Extraction without Waterbodies
+Here, we provide two road extraction examples where a road crosses a waterbody. In the first example, water bodies are not included as a `measure_roads()` parameter, but the road is sufficiently wide to be accurately located. In the second example, the road is not detected without the inclusion of water features, and water bodies are included. 
+
+
+## Example 1: Road Extraction without Waterbodies on a Wide Road
+
+In this case study, we use the `measure_roads()` function to update a road crossing the Mattagami River (rivière Mattagami) in the Romeo Malette Forest, Ontario. The figure below visualizes the LAS tile used in this example and shows the river on the landscape.
+
+```{r, eval=FALSE, include=F, echo=FALSE}
+las_c <- clip_circle(las, 466200, 5363600, 400)
+
+x <- plot(las_c, bg = "white", size = 3)
+add_dtm3d(x, dtm)
+```
+
+![](images/las_dtm_circle_river.PNG)
 
 ### Loading Data: {#sec-loading-data_wb}
 
@@ -37,29 +68,33 @@ st_crs(roads) = st_crs(ctg)
 roads = sf::st_crop(roads, ctg)
 ```
 
-### Updating Roads
+By plotting the road which crosses the Mattagami River on a base map, using the `mapView()` function, we can see that part of this road is a bridge. For more information on interactive plotting with `mapView(),` refer to section \@ref(sec-interactive-spatial-plotting).
 
-```R
-updated_roads_custom_param <- measure_roads(ctg = ctg, roads = roads, dtm = dtm)
+```{r plot-waterbodies_cs1, warning = FALSE, fig.align='center', fig.width=8, fig.height=6, echo = FALSE}
+url <- "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
+
+m <- mapview::mapview(list(road),
+                      layer.name = c("Waferboard_Road"),
+                      col.regions=list("red"),
+                      map.type = "Esri.WorldImagery")
+leaflet::addTiles(m@map, url)
 ```
 
-## Example 2: Road Extraction with Waterbodies
-
-### Loading Data: {#sec-loading-data_wb}
+### Updating Roads
 
 ``` r
-ctg <- readLAScatalog"path/to/ctg/files", filter = "-drop_withheld -keep_random_fraction 0.25")
-dtm <- raster("path/to/dtm.tif")
-roads <- st_read("path/to/roads")
-waterbodies <- st_read("path/to/waterbodies")
-
-st_crs(roads) = st_crs(ctg)
-roads = sf::st_crop(roads, ctg)
+updated_road <- measure_roads(ctg = ctg, roads = road, dtm = dtm)
 ```
 
-### Updating Roads
+Applying the `meaure_roads()` function without waterbodies, in this case, does not stop the method from updating the entire road. The width of the roads means that there are many points located on the bridge, and the algorithm interpreters the bridge as a road of Class 1, with an average driable width of 9.1 m,
 
-```R
-updated_roads_custom_param <- measure_roads(ctg = ctg, roads = roads, dtm = dtm, water = water)
+```{r-plot_dtm_roads, warning = FALSE, fig.align='center', fig.width=8, fig.height=6}}
+plot(dtm)
+plot(updated_road[1], add = TRUE)
 ```
-## Comparison
+
+
+## Example 2: Road Extraction with Waterbodies on a narrow Road
+
+1. With waterbodies features
+2. Without waterbodies

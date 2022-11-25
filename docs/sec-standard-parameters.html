@@ -23,7 +23,7 @@
 <meta name="author" content="Ilythia D. Morley, Jean-Romain Roussel" />
 
 
-<meta name="date" content="2022-11-24" />
+<meta name="date" content="2022-11-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -78,6 +78,7 @@
 <link id="Corrected-1-attachment" rel="attachment" href="libs/Corrected-0.0.1/Corrected_layer.fgb"/>
 <link id="CorrectedRoad-1-attachment" rel="attachment" href="libs/CorrectedRoad-0.0.1/CorrectedRoad_layer.fgb"/>
 <link id="RoadWidthBuffer-1-attachment" rel="attachment" href="libs/RoadWidthBuffer-0.0.1/RoadWidthBuffer_layer.fgb"/>
+<link id="Waferboard_Road-1-attachment" rel="attachment" href="libs/Waferboard_Road-0.0.1/Waferboard_Road_layer.fgb"/>
 <link id="Existing-1-attachment" rel="attachment" href="libs/Existing-0.0.1/Existing_layer.fgb"/>
 <link id="Updated-1-attachment" rel="attachment" href="libs/Updated-0.0.1/Updated_layer.fgb"/>
 <link id="Snapped-1-attachment" rel="attachment" href="libs/Snapped-0.0.1/Snapped_layer.fgb"/>
@@ -233,17 +234,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="7" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html"><i class="fa fa-check"></i><b>7</b> Waterbodies</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#example-1-road-extraction-without-waterbodies"><i class="fa fa-check"></i><b>7.1</b> Example 1: Road Extraction without Waterbodies</a>
+<li class="chapter" data-level="7.1" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#example-1-road-extraction-without-waterbodies-on-a-wide-road"><i class="fa fa-check"></i><b>7.1</b> Example 1: Road Extraction without Waterbodies on a Wide Road</a>
 <ul>
 <li class="chapter" data-level="7.1.1" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#sec-loading-data_wb"><i class="fa fa-check"></i><b>7.1.1</b> Loading Data:</a></li>
 <li class="chapter" data-level="7.1.2" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#updating-roads"><i class="fa fa-check"></i><b>7.1.2</b> Updating Roads</a></li>
 </ul></li>
-<li class="chapter" data-level="7.2" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#example-2-road-extraction-with-waterbodies"><i class="fa fa-check"></i><b>7.2</b> Example 2: Road Extraction with Waterbodies</a>
-<ul>
-<li class="chapter" data-level="7.2.1" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#sec-loading-data_wb"><i class="fa fa-check"></i><b>7.2.1</b> Loading Data:</a></li>
-<li class="chapter" data-level="7.2.2" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#updating-roads-1"><i class="fa fa-check"></i><b>7.2.2</b> Updating Roads</a></li>
-</ul></li>
-<li class="chapter" data-level="7.3" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#comparison"><i class="fa fa-check"></i><b>7.3</b> Comparison</a></li>
+<li class="chapter" data-level="7.2" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#example-2-road-extraction-with-waterbodies-on-a-narrow-road"><i class="fa fa-check"></i><b>7.2</b> Example 2: Road Extraction with Waterbodies on a narrow Road</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html"><i class="fa fa-check"></i><b>8</b> Tips and Tricks</a>
 <ul>
@@ -260,6 +256,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="8.5" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#sec-saving-data"><i class="fa fa-check"></i><b>8.5</b> Saving Data</a></li>
 <li class="chapter" data-level="8.6" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#sec-reconnecing-roads"><i class="fa fa-check"></i><b>8.6</b> Reconnecting Roads</a></li>
+<li class="chapter" data-level="8.7" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#sec-rrtudio_shortcuts"><i class="fa fa-check"></i><b>8.7</b> RStudio Shortcuts</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="sec-getting-started-with-r.html"><a href="sec-getting-started-with-r.html"><i class="fa fa-check"></i><b>9</b> Getting Started with R</a>
 <ul>
@@ -369,61 +366,80 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <p>Once the algorithm calculates a score for each of the four road state parameters, these scores are combined into a final score (Figure 7 of the method <a href="https://www.sciencedirect.com/science/article/pii/S1569843222002084?via%3Dihub">paper</a>). This score can be used as is but is also binned in four classes where Class 4 corresponds to a score [0, 25], Class 3 to a score [25, 50], Class 2 to a score [50, 75], and Class 1 to a score [75, 100 ].</p>
 
-<pre><code>#&gt; Reading layer `roads&#39; from data source `E:\ALSroads_Guide\data\06\01\roads.shp&#39; using driver `ESRI Shapefile&#39;
+<pre><code>#&gt; Reading layer `roads&#39; from data source 
+#&gt;   `E:\ALSroads_Guide\data\06\01\roads.shp&#39; 
+#&gt;   using driver `ESRI Shapefile&#39;
 #&gt; Simple feature collection with 12 features and 20 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: 638000 ymin: 5142000 xmax: 639000 ymax: 5143000
 #&gt; Projected CRS: NAD83(CSRS) / UTM zone 17N
-#&gt; Reading layer `upd_roads&#39; from data source `E:\ALSroads_Guide\data\06\01\upd_roads.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; Reading layer `upd_roads&#39; from data source 
+#&gt;   `E:\ALSroads_Guide\data\06\01\upd_roads.shp&#39; 
+#&gt;   using driver `ESRI Shapefile&#39;
 #&gt; Simple feature collection with 12 features and 28 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: 637998.8 ymin: 5142000 xmax: 639000 ymax: 5142999
 #&gt; Projected CRS: NAD83(CSRS) / UTM zone 17N
-#&gt; Reading layer `road&#39; from data source `E:\ALSroads_Guide\data\06\02\road.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; Reading layer `road&#39; from data source 
+#&gt;   `E:\ALSroads_Guide\data\06\02\road.shp&#39; 
+#&gt;   using driver `ESRI Shapefile&#39;
 #&gt; Simple feature collection with 1 feature and 36 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: 451156.3 ymin: 5389576 xmax: 451767.8 ymax: 5389814
 #&gt; Projected CRS: NAD83 / UTM zone 17N
-#&gt; Reading layer `roads&#39; from data source `E:\ALSroads_Guide\data\06\03\roads.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; Reading layer `roads&#39; from data source 
+#&gt;   `E:\ALSroads_Guide\data\06\03\roads.shp&#39; 
+#&gt;   using driver `ESRI Shapefile&#39;
 #&gt; Simple feature collection with 1 feature and 36 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: 433270.3 ymin: 5336398 xmax: 434000 ymax: 5336992
 #&gt; Projected CRS: NAD83 / UTM zone 17N
-#&gt; Reading layer `upd_roads&#39; from data source `E:\ALSroads_Guide\data\06\03\upd_roads.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; Reading layer `upd_roads&#39; from data source 
+#&gt;   `E:\ALSroads_Guide\data\06\03\upd_roads.shp&#39; 
+#&gt;   using driver `ESRI Shapefile&#39;
 #&gt; Simple feature collection with 1 feature and 45 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: 433481 ymin: 5336562 xmax: 434000 ymax: 5336989
 #&gt; Projected CRS: NAD83(CSRS) / UTM zone 17N
-#&gt; Reading layer `upd_roads_custom&#39; from data source `E:\ALSroads_Guide\data\06\03\upd_roads_custom.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; Reading layer `upd_roads_custom&#39; from data source 
+#&gt;   `E:\ALSroads_Guide\data\06\03\upd_roads_custom.shp&#39; 
+#&gt;   using driver `ESRI Shapefile&#39;
 #&gt; Simple feature collection with 1 feature and 44 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: 433275.5 ymin: 5336400 xmax: 434001.2 ymax: 5336989
 #&gt; Projected CRS: NAD83 / UTM zone 17N
-#&gt; Reading layer `roads&#39; from data source `E:\ALSroads_Guide\data\06\03\roads.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; Reading layer `roads&#39; from data source 
+#&gt;   `E:\ALSroads_Guide\data\06\03\roads.shp&#39; 
+#&gt;   using driver `ESRI Shapefile&#39;
 #&gt; Simple feature collection with 1 feature and 36 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: 433270.3 ymin: 5336398 xmax: 434000 ymax: 5336992
 #&gt; Projected CRS: NAD83 / UTM zone 17N
-#&gt; Reading layer `upd_roads&#39; from data source `E:\ALSroads_Guide\data\06\04\upd_roads.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; Reading layer `upd_roads&#39; from data source 
+#&gt;   `E:\ALSroads_Guide\data\06\04\upd_roads.shp&#39; 
+#&gt;   using driver `ESRI Shapefile&#39;
 #&gt; Simple feature collection with 8 features and 44 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: 433142.5 ymin: 5336329 xmax: 434000.8 ymax: 5337000
 #&gt; Projected CRS: NAD83 / UTM zone 17N
-#&gt; Reading layer `upd_roads_custom&#39; from data source `E:\ALSroads_Guide\data\06\04\upd_roads_custom.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; Reading layer `upd_roads_custom&#39; from data source 
+#&gt;   `E:\ALSroads_Guide\data\06\04\upd_roads_custom.shp&#39; 
+#&gt;   using driver `ESRI Shapefile&#39;
 #&gt; Simple feature collection with 8 features and 44 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: 433141.7 ymin: 5336329 xmax: 434000.8 ymax: 5337000
 #&gt; Projected CRS: NAD83 / UTM zone 17N
-#&gt; Reading layer `upd_roads_custom_and_standard&#39; from data source `E:\ALSroads_Guide\data\06\04\upd_roads_custom_and_standard.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; Reading layer `upd_roads_custom_and_standard&#39; from data source `E:\ALSroads_Guide\data\06\04\upd_roads_custom_and_standard.shp&#39; 
+#&gt;   using driver `ESRI Shapefile&#39;
 #&gt; Simple feature collection with 16 features and 45 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY

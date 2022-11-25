@@ -23,7 +23,7 @@
 <meta name="author" content="Ilythia D. Morley, Jean-Romain Roussel" />
 
 
-<meta name="date" content="2022-11-24" />
+<meta name="date" content="2022-11-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -78,6 +78,7 @@
 <link id="Corrected-1-attachment" rel="attachment" href="libs/Corrected-0.0.1/Corrected_layer.fgb"/>
 <link id="CorrectedRoad-1-attachment" rel="attachment" href="libs/CorrectedRoad-0.0.1/CorrectedRoad_layer.fgb"/>
 <link id="RoadWidthBuffer-1-attachment" rel="attachment" href="libs/RoadWidthBuffer-0.0.1/RoadWidthBuffer_layer.fgb"/>
+<link id="Waferboard_Road-1-attachment" rel="attachment" href="libs/Waferboard_Road-0.0.1/Waferboard_Road_layer.fgb"/>
 <link id="Existing-1-attachment" rel="attachment" href="libs/Existing-0.0.1/Existing_layer.fgb"/>
 <link id="Updated-1-attachment" rel="attachment" href="libs/Updated-0.0.1/Updated_layer.fgb"/>
 <link id="Snapped-1-attachment" rel="attachment" href="libs/Snapped-0.0.1/Snapped_layer.fgb"/>
@@ -233,17 +234,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="7" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html"><i class="fa fa-check"></i><b>7</b> Waterbodies</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#example-1-road-extraction-without-waterbodies"><i class="fa fa-check"></i><b>7.1</b> Example 1: Road Extraction without Waterbodies</a>
+<li class="chapter" data-level="7.1" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#example-1-road-extraction-without-waterbodies-on-a-wide-road"><i class="fa fa-check"></i><b>7.1</b> Example 1: Road Extraction without Waterbodies on a Wide Road</a>
 <ul>
 <li class="chapter" data-level="7.1.1" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#sec-loading-data_wb"><i class="fa fa-check"></i><b>7.1.1</b> Loading Data:</a></li>
 <li class="chapter" data-level="7.1.2" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#updating-roads"><i class="fa fa-check"></i><b>7.1.2</b> Updating Roads</a></li>
 </ul></li>
-<li class="chapter" data-level="7.2" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#example-2-road-extraction-with-waterbodies"><i class="fa fa-check"></i><b>7.2</b> Example 2: Road Extraction with Waterbodies</a>
-<ul>
-<li class="chapter" data-level="7.2.1" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#sec-loading-data_wb"><i class="fa fa-check"></i><b>7.2.1</b> Loading Data:</a></li>
-<li class="chapter" data-level="7.2.2" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#updating-roads-1"><i class="fa fa-check"></i><b>7.2.2</b> Updating Roads</a></li>
-</ul></li>
-<li class="chapter" data-level="7.3" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#comparison"><i class="fa fa-check"></i><b>7.3</b> Comparison</a></li>
+<li class="chapter" data-level="7.2" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#example-2-road-extraction-with-waterbodies-on-a-narrow-road"><i class="fa fa-check"></i><b>7.2</b> Example 2: Road Extraction with Waterbodies on a narrow Road</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html"><i class="fa fa-check"></i><b>8</b> Tips and Tricks</a>
 <ul>
@@ -260,6 +256,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="8.5" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#sec-saving-data"><i class="fa fa-check"></i><b>8.5</b> Saving Data</a></li>
 <li class="chapter" data-level="8.6" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#sec-reconnecing-roads"><i class="fa fa-check"></i><b>8.6</b> Reconnecting Roads</a></li>
+<li class="chapter" data-level="8.7" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#sec-rrtudio_shortcuts"><i class="fa fa-check"></i><b>8.7</b> RStudio Shortcuts</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="sec-getting-started-with-r.html"><a href="sec-getting-started-with-r.html"><i class="fa fa-check"></i><b>9</b> Getting Started with R</a>
 <ul>
@@ -287,7 +284,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">User Guide: The <code>ALSroads</code> Package</h1>
 <p class="author"><em>Ilythia D. Morley, Jean-Romain Roussel</em></p>
-<p class="date"><em>2022-11-24</em></p>
+<p class="date"><em>2022-11-25</em></p>
 </div>
 <div id="sec-introduction" class="section level1 hasAnchor" number="1">
 <h1><span class="header-section-number">1</span> Introduction<a href="index.html#sec-introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
@@ -303,7 +300,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>#&gt; &lt;STYLE type=&#39;text/css&#39; scoped&gt;
 #&gt; PRE.fansi SPAN {padding-top: .25em; padding-bottom: .25em};
 #&gt; &lt;/STYLE&gt;
-#&gt; Reading layer `ctg_extent&#39; from data source `E:\ALSroads_Guide\data\03\ctg_extent.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; Reading layer `ctg_extent&#39; from data source 
+#&gt;   `E:\ALSroads_Guide\data\03\ctg_extent.shp&#39; 
+#&gt;   using driver `ESRI Shapefile&#39;
 #&gt; Simple feature collection with 9 features and 34 fields
 #&gt; Geometry type: POLYGON
 #&gt; Dimension:     XY

@@ -23,7 +23,7 @@
 <meta name="author" content="Ilythia D. Morley, Jean-Romain Roussel" />
 
 
-<meta name="date" content="2022-11-24" />
+<meta name="date" content="2022-11-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -78,6 +78,7 @@
 <link id="Corrected-1-attachment" rel="attachment" href="libs/Corrected-0.0.1/Corrected_layer.fgb"/>
 <link id="CorrectedRoad-1-attachment" rel="attachment" href="libs/CorrectedRoad-0.0.1/CorrectedRoad_layer.fgb"/>
 <link id="RoadWidthBuffer-1-attachment" rel="attachment" href="libs/RoadWidthBuffer-0.0.1/RoadWidthBuffer_layer.fgb"/>
+<link id="Waferboard_Road-1-attachment" rel="attachment" href="libs/Waferboard_Road-0.0.1/Waferboard_Road_layer.fgb"/>
 <link id="Existing-1-attachment" rel="attachment" href="libs/Existing-0.0.1/Existing_layer.fgb"/>
 <link id="Updated-1-attachment" rel="attachment" href="libs/Updated-0.0.1/Updated_layer.fgb"/>
 <link id="Snapped-1-attachment" rel="attachment" href="libs/Snapped-0.0.1/Snapped_layer.fgb"/>
@@ -233,17 +234,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="7" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html"><i class="fa fa-check"></i><b>7</b> Waterbodies</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#example-1-road-extraction-without-waterbodies"><i class="fa fa-check"></i><b>7.1</b> Example 1: Road Extraction without Waterbodies</a>
+<li class="chapter" data-level="7.1" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#example-1-road-extraction-without-waterbodies-on-a-wide-road"><i class="fa fa-check"></i><b>7.1</b> Example 1: Road Extraction without Waterbodies on a Wide Road</a>
 <ul>
 <li class="chapter" data-level="7.1.1" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#sec-loading-data_wb"><i class="fa fa-check"></i><b>7.1.1</b> Loading Data:</a></li>
 <li class="chapter" data-level="7.1.2" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#updating-roads"><i class="fa fa-check"></i><b>7.1.2</b> Updating Roads</a></li>
 </ul></li>
-<li class="chapter" data-level="7.2" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#example-2-road-extraction-with-waterbodies"><i class="fa fa-check"></i><b>7.2</b> Example 2: Road Extraction with Waterbodies</a>
-<ul>
-<li class="chapter" data-level="7.2.1" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#sec-loading-data_wb"><i class="fa fa-check"></i><b>7.2.1</b> Loading Data:</a></li>
-<li class="chapter" data-level="7.2.2" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#updating-roads-1"><i class="fa fa-check"></i><b>7.2.2</b> Updating Roads</a></li>
-</ul></li>
-<li class="chapter" data-level="7.3" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#comparison"><i class="fa fa-check"></i><b>7.3</b> Comparison</a></li>
+<li class="chapter" data-level="7.2" data-path="sec-waterbodies.html"><a href="sec-waterbodies.html#example-2-road-extraction-with-waterbodies-on-a-narrow-road"><i class="fa fa-check"></i><b>7.2</b> Example 2: Road Extraction with Waterbodies on a narrow Road</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html"><i class="fa fa-check"></i><b>8</b> Tips and Tricks</a>
 <ul>
@@ -260,6 +256,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="8.5" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#sec-saving-data"><i class="fa fa-check"></i><b>8.5</b> Saving Data</a></li>
 <li class="chapter" data-level="8.6" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#sec-reconnecing-roads"><i class="fa fa-check"></i><b>8.6</b> Reconnecting Roads</a></li>
+<li class="chapter" data-level="8.7" data-path="sec-tips-and-tricks.html"><a href="sec-tips-and-tricks.html#sec-rrtudio_shortcuts"><i class="fa fa-check"></i><b>8.7</b> RStudio Shortcuts</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="sec-getting-started-with-r.html"><a href="sec-getting-started-with-r.html"><i class="fa fa-check"></i><b>9</b> Getting Started with R</a>
 <ul>
@@ -512,6 +509,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb40-6"><a href="sec-edge-case-studies.html#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;Count&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Road Class&quot;</span>)</span></code></pre></div>
 <p><img src="ALSroads-book_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
 
+<pre><code>#&gt; Reading layer `RMF_Roads_Network&#39; from data source `I:\02_RMF\04_Road_Network\06_Existing_Network\RMF_Roads_Network.shp&#39; 
+#&gt;   using driver `ESRI Shapefile&#39;
+#&gt; Simple feature collection with 17843 features and 36 fields
+#&gt; Geometry type: MULTILINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: 390000 ymin: 5280000 xmax: 510000 ymax: 5410000
+#&gt; Projected CRS: NAD83 / UTM zone 17N
+#&gt; Reading layer `updated_road&#39; from data source 
+#&gt;   `E:\ALSroads_Guide\data\07\updated_road.shp&#39; 
+#&gt;   using driver `ESRI Shapefile&#39;
+#&gt; Simple feature collection with 1 feature and 44 fields
+#&gt; Geometry type: LINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: 466188.4 ymin: 5363341 xmax: 466718.4 ymax: 5363861
+#&gt; Projected CRS: NAD83(CSRS) / UTM zone 17N + CGVD2013_height_-_CGG2013_-_NAD83_CSRS
+#&gt; Reading layer `road_2&#39; from data source 
+#&gt;   `E:\ALSroads_Guide\data\07\road_2.shp&#39; 
+#&gt;   using driver `ESRI Shapefile&#39;
+#&gt; Simple feature collection with 1 feature and 36 fields
+#&gt; Geometry type: LINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: 447000 ymin: 5332224 xmax: 447489.1 ymax: 5332280
+#&gt; Projected CRS: NAD83(CSRS) / UTM zone 17N + CGVD2013_height_-_CGG2013_-_NAD83_CSRS
+#&gt; Reading layer `water_2&#39; from data source 
+#&gt;   `E:\ALSroads_Guide\data\07\water_2.shp&#39; 
+#&gt;   using driver `ESRI Shapefile&#39;
+#&gt; Simple feature collection with 1 feature and 17 fields
+#&gt; Geometry type: POLYGON
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: 447254.6 ymin: 5330793 xmax: 447957.6 ymax: 5332512
+#&gt; Projected CRS: NAD83(CSRS) / UTM zone 17N</code></pre>
 </div>
 </div>
 </div>

@@ -56,12 +56,10 @@ loading-data-2
 parameter-tuning-2
 results-2
 sec-waterbodies
-example-1-road-extraction-without-waterbodies
+example-1-road-extraction-without-waterbodies-on-a-wide-road
 sec-loading-data_wb
 updating-roads
-example-2-road-extraction-with-waterbodies
-updating-roads-1
-comparison
+example-2-road-extraction-with-waterbodies-on-a-narrow-road
 sec-tips-and-tricks
 sec-casting-roads-to-linestring
 sec-adding-an-id-column
@@ -74,6 +72,7 @@ sec-plotting-lidar-data
 sec-3d-plotting-raster-data
 sec-saving-data
 sec-reconnecing-roads
+sec-rrtudio_shortcuts
 sec-getting-started-with-r
 sec-installing-r-and-rstudio
 sec-installing-alsroad

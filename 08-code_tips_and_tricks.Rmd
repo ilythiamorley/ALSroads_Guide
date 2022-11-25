@@ -16,7 +16,9 @@ r3dDefaults$zoom = 0.75
 knitr::opts_chunk$set(
   comment =  "#>", 
   collapse = TRUE,
-  fig.align = "center")
+  fig.align = "center", 
+  fig.pos = "H", 
+  out.extra = "")
 
 rgl::setupKnitr(autoprint = TRUE)
 
@@ -24,11 +26,9 @@ rgl::setupKnitr(autoprint = TRUE)
 existing_roads <- st_read("data/04/roads.shp")
 updated_roads <-st_read("data/04/updated_roads.shp")
 updated_roads$CLASS <- as.factor(updated_roads$CLASS)
-
 updated_roads_ <- updated_roads %>%
   dplyr::filter(NUM %in% c(4,6,16))
 snapped_roads <- st_snap_lines(roads = updated_roads_, tolerance = 200)
-
 las <- readLAS("data/03/ctg/1kmZ175700515102020L.laz")
 dtm <- raster("data/08/dtm.tif")
 existing_road <- existing_roads %>%
@@ -99,7 +99,7 @@ road_subset <- roads %>%
 
 Users working within R can produce interactive spatial plots using the function `mapView()` from the package `mapview`(refer to the [mapview vignette](https://rdrr.io/github/r-spatial/mapview/man/)). The `mapView()` function produces an interactive view of spatial object(s) on top of a base map.
 
-```{r plot-leflet-example, warning = FALSE, fig.align='center', fig.width=6, fig.height=4}
+```{r plot-leflet-example, warning = FALSE, fig.align='center', fig.width=8, fig.height=6}
 library("mapview")
 library("leaflet")
 url = "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
@@ -185,7 +185,8 @@ This post-processing step involves the "snapping" of road ends together, with or
 library("ALSroads")
 snapped_roads <- st_snap_lines(roads = updated_roads, ref = existing_roads, field = "NEW_ID", tolerance = 30)
 ```
-```{r plot-snap, warning = FALSE, fig.align='center', fig.width=6, fig.height=4}
+
+```{r plot-snap, warning = FALSE, fig.align='center', fig.width=8, fig.height=6}
 library("mapview")
 library("leaflet")
 url <- "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
@@ -195,7 +196,6 @@ m <- mapview::mapview(list(updated_roads_, snapped_roads$roads),
 leaflet::addTiles(m@map, url)
 ```
 
-
 Other post-processing functions included in the `ALSroads` package are:
 
 -   `check_road_differences`: Check the amplitude of differences between corrected and uncorrected roads.
@@ -203,3 +203,19 @@ Other post-processing functions included in the `ALSroads` package are:
 -   `st_check_crossings`: Check if roads cross at points other than at their ends.
 
 -   `st_check_junctions`: Check if road endings are close enough to be considered potential junctions.
+
+## RStudio Shortcuts {#sec-rrtudio_shortcuts}
+
+-   `ctrl+shift+C`: Comment lines in and out.
+
+-   `alt + -`: Shortcut for `<-` .
+
+-   `ctrl-1` and `crtl-2`: Shift the cursor focus to script or console, respectively.
+
+-   `ctrl-shift-d`: Duplicate the current line or selected text.
+
+-   `ctrl-shift-arrow`: Highlight chunks of text.
+
+-   `ctrl-D`: Delete Line.
+
+-   `alt+shift+K`: View and edit keyboard shortcuts.
