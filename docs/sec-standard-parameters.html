@@ -366,80 +366,62 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <p>Once the algorithm calculates a score for each of the four road state parameters, these scores are combined into a final score (Figure 7 of the method <a href="https://www.sciencedirect.com/science/article/pii/S1569843222002084?via%3Dihub">paper</a>). This score can be used as is but is also binned in four classes where Class 4 corresponds to a score [0, 25], Class 3 to a score [25, 50], Class 2 to a score [50, 75], and Class 1 to a score [75, 100 ].</p>
 
-<pre><code>#&gt; Reading layer `roads&#39; from data source 
-#&gt;   `E:\ALSroads_Guide\data\06\01\roads.shp&#39; 
-#&gt;   using driver `ESRI Shapefile&#39;
+<pre><code>#&gt; Reading layer `roads&#39; from data source `E:\ALSroads_Guide\data\06\01\roads.shp&#39; using driver `ESRI Shapefile&#39;
 #&gt; Simple feature collection with 12 features and 20 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: 638000 ymin: 5142000 xmax: 639000 ymax: 5143000
 #&gt; Projected CRS: NAD83(CSRS) / UTM zone 17N
-#&gt; Reading layer `upd_roads&#39; from data source 
-#&gt;   `E:\ALSroads_Guide\data\06\01\upd_roads.shp&#39; 
-#&gt;   using driver `ESRI Shapefile&#39;
+#&gt; Reading layer `upd_roads&#39; from data source `E:\ALSroads_Guide\data\06\01\upd_roads.shp&#39; using driver `ESRI Shapefile&#39;
 #&gt; Simple feature collection with 12 features and 28 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: 637998.8 ymin: 5142000 xmax: 639000 ymax: 5142999
 #&gt; Projected CRS: NAD83(CSRS) / UTM zone 17N
-#&gt; Reading layer `road&#39; from data source 
-#&gt;   `E:\ALSroads_Guide\data\06\02\road.shp&#39; 
-#&gt;   using driver `ESRI Shapefile&#39;
+#&gt; Reading layer `road&#39; from data source `E:\ALSroads_Guide\data\06\02\road.shp&#39; using driver `ESRI Shapefile&#39;
 #&gt; Simple feature collection with 1 feature and 36 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: 451156.3 ymin: 5389576 xmax: 451767.8 ymax: 5389814
 #&gt; Projected CRS: NAD83 / UTM zone 17N
-#&gt; Reading layer `roads&#39; from data source 
-#&gt;   `E:\ALSroads_Guide\data\06\03\roads.shp&#39; 
-#&gt;   using driver `ESRI Shapefile&#39;
+#&gt; Reading layer `roads&#39; from data source `E:\ALSroads_Guide\data\06\03\roads.shp&#39; using driver `ESRI Shapefile&#39;
 #&gt; Simple feature collection with 1 feature and 36 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: 433270.3 ymin: 5336398 xmax: 434000 ymax: 5336992
 #&gt; Projected CRS: NAD83 / UTM zone 17N
-#&gt; Reading layer `upd_roads&#39; from data source 
-#&gt;   `E:\ALSroads_Guide\data\06\03\upd_roads.shp&#39; 
-#&gt;   using driver `ESRI Shapefile&#39;
+#&gt; Reading layer `upd_roads&#39; from data source `E:\ALSroads_Guide\data\06\03\upd_roads.shp&#39; using driver `ESRI Shapefile&#39;
 #&gt; Simple feature collection with 1 feature and 45 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: 433481 ymin: 5336562 xmax: 434000 ymax: 5336989
 #&gt; Projected CRS: NAD83(CSRS) / UTM zone 17N
-#&gt; Reading layer `upd_roads_custom&#39; from data source 
-#&gt;   `E:\ALSroads_Guide\data\06\03\upd_roads_custom.shp&#39; 
-#&gt;   using driver `ESRI Shapefile&#39;
+#&gt; Reading layer `upd_roads_custom&#39; from data source `E:\ALSroads_Guide\data\06\03\upd_roads_custom.shp&#39; using driver `ESRI Shapefile&#39;
 #&gt; Simple feature collection with 1 feature and 44 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: 433275.5 ymin: 5336400 xmax: 434001.2 ymax: 5336989
 #&gt; Projected CRS: NAD83 / UTM zone 17N
-#&gt; Reading layer `roads&#39; from data source 
-#&gt;   `E:\ALSroads_Guide\data\06\03\roads.shp&#39; 
-#&gt;   using driver `ESRI Shapefile&#39;
+#&gt; Reading layer `roads&#39; from data source `E:\ALSroads_Guide\data\06\03\roads.shp&#39; using driver `ESRI Shapefile&#39;
 #&gt; Simple feature collection with 1 feature and 36 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: 433270.3 ymin: 5336398 xmax: 434000 ymax: 5336992
 #&gt; Projected CRS: NAD83 / UTM zone 17N
-#&gt; Reading layer `upd_roads&#39; from data source 
-#&gt;   `E:\ALSroads_Guide\data\06\04\upd_roads.shp&#39; 
-#&gt;   using driver `ESRI Shapefile&#39;
+#&gt; Reading layer `upd_roads&#39; from data source `E:\ALSroads_Guide\data\06\04\upd_roads.shp&#39; using driver `ESRI Shapefile&#39;
 #&gt; Simple feature collection with 8 features and 44 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: 433142.5 ymin: 5336329 xmax: 434000.8 ymax: 5337000
 #&gt; Projected CRS: NAD83 / UTM zone 17N
-#&gt; Reading layer `upd_roads_custom&#39; from data source 
-#&gt;   `E:\ALSroads_Guide\data\06\04\upd_roads_custom.shp&#39; 
-#&gt;   using driver `ESRI Shapefile&#39;
+#&gt; Reading layer `upd_roads_custom&#39; from data source `E:\ALSroads_Guide\data\06\04\upd_roads_custom.shp&#39; using driver `ESRI Shapefile&#39;
 #&gt; Simple feature collection with 8 features and 44 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: 433141.7 ymin: 5336329 xmax: 434000.8 ymax: 5337000
 #&gt; Projected CRS: NAD83 / UTM zone 17N
-#&gt; Reading layer `upd_roads_custom_and_standard&#39; from data source `E:\ALSroads_Guide\data\06\04\upd_roads_custom_and_standard.shp&#39; 
-#&gt;   using driver `ESRI Shapefile&#39;
+#&gt; Reading layer `upd_roads_custom_and_standard&#39; from data source 
+#&gt;   `E:\ALSroads_Guide\data\06\04\upd_roads_custom_and_standard.shp&#39; using driver `ESRI Shapefile&#39;
 #&gt; Simple feature collection with 16 features and 45 fields
 #&gt; Geometry type: LINESTRING
 #&gt; Dimension:     XY
