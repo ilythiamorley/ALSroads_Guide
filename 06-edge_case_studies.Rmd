@@ -3,6 +3,7 @@ library(lidR)
 library(ggplot2)
 library(raster)
 library(sf)
+library(ALSroads)
 
 r3dDefaults = rgl::r3dDefaults
 m = structure(c(0.921, -0.146, 0.362, 0, 0.386, 0.482, -0.787, 0, 
@@ -28,25 +29,32 @@ rds_cs1 <- st_read("data/06/01/roads.shp")
 upd_rds_cs1 <- st_read("data/06/01/upd_roads.shp") # Standard Parameters
 
 #Case study 2: Vegetation and narrow
-las_cs2 <- readLAS("data/06/03/ctg/1kmZ157050546602020L.laz")
-las_infolder <- ("data/06/03/ctg/")
+las_cs2 <- readLAS("data/06/02/ctg/1kmZ157050546602020L.laz")
+las_infolder <- ("data/06/02/ctg/")
 ctg_cs2 <- readLAScatalog(las_infolder, filter = "-drop_withheld -keep_random_fraction 0.25")
-dtm_cs2 <- raster("data/06/03/DTM.tif")
-road_cs2 <- st_read("data/06/03/road.shp")
-road_buffer <- st_read("data/06/03/road_buffer.shp")
-chm_cs2 <- raster("data/06/03/chm.tif")
-chm_cs2_clip <- raster("data/06/03/chm_clip.tif")
-conduct_cs2 <- raster("data/06/03/conductivity.tif")
+dtm_cs2 <- raster("data/06/02/DTM.tif")
+road_cs2 <- st_read("data/06/02/road.shp")
+road_buffer <- st_read("data/06/02/road_buffer.shp")
+chm_cs2 <- raster("data/06/02/chm.tif")
+chm_cs2_clip <- raster("data/06/02/chm_clip.tif")
+conduct_cs2 <- raster("data/06/02/conductivity.tif")
 upd_cs2 <- measure_road(ctg = ctg_cs2, centerline = road_cs2, dtm = dtm_cs2, keep_class = 4)
 
-#Casestudy 3: Water
-las_infolder <- ("data/07/ctg/")
+#Case study 3: Water
+las_infolder <- ("data/06/03/ctg/")
 ctg_cs3 <- readLAScatalog(las_infolder, filter = "-drop_withheld -keep_random_fraction 0.25")
-las_cs3 <- readLAS("data/07/ctg/1kmZ174660536302018L.laz")
-dtm_cs3 <- raster("data/07/DTM.tif")
-road_cs3 <- st_read("data/07/road.shp")
-updated_road_cs3 <- st_read("data/07/updated_road.shp") #no water
+las_cs3 <- readLAS("data/06/03/ctg/1kmZ174660536302018L.laz")
+dtm_cs3 <- raster("data/06/03/DTM.tif")
+road_cs3 <- st_read("data/06/03/road.shp")
+updated_road_cs3 <- st_read("data/06/03/updated_road.shp") #no water
 
+#Case study 4: Narrow and works well
+las_cs4 <- readLAS("data/06/04/ctg/1kmZ156480546602020L.laz")
+las_infolder <- ("data/06/04/ctg/")
+ctg_cs4 <- readLAScatalog(las_infolder, filter = "-drop_withheld -keep_random_fraction 0.25")
+dtm_cs4 <- raster("data/06/04/DTM.tif")
+road_cs4 <- st_read("data/06/04/road.shp")
+upd_road_cs4 <- st_read("data/06/04/road_upd.shp")
 ```
 
 # Case Studies {#sec-case-studies}
@@ -303,7 +311,7 @@ ggplot(upd_rds_custom_and_standard_cs4, aes(factor(CLASS))) +
 
 ## Case Study 3: Road extraction over bridges
 
-# Overview
+### Overview
 
 Here, we provide two road extraction examples where a road crosses a waterbody. 
 
@@ -368,4 +376,67 @@ Applying the `meaure_roads()` for a road crossing a waterboide, in this case, do
 ```{r plot-rd, warning = FALSE, fig.align='center', fig.width=8, fig.height=6}
 plot(dtm_cs3)
 plot(updated_road_cs3[1], add = TRUE)
+```
+## Case Study 4: Narrow Road
+### Overview: 
+
+The road extraction method developed by [Roussel et al. (2022)](https://www.sciencedirect.com/science/article/pii/S1569843222002084#d1e1483) uses is suitable for locating narrow roads. The method parameters set the smallest drivable road width at 1 m. In this case study, we demonstrate the effectiveness of the `measure_roads()` function ad relocating a narrow road with a drivable road width of 1.2 m. Users can adjust the standard parameters to specify the minimum road width. For example, if a user applies the method in an area where roads must be over 2 m (for a specific vehicle), they can set the minimum road width to 2 m. 
+
+In this case study, we update a road in the Dog River-Matawin Forest in Ontario. We do not change the standard parameters in this case study, as they are sufficient for updating narrow roads. The road is located in a relatively flat area but can be accurately detected, as the plot below demonstrates:
+
+```{r, disp = FALSE}
+las_clip <- clip_circle(las_cs4, 648350, 5466120, 50)
+dtm <- rasterize_terrain(las_clip, res = 0.2, algorithm = tin())
+dtm <- raster(dtm)
+plot(dtm)
+plot(road_cs4, add = TRUE)
+```
+### Data, Method, and Application: {#sec-method-and-application}
+
+The following sections present example code and method implementation applying the `measure_roads()` function to update a narrow road using standard parameters.
+
+### Required R Packages: {#sec-required-r-packages}
+
+``` r
+remotes::install_github("Jean-Romain/ALSroads") #Install the ALSroads Package
+
+library("ALSroads") 
+library("lidR")
+library("raster")
+library("sf")
+library("ggplot2")
+```
+
+#### Loading Data: {#sec-loading-data}
+
+``` r
+ctg <- readLAScatalog"path/to/ctg/files", filter = "-drop_withheld-keep_random_fraction 0.25")
+dtm <- raster("path/to/dtm.tif")
+roads <- st_read("path/to/roads")
+
+st_crs(roads) = st_crs(ctg)
+roads = sf::st_crop(roads, ctg)
+```
+
+#### Road Extraction
+
+The standard `measure_roads()` parameters are sufficient for updating a narrow road. 
+
+``` r
+updated_roads_custom_param <- measure_roads(ctg = ctg, roads = roads, dtm = dtm, param = custom_param)
+```
+
+### Results: {#sec-results}
+
+The updated road is relocated accurately, and the vector information includes information about the state and width of the road, as well as information on road curvature, shoulders, and canopy cover.
+
+```{r, echo = FALSE, fig.width = 7.1, fig.height = 7}
+road_poly <- sf::st_buffer(road_cs4, road_cs4$ROADWID/2)
+
+url <- "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
+m <- mapview::mapview(list(road_cs4, road_poly),
+                      layer.name = c("Corrected Road", "Road Width Buffer"),
+                      col.regions=list("blue","orange"),col=list("blue","orange"),
+                      map.type = "Esri.WorldImagery")
+leaflet::addTiles(m@map, url)
 ```
