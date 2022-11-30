@@ -23,7 +23,7 @@
 <meta name="author" content="Ilythia D. Morley, Jean-Romain Roussel" />
 
 
-<meta name="date" content="2022-11-25" />
+<meta name="date" content="2022-11-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -52,36 +52,6 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
-<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
-<script src="libs/leaflet-1.3.1/leaflet.js"></script>
-<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
-<script src="libs/proj4-2.6.2/proj4.min.js"></script>
-<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
-<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
-<script src="libs/leaflet-binding-2.1.1/leaflet.js"></script>
-<script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
-<script src="libs/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script>
-<script src="libs/FlatGeoBuf-3.21.3/fgb.js"></script>
-<script src="libs/FlatGeoBuf-3.21.3/flatgeobuf-geojson.min.js"></script>
-<script src="libs/chromajs-2.1.0/chroma.min.js"></script>
-<link id="ctg-1-attachment" rel="attachment" href="libs/ctg-0.0.1/ctg_layer.fgb"/>
-<link href="libs/HomeButton-0.0.1/home-button.css" rel="stylesheet" />
-<script src="libs/HomeButton-0.0.1/home-button.js"></script>
-<script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script>
-<script src="libs/clipboard-0.0.1/setClipboardText.js"></script>
-<link href="libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
-<link href="libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
-<link id="Water-1-attachment" rel="attachment" href="libs/Water-0.0.1/Water_layer.fgb"/>
-<link id="RoadSegments-1-attachment" rel="attachment" href="libs/RoadSegments-0.0.1/RoadSegments_layer.fgb"/>
-<link id="Inaccurate-1-attachment" rel="attachment" href="libs/Inaccurate-0.0.1/Inaccurate_layer.fgb"/>
-<link id="Corrected-1-attachment" rel="attachment" href="libs/Corrected-0.0.1/Corrected_layer.fgb"/>
-<link id="CorrectedRoad-1-attachment" rel="attachment" href="libs/CorrectedRoad-0.0.1/CorrectedRoad_layer.fgb"/>
-<link id="RoadWidthBuffer-1-attachment" rel="attachment" href="libs/RoadWidthBuffer-0.0.1/RoadWidthBuffer_layer.fgb"/>
-<link id="Waferboard_Road-1-attachment" rel="attachment" href="libs/Waferboard_Road-0.0.1/Waferboard_Road_layer.fgb"/>
-<link id="Existing-1-attachment" rel="attachment" href="libs/Existing-0.0.1/Existing_layer.fgb"/>
-<link id="Updated-1-attachment" rel="attachment" href="libs/Updated-0.0.1/Updated_layer.fgb"/>
-<link id="Snapped-1-attachment" rel="attachment" href="libs/Snapped-0.0.1/Snapped_layer.fgb"/>
 
 
 <style type="text/css">
@@ -307,47 +277,47 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="overview" class="section level3 hasAnchor" number="6.2.1">
 <h3><span class="header-section-number">6.2.1</span> Overview:<a href="sec-edge-case-studies.html#overview" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The road extraction method developed by <a href="https://www.sciencedirect.com/science/article/pii/S1569843222002084#d1e1483">Roussel et al. (2022)</a> uses the geometry of the terrain to correctly relocate and measure the roads. Under ideal circumstances, a road is expected to be flat with steep slopes on its edges (shoulders or embankments). The road is embedded within an environment and surrounded by complex and non-flat topography.</p>
-<p>Under these assumptions, a road is not that hard to find and measure. However, problems arise when there is no geometry at all to detect. This may happen, for example, if the roads are not shaped with ditches on their sides. In this case, the algorithm is supposed to work with a “rescue method” (see section <a href="sec-standard-parameters.html#sec-terrain-parameters">5.3</a>) that does not use the shoulders but instead the terrain complexity.</p>
+<p>Under these assumptions, a road is not that hard to find and measure. However, problems arise when there is no geometry to detect. This may happen, for example, if the roads are not shaped with ditches on their sides. In this case, the algorithm is supposed to work with a “rescue method” (see section <a href="sec-standard-parameters.html#sec-terrain-parameters">5.3</a>) that does not use the shoulders but instead the terrain complexity.</p>
 <p>Ultimately, if the terrain is perfectly flat, there are no geometrical features that can be used to detect the road. In the following example, we present a method for adjusting the <code>measure_roads()</code> standard parameters to detect roads in a landscape where the topography is almost perfectly flat, roads are not nicely shaped, and standard road extraction is challenging.</p>
 <p>As the 3D plot of the ground points demonstrates here, the road is easily identifiable, but there is no geometrical feature that can be used to measure it. The road is flat in a flat environment.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="sec-edge-case-studies.html#cb24-1" aria-hidden="true" tabindex="-1"></a>las <span class="ot">&lt;-</span>  <span class="fu">readLAS</span>(<span class="st">&quot;data/06/01/road_10462.las&quot;</span>)</span>
-<span id="cb24-2"><a href="sec-edge-case-studies.html#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">filter_ground</span>(las), <span class="at">bg =</span> <span class="st">&quot;white&quot;</span>)</span></code></pre></div>
-<p>First let’s have a look at the conductivity layer:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="sec-edge-case-studies.html#cb25-1" aria-hidden="true" tabindex="-1"></a>sig <span class="ot">=</span> ALSroads<span class="sc">::</span><span class="fu">rasterize_conductivity</span>(las, dtm_cs1)</span>
-<span id="cb25-2"><a href="sec-edge-case-studies.html#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ........</span></span>
-<span id="cb25-3"><a href="sec-edge-case-studies.html#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sig, <span class="at">col =</span> viridis<span class="sc">::</span><span class="fu">inferno</span>(<span class="dv">50</span>))</span></code></pre></div>
-<p><img src="ALSroads-book_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>As we can see the conductivity map is absolutely perfect. Geometrical features are not that important to locate the road. Many other features are used, including the vegetation and the local density of point. Thus the road will be perfectly relocated even if the road is flat in a flat environment.</p>
-<p>The measurement of the road width is likely to fail because of the absence of clear geometry. Below we can see one slice of the point cloud perpendicularly to the road. For a better understanding of the figure users should refer to section <a href="sec-standard-parameters.html#sec-standard-parameters">5</a>. What matters here are the red and green arrows that represent the total road width and the drivable width, respectively. Clearly this road is not 21 m wide. The reason the algorithm fails is because everything is perfectly flat and there is nothing to constrain the road width.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="sec-edge-case-studies.html#cb11-1" aria-hidden="true" tabindex="-1"></a>las <span class="ot">&lt;-</span>  <span class="fu">readLAS</span>(<span class="st">&quot;data/06/01/road_10462.las&quot;</span>)</span>
+<span id="cb11-2"><a href="sec-edge-case-studies.html#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">filter_ground</span>(las), <span class="at">bg =</span> <span class="st">&quot;white&quot;</span>)</span></code></pre></div>
+<p>The road extraction method computes a conductivity layer from the point cloud to estimate how easy/difficult it is for an agent to move between two adjacent pixels. Lets look at the conductivity layer of the road in this case study:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="sec-edge-case-studies.html#cb12-1" aria-hidden="true" tabindex="-1"></a>sig <span class="ot">=</span> ALSroads<span class="sc">::</span><span class="fu">rasterize_conductivity</span>(las, dtm_cs1)</span>
+<span id="cb12-2"><a href="sec-edge-case-studies.html#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ........</span></span>
+<span id="cb12-3"><a href="sec-edge-case-studies.html#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sig, <span class="at">col =</span> viridis<span class="sc">::</span><span class="fu">inferno</span>(<span class="dv">50</span>))</span></code></pre></div>
+<p><img src="ALSroads-book_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" />
+As we can see the conductivity map is absolutely perfect. Geometrical features (shoulders or embankments) are not that important to locate the road. Many other features are used, including the vegetation and the local density of point. Thus the road centerline will be perfectly relocated even if the road is flat in a flat environment.</p>
+<p>The measurement of the road width is likely to fail because of the absence of clear geometry (shoulders or embankments). Below we can see a slice of the point cloud perpendicularly to the road. For a better understanding of the figure users should refer to section <a href="sec-standard-parameters.html#sec-standard-parameters">5</a>. The key focus of this figure are the red and green arrows that represent the total road width and the drivable width, respectively. The algorithm has determined the road to be 21 m wide, which is clearly incorrect in this case study. The reason the algorithm overestimates the road width in this case study is because the landscape surrounding the road is perfectly flat and there is nothing to constrain the road width.</p>
 <p><img src="images/slice_dtm_flat_1.png" /></p>
-<p>By altering the default <code>measure_roads()</code> parameter to be more aggressive and much less tolerant to various sources of noise we can relocate the road more accurately.</p>
+<p>By altering the default <code>measure_roads()</code> parameter to be more aggressive and less tolerant to various sources of noise we can relocate the road more accurately.</p>
 <p><img src="images/slice_dtm_flat_2.png" /></p>
-<p>In this specific slice, 6 m is probably a bit narrow for the true road width. Users must remember that measurements are performed on numerous consecutive slices and averaged (see section <a href="sec-standard-parameters.html#sec-extraction-parameters">5.1</a> for information on road slices). For this specific road, the default parameters result in the road being classified as a 13.6 mwide (total width) Class 2 road. Once the parameters are adjusted the road is classified as a 7.6 m(total width) Class 1 road. The custom parameters result in a road width and the Class that are are more representative of the real road.</p>
-<p>If the method classifies the road width as 13.6 m, many points will be found above the ground (i.e., vegetation). This interpretation impacts the road classification (see section <a href="sec-standard-parameters.html#sec-state-parameters">5.6</a>) as the method assesses the road as having vegetation on it. However, if the true road width is only 7.6 m then the algorithm will not find vegetation on the road, as this vegetation is beyond the road edge boundaries, and the road will determined to be a very clean Class 1 road.</p>
-<p>Turning the `measure_roads()` on a road-by-road basis is not possible or suitable for updateing extensive forest road networks. Doing so would defeat the purpose of the method, which is to automatically update road networks. Instead of turning parameters to suit individual roads, users should tune parameters by landscape.</p>
-<p>In this case study, the custom parameters work well, but generally the default parameters are optimal. It is important to remember that this is an <strong>edge case</strong> and represents and extreme scenario.</p>
+<p>In this specific slice, 6 m is probably an minor underestimation of the true road width. Users must remember that measurements are performed on numerous consecutive slices and averaged (see section <a href="sec-standard-parameters.html#sec-extraction-parameters">5.1</a> for information on road slices). For this specific road, the default parameters result in the road being classified as a 13.6 m wide (total width) ‘Class 2’ road. Once the parameters are adjusted, the road is classified as a 7.6 m (total width) Class 1 road. The custom parameters result in a road width and the Class that are are more representative of the real road.</p>
+<p>If the method classifies the road width as 13.6 m, many points will be found above the road (i.e., vegetation). This interpretation impacts the road classification (see section <a href="sec-standard-parameters.html#sec-state-parameters">5.6</a>) as the method assesses the road as having vegetation on it, which would limit road drivablilty. However, if the true road width is only 7.6 m then the algorithm will not find vegetation on the road, as this vegetation is beyond the road edge boundaries, and the road will determined to be a very clean ‘Class 1’ road.</p>
+<p>Tuning the `measure_roads()` parameters on a road-by-road basis is not possible or suitable for updating extensive forest road networks. Doing so would defeat the purpose of the method, which is to automatically update road networks. Instead of tuning parameters to suit individual roads, users should tune parameters by landscape.</p>
+<p>In this case study, the custom parameters work well, but generally the default parameters are preferable. It is important to remember that this is an <strong>edge case</strong> and represents and extreme scenario.</p>
 </div>
 <div id="sec-method-and-application" class="section level3 hasAnchor" number="6.2.2">
 <h3><span class="header-section-number">6.2.2</span> Data, Method, and Application:<a href="sec-edge-case-studies.html#sec-method-and-application" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>In the follow sections, example code and method implementation for the adjustment of parameters in a low DTM complexity case study is presented.</p>
+<p>The follow sections present, example code and method implementation for the adjustment of parameters in a low DTM complexity case study.</p>
 </div>
 <div id="sec-required-r-packages" class="section level3 hasAnchor" number="6.2.3">
 <h3><span class="header-section-number">6.2.3</span> Required R Packages:<a href="sec-road-extraction-using-alsroads.html#sec-required-r-packages" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="sec-edge-case-studies.html#cb26-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;Jean-Romain/ALSroads&quot;</span>) <span class="co">#Install the ALSroads Package</span></span>
-<span id="cb26-2"><a href="sec-edge-case-studies.html#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-3"><a href="sec-edge-case-studies.html#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ALSroads&quot;</span>) </span>
-<span id="cb26-4"><a href="sec-edge-case-studies.html#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;lidR&quot;</span>)</span>
-<span id="cb26-5"><a href="sec-edge-case-studies.html#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;raster&quot;</span>)</span>
-<span id="cb26-6"><a href="sec-edge-case-studies.html#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;sf&quot;</span>)</span>
-<span id="cb26-7"><a href="sec-edge-case-studies.html#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="sec-edge-case-studies.html#cb13-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;Jean-Romain/ALSroads&quot;</span>) <span class="co">#Install the ALSroads Package</span></span>
+<span id="cb13-2"><a href="sec-edge-case-studies.html#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="sec-edge-case-studies.html#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ALSroads&quot;</span>) </span>
+<span id="cb13-4"><a href="sec-edge-case-studies.html#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;lidR&quot;</span>)</span>
+<span id="cb13-5"><a href="sec-edge-case-studies.html#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;raster&quot;</span>)</span>
+<span id="cb13-6"><a href="sec-edge-case-studies.html#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;sf&quot;</span>)</span>
+<span id="cb13-7"><a href="sec-edge-case-studies.html#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span></code></pre></div>
 <div id="sec-loading-data" class="section level4 hasAnchor" number="6.2.3.1">
 <h4><span class="header-section-number">6.2.3.1</span> Loading Data:<a href="sec-edge-case-studies.html#sec-loading-data" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="sec-edge-case-studies.html#cb27-1" aria-hidden="true" tabindex="-1"></a>ctg <span class="ot">&lt;-</span> readLAScatalog<span class="st">&quot;path/to/ctg/files&quot;</span>, filter <span class="ot">=</span> <span class="st">&quot;-drop_withheld-keep_random_fraction 0.25&quot;</span><span class="er">)</span></span>
-<span id="cb27-2"><a href="sec-edge-case-studies.html#cb27-2" aria-hidden="true" tabindex="-1"></a>dtm <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;path/to/dtm.tif&quot;</span>)</span>
-<span id="cb27-3"><a href="sec-edge-case-studies.html#cb27-3" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;path/to/roads&quot;</span>)</span>
-<span id="cb27-4"><a href="sec-edge-case-studies.html#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-5"><a href="sec-edge-case-studies.html#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(roads) <span class="ot">=</span> <span class="fu">st_crs</span>(ctg)</span>
-<span id="cb27-6"><a href="sec-edge-case-studies.html#cb27-6" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">st_crop</span>(roads, ctg)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="sec-edge-case-studies.html#cb14-1" aria-hidden="true" tabindex="-1"></a>ctg <span class="ot">&lt;-</span> readLAScatalog<span class="st">&quot;path/to/ctg/files&quot;</span>, filter <span class="ot">=</span> <span class="st">&quot;-drop_withheld-keep_random_fraction 0.25&quot;</span><span class="er">)</span></span>
+<span id="cb14-2"><a href="sec-edge-case-studies.html#cb14-2" aria-hidden="true" tabindex="-1"></a>dtm <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;path/to/dtm.tif&quot;</span>)</span>
+<span id="cb14-3"><a href="sec-edge-case-studies.html#cb14-3" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;path/to/roads&quot;</span>)</span>
+<span id="cb14-4"><a href="sec-edge-case-studies.html#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="sec-edge-case-studies.html#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(roads) <span class="ot">=</span> <span class="fu">st_crs</span>(ctg)</span>
+<span id="cb14-6"><a href="sec-edge-case-studies.html#cb14-6" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">st_crop</span>(roads, ctg)</span></code></pre></div>
 </div>
 <div id="sec-parameter-tuning" class="section level4 hasAnchor" number="6.2.3.2">
 <h4><span class="header-section-number">6.2.3.2</span> Parameter Tuning<a href="sec-edge-case-studies.html#sec-parameter-tuning" class="anchor-section" aria-label="Anchor link to header"></a></h4>
@@ -357,17 +327,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>max_sd_ground_points: <code>Default = 0.15</code></li>
 </ol>
 <p>In a low DTM complexity area decreasing the <code>max_elevation_ground_points</code> and <code>max_sd_ground_points</code> improves the accuracy of road extraction. <strong>In this case study we decrees the <code>max_elevation_ground_points</code> to 0.07 and decrees the <code>max_sd_ground_points</code> to 0.04.</strong></p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="sec-edge-case-studies.html#cb28-1" aria-hidden="true" tabindex="-1"></a>custom_param <span class="ot">=</span> alsroads_default_parameters</span>
-<span id="cb28-2"><a href="sec-edge-case-studies.html#cb28-2" aria-hidden="true" tabindex="-1"></a>custom_param<span class="sc">$</span>terrain<span class="sc">$</span>max_elevation_ground_points <span class="ot">=</span> <span class="fl">0.07</span></span>
-<span id="cb28-3"><a href="sec-edge-case-studies.html#cb28-3" aria-hidden="true" tabindex="-1"></a>custom_param<span class="sc">$</span>terrain<span class="sc">$</span>max_sd_ground_points <span class="ot">=</span> <span class="fl">0.04</span></span>
-<span id="cb28-4"><a href="sec-edge-case-studies.html#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-5"><a href="sec-edge-case-studies.html#cb28-5" aria-hidden="true" tabindex="-1"></a>updated_roads_custom_param <span class="ot">&lt;-</span> <span class="fu">measure_roads</span>(<span class="at">ctg =</span> ctg, <span class="at">roads =</span> roads, <span class="at">dtm =</span> dtm, <span class="at">param =</span> custom_param)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="sec-edge-case-studies.html#cb15-1" aria-hidden="true" tabindex="-1"></a>custom_param <span class="ot">=</span> alsroads_default_parameters</span>
+<span id="cb15-2"><a href="sec-edge-case-studies.html#cb15-2" aria-hidden="true" tabindex="-1"></a>custom_param<span class="sc">$</span>terrain<span class="sc">$</span>max_elevation_ground_points <span class="ot">=</span> <span class="fl">0.07</span></span>
+<span id="cb15-3"><a href="sec-edge-case-studies.html#cb15-3" aria-hidden="true" tabindex="-1"></a>custom_param<span class="sc">$</span>terrain<span class="sc">$</span>max_sd_ground_points <span class="ot">=</span> <span class="fl">0.04</span></span>
+<span id="cb15-4"><a href="sec-edge-case-studies.html#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="sec-edge-case-studies.html#cb15-5" aria-hidden="true" tabindex="-1"></a>updated_roads_custom_param <span class="ot">&lt;-</span> <span class="fu">measure_roads</span>(<span class="at">ctg =</span> ctg, <span class="at">roads =</span> roads, <span class="at">dtm =</span> dtm, <span class="at">param =</span> custom_param)</span></code></pre></div>
 </div>
 </div>
 <div id="sec-results" class="section level3 hasAnchor" number="6.2.4">
 <h3><span class="header-section-number">6.2.4</span> Results:<a href="sec-edge-case-studies.html#sec-results" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Plotting the updated road network alongside the existing road network allows the visualization of the updated roads.</p>
-<p><img src="ALSroads-book_files/figure-html/unnamed-chunk-13-1.png" width="681.6" style="display: block; margin: auto;" /></p>
+<p><img src="ALSroads-book_files/figure-html/unnamed-chunk-4-1.png" width="681.6" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="sec-case-study-no-veg" class="section level2 hasAnchor" number="6.3">
@@ -376,38 +346,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">6.3.1</span> Overview:<a href="sec-edge-case-studies.html#overview-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The road extraction method developed by <a href="%5Bhttps://www.sciencedirect.com/science/article/pii/S1569843222002084#d1e1483">Roussel et al. (2022)</a> uses road edge vegetation to correctly position the updated road. There are three possible vegetation scenarios: 1) the road is nicely shaped by vegetation and the algorithm can accurately update the road, 2) DTM is very flat and locating the road is a challenge (see Case Study 1: Low DTM complexity), or 3) the road is not highlighted enough compared to the surrounding vegetation and cannot be located.</p>
 <p>The example case study roads are located in the northern portion of the Romeo Malette Forest, in the province of Ontario.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="sec-edge-case-studies.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#las_cs2 &lt;- readLAS(&quot;data/06/02/ctg/1kmZ174510538902018L.laz&quot;)</span></span>
-<span id="cb29-2"><a href="sec-edge-case-studies.html#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co">#las_c &lt;- clip_circle(las_cs2, 451400, 5389750, 500)</span></span></code></pre></div>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="sec-edge-case-studies.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#plot(las_c, bg = &quot;white&quot;, size = 3)</span></span>
-<span id="cb30-2"><a href="sec-edge-case-studies.html#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co">#add_dtm3d(x, dtm_cs2)</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="sec-edge-case-studies.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#las_cs2 &lt;- readLAS(&quot;data/06/02/ctg/1kmZ174510538902018L.laz&quot;)</span></span>
+<span id="cb16-2"><a href="sec-edge-case-studies.html#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#las_c &lt;- clip_circle(las_cs2, 451400, 5389750, 500)</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="sec-edge-case-studies.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#plot(las_c, bg = &quot;white&quot;, size = 3)</span></span>
+<span id="cb17-2"><a href="sec-edge-case-studies.html#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">#add_dtm3d(x, dtm_cs2)</span></span></code></pre></div>
 </div>
 <div id="data-method-and-application" class="section level3 hasAnchor" number="6.3.2">
 <h3><span class="header-section-number">6.3.2</span> Data, Method, and Application:<a href="sec-edge-case-studies.html#data-method-and-application" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div id="required-r-packages" class="section level4 hasAnchor" number="6.3.2.1">
 <h4><span class="header-section-number">6.3.2.1</span> Required R Packages:<a href="sec-edge-case-studies.html#required-r-packages" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="sec-edge-case-studies.html#cb31-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;Jean-Romain/ALSroads&quot;</span>) <span class="co">#Install the ALSroads Package</span></span>
-<span id="cb31-2"><a href="sec-edge-case-studies.html#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-3"><a href="sec-edge-case-studies.html#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ALSroads&quot;</span>) </span>
-<span id="cb31-4"><a href="sec-edge-case-studies.html#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;lidR&quot;</span>)</span>
-<span id="cb31-5"><a href="sec-edge-case-studies.html#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;raster&quot;</span>)</span>
-<span id="cb31-6"><a href="sec-edge-case-studies.html#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;sf&quot;</span>)</span>
-<span id="cb31-7"><a href="sec-edge-case-studies.html#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="sec-edge-case-studies.html#cb18-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;Jean-Romain/ALSroads&quot;</span>) <span class="co">#Install the ALSroads Package</span></span>
+<span id="cb18-2"><a href="sec-edge-case-studies.html#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="sec-edge-case-studies.html#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ALSroads&quot;</span>) </span>
+<span id="cb18-4"><a href="sec-edge-case-studies.html#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;lidR&quot;</span>)</span>
+<span id="cb18-5"><a href="sec-edge-case-studies.html#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;raster&quot;</span>)</span>
+<span id="cb18-6"><a href="sec-edge-case-studies.html#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;sf&quot;</span>)</span>
+<span id="cb18-7"><a href="sec-edge-case-studies.html#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span></code></pre></div>
 </div>
 <div id="loading-data" class="section level4 hasAnchor" number="6.3.2.2">
 <h4><span class="header-section-number">6.3.2.2</span> Loading Data:<a href="sec-edge-case-studies.html#loading-data" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="sec-edge-case-studies.html#cb32-1" aria-hidden="true" tabindex="-1"></a>ctg <span class="ot">&lt;-</span> readLAScatalog<span class="st">&quot;path/to/ctg/files&quot;</span>, filter <span class="ot">=</span> <span class="st">&quot;-drop_withheld-keep_random_fraction 0.25&quot;</span><span class="er">)</span></span>
-<span id="cb32-2"><a href="sec-edge-case-studies.html#cb32-2" aria-hidden="true" tabindex="-1"></a>dtm <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;path/to/dtm.tif&quot;</span>)</span>
-<span id="cb32-3"><a href="sec-edge-case-studies.html#cb32-3" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;path/to/roads&quot;</span>)</span>
-<span id="cb32-4"><a href="sec-edge-case-studies.html#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-5"><a href="sec-edge-case-studies.html#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(roads) <span class="ot">=</span> <span class="fu">st_crs</span>(ctg)</span>
-<span id="cb32-6"><a href="sec-edge-case-studies.html#cb32-6" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">st_crop</span>(roads, ctg)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="sec-edge-case-studies.html#cb19-1" aria-hidden="true" tabindex="-1"></a>ctg <span class="ot">&lt;-</span> readLAScatalog<span class="st">&quot;path/to/ctg/files&quot;</span>, filter <span class="ot">=</span> <span class="st">&quot;-drop_withheld-keep_random_fraction 0.25&quot;</span><span class="er">)</span></span>
+<span id="cb19-2"><a href="sec-edge-case-studies.html#cb19-2" aria-hidden="true" tabindex="-1"></a>dtm <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;path/to/dtm.tif&quot;</span>)</span>
+<span id="cb19-3"><a href="sec-edge-case-studies.html#cb19-3" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;path/to/roads&quot;</span>)</span>
+<span id="cb19-4"><a href="sec-edge-case-studies.html#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="sec-edge-case-studies.html#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(roads) <span class="ot">=</span> <span class="fu">st_crs</span>(ctg)</span>
+<span id="cb19-6"><a href="sec-edge-case-studies.html#cb19-6" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">st_crop</span>(roads, ctg)</span></code></pre></div>
 </div>
 <div id="parameter-tuning" class="section level4 hasAnchor" number="6.3.2.3">
 <h4><span class="header-section-number">6.3.2.3</span> Parameter Tuning:<a href="sec-edge-case-studies.html#parameter-tuning" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="sec-edge-case-studies.html#cb33-1" aria-hidden="true" tabindex="-1"></a>custom_param <span class="ot">=</span> alsroads_default_parameters</span>
-<span id="cb33-2"><a href="sec-edge-case-studies.html#cb33-2" aria-hidden="true" tabindex="-1"></a>custom_param<span class="sc">$</span>state<span class="sc">$</span>drivable_width_thresholds <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">8</span>)</span>
-<span id="cb33-3"><a href="sec-edge-case-studies.html#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-4"><a href="sec-edge-case-studies.html#cb33-4" aria-hidden="true" tabindex="-1"></a>updated_roads_custom_param <span class="ot">&lt;-</span> <span class="fu">measure_roads</span>(<span class="at">ctg =</span> ctg, <span class="at">roads =</span> roads, <span class="at">dtm =</span> dtm, <span class="at">param =</span> custom_param)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="sec-edge-case-studies.html#cb20-1" aria-hidden="true" tabindex="-1"></a>custom_param <span class="ot">=</span> alsroads_default_parameters</span>
+<span id="cb20-2"><a href="sec-edge-case-studies.html#cb20-2" aria-hidden="true" tabindex="-1"></a>custom_param<span class="sc">$</span>state<span class="sc">$</span>drivable_width_thresholds <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">8</span>)</span>
+<span id="cb20-3"><a href="sec-edge-case-studies.html#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="sec-edge-case-studies.html#cb20-4" aria-hidden="true" tabindex="-1"></a>updated_roads_custom_param <span class="ot">&lt;-</span> <span class="fu">measure_roads</span>(<span class="at">ctg =</span> ctg, <span class="at">roads =</span> roads, <span class="at">dtm =</span> dtm, <span class="at">param =</span> custom_param)</span></code></pre></div>
 </div>
 </div>
 <div id="results" class="section level3 hasAnchor" number="6.3.3">
@@ -427,30 +397,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">6.4.2</span> Data, Method, and Application:<a href="sec-edge-case-studies.html#data-method-and-application-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div id="required-r-packages-1" class="section level4 hasAnchor" number="6.4.2.1">
 <h4><span class="header-section-number">6.4.2.1</span> Required R Packages:<a href="sec-edge-case-studies.html#required-r-packages-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="sec-edge-case-studies.html#cb34-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;Jean-Romain/ALSroads&quot;</span>) <span class="co">#Install the ALSroads Package</span></span>
-<span id="cb34-2"><a href="sec-edge-case-studies.html#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-3"><a href="sec-edge-case-studies.html#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ALSroads&quot;</span>) </span>
-<span id="cb34-4"><a href="sec-edge-case-studies.html#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;lidR&quot;</span>)</span>
-<span id="cb34-5"><a href="sec-edge-case-studies.html#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;raster&quot;</span>)</span>
-<span id="cb34-6"><a href="sec-edge-case-studies.html#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;sf&quot;</span>)</span>
-<span id="cb34-7"><a href="sec-edge-case-studies.html#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="sec-edge-case-studies.html#cb21-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;Jean-Romain/ALSroads&quot;</span>) <span class="co">#Install the ALSroads Package</span></span>
+<span id="cb21-2"><a href="sec-edge-case-studies.html#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="sec-edge-case-studies.html#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ALSroads&quot;</span>) </span>
+<span id="cb21-4"><a href="sec-edge-case-studies.html#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;lidR&quot;</span>)</span>
+<span id="cb21-5"><a href="sec-edge-case-studies.html#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;raster&quot;</span>)</span>
+<span id="cb21-6"><a href="sec-edge-case-studies.html#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;sf&quot;</span>)</span>
+<span id="cb21-7"><a href="sec-edge-case-studies.html#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span></code></pre></div>
 </div>
 <div id="loading-data-1" class="section level4 hasAnchor" number="6.4.2.2">
 <h4><span class="header-section-number">6.4.2.2</span> Loading Data:<a href="sec-edge-case-studies.html#loading-data-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="sec-edge-case-studies.html#cb35-1" aria-hidden="true" tabindex="-1"></a>ctg <span class="ot">&lt;-</span> readLAScatalog<span class="st">&quot;path/to/ctg/files&quot;</span>, filter <span class="ot">=</span> <span class="st">&quot;-drop_withheld-keep_random_fraction 0.25&quot;</span><span class="er">)</span></span>
-<span id="cb35-2"><a href="sec-edge-case-studies.html#cb35-2" aria-hidden="true" tabindex="-1"></a>dtm <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;path/to/dtm.tif&quot;</span>)</span>
-<span id="cb35-3"><a href="sec-edge-case-studies.html#cb35-3" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;path/to/roads&quot;</span>)</span>
-<span id="cb35-4"><a href="sec-edge-case-studies.html#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-5"><a href="sec-edge-case-studies.html#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(roads) <span class="ot">=</span> <span class="fu">st_crs</span>(ctg)</span>
-<span id="cb35-6"><a href="sec-edge-case-studies.html#cb35-6" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">st_crop</span>(roads, ctg)</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="sec-edge-case-studies.html#cb22-1" aria-hidden="true" tabindex="-1"></a>ctg <span class="ot">&lt;-</span> readLAScatalog<span class="st">&quot;path/to/ctg/files&quot;</span>, filter <span class="ot">=</span> <span class="st">&quot;-drop_withheld-keep_random_fraction 0.25&quot;</span><span class="er">)</span></span>
+<span id="cb22-2"><a href="sec-edge-case-studies.html#cb22-2" aria-hidden="true" tabindex="-1"></a>dtm <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;path/to/dtm.tif&quot;</span>)</span>
+<span id="cb22-3"><a href="sec-edge-case-studies.html#cb22-3" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;path/to/roads&quot;</span>)</span>
+<span id="cb22-4"><a href="sec-edge-case-studies.html#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="sec-edge-case-studies.html#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(roads) <span class="ot">=</span> <span class="fu">st_crs</span>(ctg)</span>
+<span id="cb22-6"><a href="sec-edge-case-studies.html#cb22-6" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">st_crop</span>(roads, ctg)</span></code></pre></div>
 </div>
 <div id="parameter-tuning-1" class="section level4 hasAnchor" number="6.4.2.3">
 <h4><span class="header-section-number">6.4.2.3</span> Parameter Tuning:<a href="sec-edge-case-studies.html#parameter-tuning-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>The <code>measure_roads()</code> <strong>extraction parameters</strong> include a parameter called <code>road_buffer</code> for defining the road buffer width (see section <a href="sec-standard-parameters.html#sec-extraction-parameters">5.1</a>). The default <code>road_buffer</code> distance is 80 m, but in this case study we know that the updated road is &lt; 10 m from the existing road network. <strong>In this case study we decrees the <code>road_buffer</code> to 40 m</strong></p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="sec-edge-case-studies.html#cb36-1" aria-hidden="true" tabindex="-1"></a>custom_param <span class="ot">=</span> alsroads_default_parameters</span>
-<span id="cb36-2"><a href="sec-edge-case-studies.html#cb36-2" aria-hidden="true" tabindex="-1"></a>custom_param<span class="sc">$</span>extraction<span class="sc">$</span>road_buffer <span class="ot">=</span> <span class="dv">40</span></span>
-<span id="cb36-3"><a href="sec-edge-case-studies.html#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-4"><a href="sec-edge-case-studies.html#cb36-4" aria-hidden="true" tabindex="-1"></a>updated_roads_custom_param <span class="ot">&lt;-</span> <span class="fu">measure_roads</span>(<span class="at">ctg =</span> ctg, <span class="at">roads =</span> roads, <span class="at">dtm =</span> dtm, <span class="at">param =</span> custom_param)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="sec-edge-case-studies.html#cb23-1" aria-hidden="true" tabindex="-1"></a>custom_param <span class="ot">=</span> alsroads_default_parameters</span>
+<span id="cb23-2"><a href="sec-edge-case-studies.html#cb23-2" aria-hidden="true" tabindex="-1"></a>custom_param<span class="sc">$</span>extraction<span class="sc">$</span>road_buffer <span class="ot">=</span> <span class="dv">40</span></span>
+<span id="cb23-3"><a href="sec-edge-case-studies.html#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="sec-edge-case-studies.html#cb23-4" aria-hidden="true" tabindex="-1"></a>updated_roads_custom_param <span class="ot">&lt;-</span> <span class="fu">measure_roads</span>(<span class="at">ctg =</span> ctg, <span class="at">roads =</span> roads, <span class="at">dtm =</span> dtm, <span class="at">param =</span> custom_param)</span></code></pre></div>
 </div>
 </div>
 <div id="results-1" class="section level3 hasAnchor" number="6.4.3">
@@ -471,56 +441,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">6.5.2</span> Data, Method, and Application:<a href="sec-edge-case-studies.html#data-method-and-application-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div id="required-r-packages-2" class="section level4 hasAnchor" number="6.5.2.1">
 <h4><span class="header-section-number">6.5.2.1</span> Required R Packages:<a href="sec-edge-case-studies.html#required-r-packages-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="sec-edge-case-studies.html#cb37-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;Jean-Romain/ALSroads&quot;</span>) <span class="co">#Install the ALSroads Package</span></span>
-<span id="cb37-2"><a href="sec-edge-case-studies.html#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-3"><a href="sec-edge-case-studies.html#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ALSroads&quot;</span>) </span>
-<span id="cb37-4"><a href="sec-edge-case-studies.html#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;lidR&quot;</span>)</span>
-<span id="cb37-5"><a href="sec-edge-case-studies.html#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;raster&quot;</span>)</span>
-<span id="cb37-6"><a href="sec-edge-case-studies.html#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;sf&quot;</span>)</span>
-<span id="cb37-7"><a href="sec-edge-case-studies.html#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="sec-edge-case-studies.html#cb24-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;Jean-Romain/ALSroads&quot;</span>) <span class="co">#Install the ALSroads Package</span></span>
+<span id="cb24-2"><a href="sec-edge-case-studies.html#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="sec-edge-case-studies.html#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ALSroads&quot;</span>) </span>
+<span id="cb24-4"><a href="sec-edge-case-studies.html#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;lidR&quot;</span>)</span>
+<span id="cb24-5"><a href="sec-edge-case-studies.html#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;raster&quot;</span>)</span>
+<span id="cb24-6"><a href="sec-edge-case-studies.html#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;sf&quot;</span>)</span>
+<span id="cb24-7"><a href="sec-edge-case-studies.html#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span></code></pre></div>
 </div>
 <div id="loading-data-2" class="section level4 hasAnchor" number="6.5.2.2">
 <h4><span class="header-section-number">6.5.2.2</span> Loading Data:<a href="sec-edge-case-studies.html#loading-data-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="sec-edge-case-studies.html#cb38-1" aria-hidden="true" tabindex="-1"></a>ctg <span class="ot">&lt;-</span> readLAScatalog<span class="st">&quot;path/to/ctg/files&quot;</span>, filter <span class="ot">=</span> <span class="st">&quot;-drop_withheld-keep_random_fraction 0.25&quot;</span><span class="er">)</span></span>
-<span id="cb38-2"><a href="sec-edge-case-studies.html#cb38-2" aria-hidden="true" tabindex="-1"></a>dtm <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;path/to/dtm.tif&quot;</span>)</span>
-<span id="cb38-3"><a href="sec-edge-case-studies.html#cb38-3" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;path/to/roads&quot;</span>)</span>
-<span id="cb38-4"><a href="sec-edge-case-studies.html#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-5"><a href="sec-edge-case-studies.html#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(roads) <span class="ot">=</span> <span class="fu">st_crs</span>(ctg)</span>
-<span id="cb38-6"><a href="sec-edge-case-studies.html#cb38-6" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">st_crop</span>(roads, ctg)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="sec-edge-case-studies.html#cb25-1" aria-hidden="true" tabindex="-1"></a>ctg <span class="ot">&lt;-</span> readLAScatalog<span class="st">&quot;path/to/ctg/files&quot;</span>, filter <span class="ot">=</span> <span class="st">&quot;-drop_withheld-keep_random_fraction 0.25&quot;</span><span class="er">)</span></span>
+<span id="cb25-2"><a href="sec-edge-case-studies.html#cb25-2" aria-hidden="true" tabindex="-1"></a>dtm <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;path/to/dtm.tif&quot;</span>)</span>
+<span id="cb25-3"><a href="sec-edge-case-studies.html#cb25-3" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;path/to/roads&quot;</span>)</span>
+<span id="cb25-4"><a href="sec-edge-case-studies.html#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="sec-edge-case-studies.html#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(roads) <span class="ot">=</span> <span class="fu">st_crs</span>(ctg)</span>
+<span id="cb25-6"><a href="sec-edge-case-studies.html#cb25-6" aria-hidden="true" tabindex="-1"></a>roads <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">st_crop</span>(roads, ctg)</span></code></pre></div>
 </div>
 <div id="parameter-tuning-2" class="section level4 hasAnchor" number="6.5.2.3">
 <h4><span class="header-section-number">6.5.2.3</span> Parameter Tuning:<a href="sec-edge-case-studies.html#parameter-tuning-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>The <code>measure_roads()</code> <strong>road state parameters</strong> include a parameter called <code>drivable_width_thresholds</code> for assigning drivable width thresholds (see section <a href="sec-standard-parameters.html#sec-state-parameters">5.6</a>). The default <code>drivable_width_thresholds</code>are <code>c(1, 5)</code>, but in this case study we know roads under 3 m are not drivable, and roads over 8 m are good roads.</p>
 <p><strong>We set the <code>drivable_width_thresholds</code> to <code>c(5, 8)</code></strong> meaning that roads with drivable widths over 8 m are assigned a score of 100 and roads with a width less than 5 m are assigned a score of 0 (there is a linear relationship between 5 and 8 m).</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="sec-edge-case-studies.html#cb39-1" aria-hidden="true" tabindex="-1"></a>custom_param <span class="ot">=</span> alsroads_default_parameters</span>
-<span id="cb39-2"><a href="sec-edge-case-studies.html#cb39-2" aria-hidden="true" tabindex="-1"></a>custom_param<span class="sc">$</span>state<span class="sc">$</span>drivable_width_thresholds <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">8</span>)</span>
-<span id="cb39-3"><a href="sec-edge-case-studies.html#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-4"><a href="sec-edge-case-studies.html#cb39-4" aria-hidden="true" tabindex="-1"></a>updated_roads_custom_param <span class="ot">&lt;-</span> <span class="fu">measure_roads</span>(<span class="at">ctg =</span> ctg, <span class="at">roads =</span> roads, <span class="at">dtm =</span> dtm, <span class="at">param =</span> custom_param)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="sec-edge-case-studies.html#cb26-1" aria-hidden="true" tabindex="-1"></a>custom_param <span class="ot">=</span> alsroads_default_parameters</span>
+<span id="cb26-2"><a href="sec-edge-case-studies.html#cb26-2" aria-hidden="true" tabindex="-1"></a>custom_param<span class="sc">$</span>state<span class="sc">$</span>drivable_width_thresholds <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">8</span>)</span>
+<span id="cb26-3"><a href="sec-edge-case-studies.html#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="sec-edge-case-studies.html#cb26-4" aria-hidden="true" tabindex="-1"></a>updated_roads_custom_param <span class="ot">&lt;-</span> <span class="fu">measure_roads</span>(<span class="at">ctg =</span> ctg, <span class="at">roads =</span> roads, <span class="at">dtm =</span> dtm, <span class="at">param =</span> custom_param)</span></code></pre></div>
 </div>
 </div>
 <div id="results-2" class="section level3 hasAnchor" number="6.5.3">
 <h3><span class="header-section-number">6.5.3</span> Results:<a href="sec-edge-case-studies.html#results-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Results show that when the <code>drivable_width_thresholds</code> is changed to <code>c(5, 8)</code> fewer roads are classified as Class 1 and Class 2 (i.e., drivable roads). Compared to the updated road network using standard parameters, where no roads were Class 3 or 4, the updated road network using custom parameters includes two roads of Class 3 (i.e., not drivable). These results demonstrate that changing the <code>drivable_width_thresholds</code> impacts the road Class by considering roads beyond the minimum road width threshold, in this case 5 m, as not drivable. <em>Note: In this case study area there are no Class 4 roads.</em></p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="sec-edge-case-studies.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(upd_rds_custom_and_standard_cs4, <span class="fu">aes</span>(<span class="fu">factor</span>(CLASS))) <span class="sc">+</span>   </span>
-<span id="cb40-2"><a href="sec-edge-case-studies.html#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Param), <span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>, <span class="at">stat=</span><span class="st">&quot;count&quot;</span>, <span class="at">width=</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb40-3"><a href="sec-edge-case-studies.html#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb40-4"><a href="sec-edge-case-studies.html#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;bottom&quot;</span>) <span class="sc">+</span></span>
-<span id="cb40-5"><a href="sec-edge-case-studies.html#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_discrete</span>(<span class="at">name=</span><span class="cn">NULL</span>, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Custom Parameters&quot;</span>, <span class="st">&quot;Standard Parameters&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb40-6"><a href="sec-edge-case-studies.html#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;Count&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Road Class&quot;</span>)</span></code></pre></div>
-<p><img src="ALSroads-book_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="sec-edge-case-studies.html#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(upd_rds_custom_and_standard_cs4, <span class="fu">aes</span>(<span class="fu">factor</span>(CLASS))) <span class="sc">+</span>   </span>
+<span id="cb27-2"><a href="sec-edge-case-studies.html#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Param), <span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>, <span class="at">stat=</span><span class="st">&quot;count&quot;</span>, <span class="at">width=</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb27-3"><a href="sec-edge-case-studies.html#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb27-4"><a href="sec-edge-case-studies.html#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;bottom&quot;</span>) <span class="sc">+</span></span>
+<span id="cb27-5"><a href="sec-edge-case-studies.html#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_discrete</span>(<span class="at">name=</span><span class="cn">NULL</span>, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Custom Parameters&quot;</span>, <span class="st">&quot;Standard Parameters&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb27-6"><a href="sec-edge-case-studies.html#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;Count&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Road Class&quot;</span>)</span></code></pre></div>
+<p><img src="ALSroads-book_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
 
-<pre><code>#&gt; Reading layer `road&#39; from data source `E:\ALSroads_Guide\data\07\road.shp&#39; using driver `ESRI Shapefile&#39;
-#&gt; Simple feature collection with 1 feature and 36 fields
-#&gt; Geometry type: LINESTRING
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 466189.2 ymin: 5363340 xmax: 466723.2 ymax: 5363860
-#&gt; Projected CRS: NAD83 / UTM zone 17N
-#&gt; Reading layer `updated_road&#39; from data source `E:\ALSroads_Guide\data\07\updated_road.shp&#39; using driver `ESRI Shapefile&#39;
-#&gt; Simple feature collection with 1 feature and 44 fields
-#&gt; Geometry type: LINESTRING
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 466188.4 ymin: 5363341 xmax: 466718.4 ymax: 5363861
-#&gt; Projected CRS: NAD83(CSRS) / UTM zone 17N + CGVD2013_height_-_CGG2013_-_NAD83_CSRS</code></pre>
 </div>
 </div>
 </div>
