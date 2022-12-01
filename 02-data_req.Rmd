@@ -15,8 +15,8 @@ rgl::setupKnitr(autoprint = TRUE)
 knitr::opts_chunk$set(echo = TRUE)
 
 #Data
-ctg <- readLAScatalog("data/03/ctg/",  filter = "-drop_withheld -keep_random_fraction 0.25")
-ctg_extent <- st_read("data/03/ctg_extent.shp")
+ctg_extent <- st_read("data/02/ctg_extent.shp")
+waterbodies <- st_read("data/02/waterbodies.shp")
 ```
 
 # Road Extraction Data Requirements {#sec-road-extraction-data-requirements}
@@ -41,11 +41,12 @@ Updating and enhancing road segments using `ALSroads` requires LiDAR data that c
 4.  **In a projected coordinate system and in meters:** some parameters are hardcoded in meters.
 5.  **Have a density of 5-10 points/m²:** less than 5-10 points/m² and the algorithm is not guaranteed to work; more than 5-10 points/m² is not useful and will increase the computation time. If the density of the input point cloud is over 10 points/m², it can be decimated on-the-fly using the `filter` argument (see 'lidR' book [chapter 2.1.1](https://r-lidar.github.io/lidRbook/io.html#filter)).
 
-```{r, fig.width=5}
+```R
 library(lidR)
 ctg <- readLAScatalog("data/03/ctg/",  filter = "-drop_withheld -keep_random_fraction 0.25")
 plot(ctg)
 ```
+![](images/ctg_grid_plot.PNG)
 
 ## DTM Data {#sec-dtm-data}
 
@@ -55,12 +56,14 @@ Road enhancement using `ALSroads` requires a Digital Terrain Model (DTM) as an i
 2.  **Cover the extent of the LiDAR coverage.**
 3.  **Match the coordinate system of the LiDAR coverage.**
 
-```{r, message=FALSE, fig.width=5}
+```r
 library(raster)
-dtm <- raster("data/03/DTM.tif")
+dtm <- raster("path/to/DTM.tif")
 plot(ctg)
 plot(dtm, col = gray(1:50/50), add = T)
+
 ```
+![](images/big_dtm.PNG)
 
 ## Existing Road Network {#sec-existing-road-network}
 
@@ -69,12 +72,14 @@ The road extraction method implemented using `ALSroads` updates an existing road
 1.  **Be a simple feature (sf) format (line).**
 2.  **Match the coordinate system of the LiDAR coverage.**
 
-```{r, fig.width=5}
+```r
 library(sf)
-roads <- st_read("data/03/roads.shp", quiet = TRUE)
+roads <- st_read("path/to/roads.shp", quiet = TRUE)
+
 plot(ctg)
 plot(st_geometry(roads), add = T)
 ```
+![](images/ctg_grid_roads.PNG)
 
 ## Water Bodies (optional) {#sec-water-bodies}
 
@@ -91,9 +96,9 @@ If water bodies are included in road extraction (recommended), they must:
 1.  **Be a simple feature (sf) format (polygon).**
 2.  **Match the coordinate system of the LiDAR coverage.**
 
-```{r, fig.width=5}
+```r
 library(sf)
-waterbodies <- st_read("data/03/waterbodies.shp", quiet = TRUE)
+waterbodies <- st_read("path/to/waterbodies.shp", quiet = TRUE)
 ```
 
 ```{r plot-waterbodies, warning = FALSE, fig.align='center', fig.width=8, fig.height=6, echo = FALSE}

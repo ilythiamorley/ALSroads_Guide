@@ -18,7 +18,6 @@ knitr::opts_chunk$set(
 rgl::setupKnitr(autoprint = TRUE)
 
 #Data
-ctg <- readLAScatalog("data/03/ctg", filter = "-drop_withheld -keep_random_fraction 0.25")
 roads <- st_read("data/03/roads.shp")
 ```
 
@@ -40,7 +39,7 @@ ctg <- readLAScatalog("path/to/ctg/files")
 
 The `print()` function can summarize information about the `LAScatalog`, such as the number and density of points.
 
-```{r, message=FALSE}
+``` r
 print(ctg)
 ```
 
@@ -54,6 +53,7 @@ print(ctg)
 library(raster)
 dtm <- raster("path/to/dtm.tif)
 ```
+
 The loaded DTM can be plotted for visualization using the `plot_dtm3d()` function from the `lidR` package.
 
 ``` r
@@ -80,8 +80,9 @@ An existing road network is required to perform road extraction using `ALSroads`
 roads <- st_read("path/to/roads")
 ```
 
-```{r, message=FALSE, fig.align='center', fig.width=6, fig.height=4}
+```{r, message=FALSE, warning = FALSE, fig.align='center', fig.width=8, fig.height=6, echo = FALSE}
 url = "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
+
 m = mapview::mapview(roads,
   layer.name = "Road Segments",
   color = "red", map.type = "Esri.WorldImagery")

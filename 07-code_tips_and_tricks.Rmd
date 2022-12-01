@@ -23,14 +23,12 @@ knitr::opts_chunk$set(
 rgl::setupKnitr(autoprint = TRUE)
 
 #Data
-existing_roads <- st_read("data/04/roads.shp")
-updated_roads <-st_read("data/04/updated_roads.shp")
+existing_roads <- st_read("data/08/roads.shp")
+updated_roads <-st_read("data/08/updated_roads.shp")
 updated_roads$CLASS <- as.factor(updated_roads$CLASS)
 updated_roads_ <- updated_roads %>%
   dplyr::filter(NUM %in% c(4,6,16))
 snapped_roads <- st_snap_lines(roads = updated_roads_, tolerance = 200)
-las <- readLAS("data/03/ctg/1kmZ175700515102020L.laz")
-dtm <- raster("data/08/dtm.tif")
 existing_road <- existing_roads %>%
   dplyr::filter(NUM %in% c(23))
 updated_road <- updated_roads %>%
@@ -102,7 +100,9 @@ Users working within R can produce interactive spatial plots using the function 
 ```{r plot-leflet-example, warning = FALSE, fig.align='center', fig.width=8, fig.height=6}
 library("mapview")
 library("leaflet")
+
 url = "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
+
 m <- mapview::mapview(list(existing_road, updated_road),
   layer.name = c("Existing", "Updated"),
   color = c("red", "blue"), map.type = "Esri.WorldImagery")
@@ -190,9 +190,12 @@ snapped_roads <- st_snap_lines(roads = updated_roads, ref = existing_roads, fiel
 library("mapview")
 library("leaflet")
 url <- "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
+
 m <- mapview::mapview(list(updated_roads_, snapped_roads$roads),
-                      layer.name = c("Updated", "Snapped"),
-                      color = c("red", "green"), map.type = "Esri.WorldImagery")
+                      layer.name = c("Snapped", "Updated"),
+                      color = c("green", "red"),
+                      lwd = c(3, 1.5),
+                      map.type = "Esri.WorldImagery") 
 leaflet::addTiles(m@map, url)
 ```
 

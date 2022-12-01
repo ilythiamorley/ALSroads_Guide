@@ -34,7 +34,9 @@ The `ALSroads` package includes functions developed for correcting and updating 
 Broadly, the road extraction method consists of three steps:
 
 1.  Production of a raster of conductivity from the point cloud to estimate how easy/difficult it is for an agent to move between two adjacent pixels, using the concept of friction. Low cost (or high conductivity) is attributed to pixels where movement is easy; these pixels are interpreted as those which likely correspond to roads.
+
 2.  Application of a least cost path algorithm on the conductivity map to retrieve an accurate geometry of the road centerline in a vector format. This step uses a reference road network maintained by an authority as prior information and updates the geometry of the network.
+
 3.  Estimation of road widths and road state using characteristics from the point cloud. Using the accurate geometry returned by step 2, the algorithm extracts the average conductivity of the path and takes successive slices of the point cloud perpendicularly to the road. The slices are used to measure the widths of the roads by detecting variations in the DTM. They are also used to estimate the percentage of points above the measured road, assuming they correspond to vegetation on the road. The state of the road is determined as a combination of the conductivity, drivable width, and percentage of points above the road. Good state roads are assumed to be large, with a low displacement cost and minimal edge vegetation.
 
 ## Standard Road Extraction using `measure_roads()` {#sec-standard-road-extraction-using-measure_roads}
@@ -71,8 +73,8 @@ roads <- st_read("path/to/roads.shp")
 
 Before running the `measure_roads()` function, users are recommended to:
 
-1. Ensure the coordinate reference system (CRS) of the existing roads network and `LAScatalog` match.
-2. Crop the roads network to the extent of the `LAScatalog` to confirm that no roads are beyond the extent of the point cloud and DTM.
+1.  Ensure the coordinate reference system (CRS) of the existing roads network and `LAScatalog` match.
+2.  Crop the roads network to the extent of the `LAScatalog` to confirm that no roads are beyond the extent of the point cloud and DTM.
 
 ### Network Update {#sec-network-update}
 
@@ -89,8 +91,6 @@ The `measure_roads()` function updates the existing road network by adding eight
 
 ## Applying `measure_roads()` {#sec-applying-measure_roads}
 
-In this example, we do not include water bodies, refer to section \@ref(sec-waterbodies) for an example application with water bodies. Similarly, here we do not adjust the `ALSroads` default parameters; refer to section \@ref(sec-edge-case-studies) applications of the method with custom parameters.
-
 ``` r
 updated_roads <- measure_roads(ctg = ctg, roads = roads, dtm = dtm)
 ```
@@ -99,7 +99,7 @@ updated_roads <- measure_roads(ctg = ctg, roads = roads, dtm = dtm)
 
 The updated road network is a spatial feature that can be plotted to visualize the location of updated roads.
 
-```{r plot-roads-network, warning = FALSE, fig.align='center', fig.width=6, fig.height=4}
+```{r plot-roads-network, message=FALSE, warning = FALSE, fig.align='center', fig.width=8, fig.height=6, echo = FALSE}
 url = "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
 m <- mapview::mapview(list(roads, roads_upd),
   layer.name = c("Inaccurate", "Corrected"),
@@ -113,7 +113,7 @@ Following road extraction, the new road width attribute can be used to buffer th
 road_poly <- sf::st_buffer(updated_roads, updated_roads$ROADWIDTH/2)
 ```
 
-```{r plot-buff-rd, warning = FALSE, fig.align='center', fig.width=6, fig.height=4}
+```{r plot-buff-rd, message=FALSE, warning = FALSE, fig.align='center', fig.width=8, fig.height=6, echo = FALSE}
 url <- "https://servicesmatriciels.mern.gouv.qc.ca:443/erdas-iws/ogc/wmts/Inventaire_Ecoforestier/Inventaire_Ecoforestier/default/GoogleMapsCompatibleExt2:epsg:3/{z}/{y}/{x}.jpg"
 m <- mapview::mapview(list(road_upd, road_poly),
                       layer.name = c("Corrected Road", "Road Width Buffer"),
@@ -134,7 +134,8 @@ ggplot(roads_upd, aes(y = CLASS, fill = CLASS)) +
     labs(x="Count", y="Road Class") +
     scale_fill_discrete(name = "Road Class") 
 ```
-<center> ![](images/road_class_plot.png) <center>
+
+![](images/road_class_plot.PNG)
 
 The drivable widths of roads, grouped by road class, can be plotted for comparison. Only Class 1 and 2 roads are included, as Class 3 and 4 roads do not have updated road widths.
 
@@ -145,4 +146,5 @@ ggplot(data=roads_upd_filt, aes(x=CLASS, y= DRIVABL, fill=CLASS)) +
       theme(text = element_text(size = 16)) +
       scale_fill_manual(values = c("#F8766D", "#7CAE00"), (name = "Road Class"))
 ```
-<center> ![](images/road_width_plot.png) <center>
+
+![](images/road_width_plot.PNG)
