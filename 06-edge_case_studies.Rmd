@@ -377,27 +377,7 @@ Applying the `meaure_roads()` for a road crossing a waterboide, in this case, do
 plot(dtm_cs3)
 plot(updated_road_cs3[1], add = TRUE)
 ```
-<<<<<<< HEAD
 
-
-## Road covered by deciduous trees
-
-In the following example the road is barely invisible from above because it is completely covered by deciduous trees. Using RGB images or using a CHM it is therefore impossible to find and measure the road. 
-
-![](images/kenauk-rgb.png){width=70%}
-
-However `ALSroad` only uses the CHM to find the road as one input among others. In this specific cases the road is visible in the DTM. It is also visible in the density of ground points.
-
-![](images/kenauk-shadeddtm.png){width=70%}
-
-Overall the road is not invisible in lidar data even if some indicators may fail in this cases. Therefore this edge cases works out of the box and the conductivity layer highlight properly the road
-
-![](images/kenauk-condutivity.png){width=70%}
-
-When running the `measure_road()` function the road is properly located and measured out of the box with default parameters. This road being particularly well shaped measuring it size is not a problem. Here the algorithm measured a 8.6 m class 1 road. In the image bellow we can see in purple the original inaccurate track of the official map and in yellow the new track with additional attributes
-
-![](images/kenauk-final.png){width=70%}
-=======
 ## Case Study 4: Narrow Road
 ### Overview: 
 
@@ -461,4 +441,21 @@ m <- mapview::mapview(list(road_cs4, road_poly),
                       map.type = "Esri.WorldImagery")
 leaflet::addTiles(m@map, url)
 ```
->>>>>>> 336d897c9486b4c8ef84cfca204f3aff09e58317
+
+## Case study 5: road covered by deciduous trees
+
+In the following example the road is barely invisible from above because it is completely covered by deciduous trees. Using RGB images or using a CHM it is therefore impossible to find and measure the road. 
+
+![](images/kenauk-rgb.png){width=70%}
+
+However `ALSroad` only uses the CHM to find the road as one input among others. In this specific cases the road is visible in the DTM. It is also visible in the density of ground points.
+
+![](images/kenauk-shadeddtm.png){width=70%}
+
+Overall the road is not invisible in lidar data even if some indicators may fail in this cases. Therefore this edge cases works out of the box and the conductivity layer highlight properly the road
+
+![](images/kenauk-condutivity.png){width=70%}
+
+When running the `measure_road()` function the road is properly located and measured out of the box with default parameters. This road being particularly well shaped measuring it size is not a problem. Here the algorithm measured a 8.6 m class 1 road. In the image bellow we can see in purple the original inaccurate track of the official map and in yellow the new track with additional attributes
+
+![](images/kenauk-final.png){width=70%}
